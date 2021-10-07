@@ -1,1 +1,14 @@
+<nav>
+  <ul>
+    <li>
+      <%= link_to 'Contratar freelancers', new_user_registration_path %>
+    </li>
+    <% if user_signed_in? %>
+      <li data-test="username">
+        <%= current_user.name %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
+
 <h1 data-test="title">Encontre freelancers!</h1>

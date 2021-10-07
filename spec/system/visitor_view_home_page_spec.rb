@@ -4,6 +4,6 @@ describe 'Visitor view home page' do
   it 'successfully' do
     visit root_path
 
-    expect(page).to have_selector('[data-test=title]')
+    expect(page).to have_selector('[data-test=title]', text: 'Encontre freelancers!')
   end
 end
