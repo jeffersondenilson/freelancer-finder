@@ -8,3 +8,4 @@ pt-BR:
         name: "Nome"
         password: "Senha"
         password_confirmation: "Confirmação de senha"
+        remember_me: "Lembrar de mim"
