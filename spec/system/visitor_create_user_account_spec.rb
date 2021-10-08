@@ -15,5 +15,14 @@ describe 'Visitor create user account' do
     expect(page).to have_selector('[data-test=username]', text: 'Jane Doe')
   end
 
-  it 'and can not create with empty fields'
+  it 'and can not create with empty fields' do
+    visit root_path
+
+    click_on 'Contratar freelancers'
+    click_on 'Criar conta'
+
+    expect(page).to have_content('Nome não pode ficar em branco')
+    expect(page).to have_content('Email não pode ficar em branco')
+    expect(page).to have_content('Senha não pode ficar em branco')
+  end
 end
