@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'User log in' do
+describe 'User sign in' do
   it 'successfully' do
     User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
     visit root_path
