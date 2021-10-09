@@ -6,7 +6,7 @@ class CreateProjects < ActiveRecord::Migration[6.1]
       t.text :desired_abilities, null: false, default: ""
       t.decimal :value_per_hour, null: false, default: 0
       t.date :due_date, null: false
-      t.boolean :remote, null: false
+      t.boolean :remote, null: false, default: false
 
       t.timestamps
     end

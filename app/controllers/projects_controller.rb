@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+  # TODO: só mostrar e editar projetos criados pelo usuário
   before_action :authenticate_user!
 
   def show
@@ -18,6 +19,23 @@ class ProjectsController < ApplicationController
       redirect_to @project
     else
       render :new
+    end
+  end
+
+  def edit
+    @project = Project.find(params[:id])
+  end
+
+  def update
+    @project = Project.find(params[:id])
+    # p project_params
+
+    if @project.update(project_params)
+      flash[:notice] = 'Projeto atualizado com sucesso'
+      redirect_to @project
+    else
+      p @project.errors.full_messages
+      render :edit
     end
   end
 
