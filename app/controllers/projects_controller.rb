@@ -28,20 +28,18 @@ class ProjectsController < ApplicationController
 
   def update
     @project = Project.find(params[:id])
-    # p project_params
 
     if @project.update(project_params)
       flash[:notice] = 'Projeto atualizado com sucesso'
       redirect_to @project
     else
-      p @project.errors.full_messages
       render :edit
     end
   end
 
-  def my_projects
-    @projects = current_user.projects
-  end
+  # def my_projects
+  #   @projects = current_user.projects
+  # end
 
   private
   def project_params

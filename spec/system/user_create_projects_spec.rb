@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'User create projects' do
   it 'and must be signed in' do
-    visit my_projects_projects_path
+    visit new_project_path
 
     expect(current_path).to eq(new_user_session_path)
   end
@@ -12,7 +12,7 @@ describe 'User create projects' do
       password: 'he217tw8')
     login_as jane, scope: :user
 
-    visit my_projects_projects_path
+    visit root_path
     click_on 'Criar projeto'
     fill_in 'Título', with: 'Meu primeiro projeto'
     fill_in 'Descrição', with: 'Lorem ipsum dolor sit amet'

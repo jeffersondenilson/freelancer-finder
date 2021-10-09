@@ -11,7 +11,6 @@ describe 'Visitor create user account' do
     fill_in 'Confirmação de senha', with: '123456'
     click_on 'Criar conta'
 
-    # TODO: redirecionar usuario para projects
     expect(page).to have_selector('li', text: 'Jane Doe')
   end
 

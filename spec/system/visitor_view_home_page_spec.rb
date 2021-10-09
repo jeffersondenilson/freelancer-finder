@@ -6,4 +6,6 @@ describe 'Visitor view home page' do
 
     expect(page).to have_selector('h1', text: 'Encontre freelancers!')
   end
+
+  it 'and view dashboard when signed in'
 end

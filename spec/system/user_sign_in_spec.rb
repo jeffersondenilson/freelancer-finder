@@ -11,10 +11,8 @@ describe 'User sign in' do
     fill_in 'Senha', with: '123456'
     click_on 'Entrar'
 
-    # TODO: redirecionar usuario para projects
     expect(page).to have_selector('li', text: 'Jane Doe')
-    # TODO: verificar href de criar projeto
-    expect(page).to have_link('Criar projeto')
+    expect(page).to have_link('Criar projeto', href: new_project_path)
   end
 
   it 'and must fill all fields' do
@@ -30,6 +28,4 @@ describe 'User sign in' do
   end
 
   it 'and view professionals'
-
-  it 'and can not view page without login'
 end
