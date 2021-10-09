@@ -1,0 +1,13 @@
+---
+pt-BR:
+  activerecord:
+    models:
+      project: "Projeto"
+    attributes:
+      project:
+        title: "Título"
+        description: "Descrição"
+        desired_abilities: "Habilidades desejadas"
+        value_per_hour: "Valor por hora"
+        due_date: "Data limite"
+        remote: "Remoto"

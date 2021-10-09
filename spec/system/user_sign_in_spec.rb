@@ -12,7 +12,7 @@ describe 'User sign in' do
     click_on 'Entrar'
 
     # TODO: redirecionar usuario para projects
-    expect(page).to have_selector('[data-test=username]', text: 'Jane Doe')
+    expect(page).to have_selector('li', text: 'Jane Doe')
     # TODO: verificar href de criar projeto
     expect(page).to have_link('Criar projeto')
   end

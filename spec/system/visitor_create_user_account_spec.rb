@@ -12,7 +12,7 @@ describe 'Visitor create user account' do
     click_on 'Criar conta'
 
     # TODO: redirecionar usuario para projects
-    expect(page).to have_selector('[data-test=username]', text: 'Jane Doe')
+    expect(page).to have_selector('li', text: 'Jane Doe')
   end
 
   it 'and must fill all fields' do

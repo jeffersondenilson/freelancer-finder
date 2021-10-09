@@ -1,0 +1,9 @@
+<div>
+  <p>Título: <%= @project.title %></p>
+  <p>Descrição: <%= @project.description %></p>
+  <p>Habilidades desejadas: <%= @project.desired_abilities %></p>
+  <p>Valor por hora: <%= number_to_currency @project.value_per_hour %></p>
+  <p>Data limite: <%= I18n.l @project.due_date %></p>
+  <p>Trabalho <%= @project.remote? ? "remoto" : "presencial" %></p>
+  <p>Criado por: <%= @project.author.name %></p>
+</div>

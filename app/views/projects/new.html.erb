@@ -1,0 +1,50 @@
+<h1>Novo projeto</h1>
+
+<%= form_with model: @project do |f| %>
+  <div>
+    <%= f.label :title %> <br>
+    <%= f.text_field :title %>
+    <%= @project.errors.full_messages_for(:title).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :description %> <br>
+    <%= f.text_area :description %>
+    <%= @project.errors.full_messages_for(:description).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :desired_abilities %> <br>
+    <%= f.text_area :desired_abilities %>
+    <%= @project.errors.full_messages_for(:desired_abilities).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :value_per_hour %> <br>
+    <%= f.number_field :value_per_hour, { step: 0.01 } %>
+    <%= @project.errors.full_messages_for(:value_per_hour).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :due_date %> <br>
+    <%= f.date_field :due_date %>
+    <%= @project.errors.full_messages_for(:due_date).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.check_box :remote %> 
+    <%= f.label :remote %>
+  </div>
+
+  <%= f.submit 'Criar' %>
+<% end %>
