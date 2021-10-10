@@ -3,11 +3,11 @@ Rails.application.routes.draw do
   devise_for :users
 
   authenticated :user do
-    root to: 'home#dashboard', as: :authenticated_root
+    root to: 'home#dashboard', as: :authenticated_user_root
   end
 
   # authenticated :professionals do
-  #   root to: 'home#dashboard', as: :authenticated_root
+  #   root to: 'home#dashboard', as: :authenticated_professional_root
   # end
 
   root to: 'home#index'

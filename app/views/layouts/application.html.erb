@@ -13,12 +13,16 @@
   <body>
     <nav>
       <ul>
+        <% # TODO: criar partial com links para cada tipo de usuario %>
         <% if user_signed_in? %>
           <li>
             <%= link_to 'Criar projeto', new_project_path %>
           </li>
           <%= render 'layouts/signed_in_links', resource: current_user %>
         <% elsif professional_signed_in? %>
+          <li>
+            <%= link_to 'Buscar projetos', projects_path %>
+          </li>
           <%= render 'layouts/signed_in_links', resource: current_professional %>
         <% else %>
           <li>

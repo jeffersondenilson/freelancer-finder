@@ -1,9 +1,15 @@
 <div>
   <h1>Meus projetos</h1>
-  <% if current_user.projects.empty? %>
-    <p>Você ainda não tem projetos</p>
-    <%= link_to 'Crie um projeto', new_project_path %>
-  <% else %>
-    <%= render current_user.projects %>
+  <% if user_signed_in? %>
+    <% if current_user.projects.empty? %>
+      <p>Você ainda não tem projetos</p>
+      <%= link_to 'Crie um projeto', new_project_path %>
+    <% else %>
+      <%= render current_user.projects %>
+    <% end %>
+  <% end %>
+
+  <% if professional_signed_in? %>
+    <p>U PROFESSIONAL</p>
   <% end %>
 </div>
