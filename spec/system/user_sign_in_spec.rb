@@ -27,6 +27,16 @@ describe 'User sign in' do
     expect(page).to have_content('Email ou senha inválida.')
   end
 
-  it 'and sign out'
+  it 'and sign out' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    login_as jane, scope: :user
+    visit root_path
+
+    click_on 'Sair'
+
+    expect(current_path).to eq(root_path)
+    expect(page).to have_selector('h1', text: 'Encontre freelancers!')
+  end
+
   it 'and view professionals'
 end
