@@ -55,7 +55,7 @@ describe 'User create projects' do
       password: 'he217tw8')
     project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
       desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
-      remote: true, author: jane)
+      remote: true, creator: jane)
     login_as jane, scope: :user
 
     visit project_path(project)

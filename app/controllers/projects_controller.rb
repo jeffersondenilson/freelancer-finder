@@ -3,7 +3,8 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @project = Project.find(params[:id])
+    @project = Project.find_by(id: params[:id], creator: current_user)
+    redirect_to root_path if @project.nil?
   end
 
   def new
@@ -12,7 +13,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    @project.author = current_user
+    @project.creator = current_user
 
     if @project.save
       flash[:notice] = 'Projeto salvo com sucesso'
@@ -36,10 +37,6 @@ class ProjectsController < ApplicationController
       render :edit
     end
   end
-
-  # def my_projects
-  #   @projects = current_user.projects
-  # end
 
   private
   def project_params

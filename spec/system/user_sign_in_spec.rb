@@ -27,5 +27,6 @@ describe 'User sign in' do
     expect(page).to have_content('Email ou senha inválida.')
   end
 
+  it 'and sign out'
   it 'and view professionals'
 end
