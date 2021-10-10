@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FreelancerFinder</title>
+    <title>Freelancer Finder</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,7 +11,26 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
+    <nav>
+      <ul>
+        <% if user_signed_in? %>
+          <li>
+            <%= link_to 'Criar projeto', new_project_path %>
+          </li>
+          <%= render 'layouts/signed_in_links', resource: current_user %>
+        <% elsif professional_signed_in? %>
+          <%= render 'layouts/signed_in_links', resource: current_professional %>
+        <% else %>
+          <li>
+            <%= link_to 'Contratar freelancers', new_user_registration_path %>
+          </li>
+          <li>
+            <%= link_to 'Encontrar projetos', new_professional_registration_path %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     

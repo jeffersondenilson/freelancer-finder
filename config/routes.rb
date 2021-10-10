@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
-  devise_for :users #, controllers: { registrations: "registrations" }
+  devise_for :professionals
+  devise_for :users
 
   authenticated :user do
     root to: 'home#dashboard', as: :authenticated_root
   end
+
+  # authenticated :professionals do
+  #   root to: 'home#dashboard', as: :authenticated_root
+  # end
 
   root to: 'home#index'
   
