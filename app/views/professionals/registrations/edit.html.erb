@@ -1,4 +1,8 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% if !resource.completed_profile %>
+  <h2>Complete o seu perfil para continuar</h2>
+<% else %>
+  <h2>Editar Perfil <%#= resource_name.to_s.humanize %></h2>
+<% end %>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "professionals/shared/error_messages", resource: resource %>

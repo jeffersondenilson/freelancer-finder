@@ -11,7 +11,6 @@ describe 'Professional sign in' do
     fill_in 'Senha', with: '123456'
     click_on 'Entrar'
 
-    expect(page).to have_content('smth')
     expect(page).to have_selector('li', text: 'John Doe')
     expect(page).to have_link('Buscar projetos', href: projects_path)
     expect(page).not_to have_link('Criar projeto', href: new_project_path)
@@ -46,9 +45,8 @@ describe 'Professional sign in' do
     
     visit root_path
 
-    # expect(page).to have_content('smth')
     expect(current_path).to eq(edit_professional_registration_path(john))
-    expect(page).to have_selector('h1', text: 'Complete o seu perfil para continuar')
+    expect(page).to have_selector('h2', text: 'Complete o seu perfil para continuar')
   end
 
   it 'and must complete profile to navigate'

@@ -6,13 +6,11 @@ Rails.application.routes.draw do
     root to: 'home#dashboard', as: :authenticated_user_root
   end
 
-  # authenticated :professionals do
-  #   root to: 'home#dashboard', as: :authenticated_professional_root
-  # end
+  authenticated :professional do
+    root to: 'home#dashboard', as: :authenticated_professional_root
+  end
 
   root to: 'home#index'
   
-  resources :projects, only: [:show, :new, :create, :edit, :update] # do
-    # get 'my_projects', on: :collection
-  # end
+  resources :projects, only: [:show, :new, :create, :edit, :update]
 end

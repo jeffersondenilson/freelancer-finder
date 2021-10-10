@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_10_133431) do
+ActiveRecord::Schema.define(version: 2021_10_10_185719) do
 
   create_table "professionals", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -21,6 +21,14 @@ ActiveRecord::Schema.define(version: 2021_10_10_133431) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "full_name", default: ""
+    t.date "birth_date"
+    t.text "education", default: ""
+    t.text "description", default: ""
+    t.text "experience", default: ""
+    t.text "abilities", default: ""
+    t.string "profile_picture_url", default: ""
+    t.boolean "completed_profile", default: false
     t.index ["email"], name: "index_professionals_on_email", unique: true
     t.index ["reset_password_token"], name: "index_professionals_on_reset_password_token", unique: true
   end
