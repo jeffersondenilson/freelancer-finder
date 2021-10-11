@@ -12,5 +12,5 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
   
-  resources :projects, only: [:show, :new, :create, :edit, :update]
+  resources :projects, only: [:index, :show, :new, :create, :edit, :update]
 end

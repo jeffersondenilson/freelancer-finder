@@ -1,4 +1,4 @@
-<% if !resource.completed_profile %>
+<% if !resource.completed_profile? %>
   <h2>Complete o seu perfil para continuar</h2>
 <% else %>
   <h2>Editar Perfil <%#= resource_name.to_s.humanize %></h2>
@@ -10,6 +10,46 @@
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name, "Nome social" %><br />
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :full_name %><br />
+    <%= f.text_field :full_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :birth_date %><br />
+    <%= f.date_field :birth_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :education %><br />
+    <%= f.text_area :education %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :experience %><br />
+    <%= f.text_area :experience %>
+  </div>
+
+  <div class="field">
+    <%= f.label :abilities %><br />
+    <%= f.text_area :abilities %>
+  </div>
+
+  <div class="field">
+    <%= f.label :profile_picture_url %><br />
+    <%= f.text_field :profile_picture_url %>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -36,12 +76,14 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "Enviar" %>
   </div>
 <% end %>
 
+<!--
 <h3>Cancel my account</h3>
 
 <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
 
 <%= link_to "Back", :back %>
+-->
