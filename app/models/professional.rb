@@ -7,7 +7,7 @@ class Professional < ApplicationRecord
   validates :name, presence: true
 
   validates :full_name, :birth_date, :education, :description, :abilities, 
-    :profile_picture_url, presence: true, on: :update
+    presence: true, on: :update
 
   before_update :set_completed_profile
 

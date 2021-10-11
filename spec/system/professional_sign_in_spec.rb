@@ -91,7 +91,25 @@ describe 'Professional sign in' do
     expect(page).to have_selector('img#profile-picture')
   end
 
-  it 'and must fill all required fields to complete profile'
+  it 'and must fill all required fields to complete profile' do
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', password: '123456')
+    login_as john, scope: :professional
+    
+    visit root_path
+    fill_in 'Nome social', with: ''
+    fill_in 'Senha atual', with: '123456'
+    click_on 'Enviar'
+
+    expect(page).to have_content('Não foi possível salvar profissional')
+    expect(page).to have_content('Nome não pode ficar em branco')
+    expect(page).to have_content('Nome completo não pode ficar em branco')
+    expect(page).to have_content('Data de nascimento não pode ficar em branco')
+    expect(page).to have_content('Formação não pode ficar em branco')
+    expect(page).to have_content('Descrição não pode ficar em branco')
+    expect(page).to have_content('Habilidades não pode ficar em branco')
+    expect(page).not_to have_content('Experiência não pode ficar em branco')
+    expect(page).not_to have_content('Foto de perfil não pode ficar em branco')
+  end
 
   # TODO: mover para testes de profissional vê projetos
   it 'and view projects'
