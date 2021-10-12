@@ -1,12 +1,23 @@
 class ProjectsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!,
+    only: [:show, :new, :create, :edit, :update],
+    unless: :professional_signed_in?
+  before_action :authenticate_professional!,
+    only: [:index, :show],
+    unless: :user_signed_in?
 
   def index
     @projects = Project.all
   end
 
   def show
-    @project = Project.find_by(id: params[:id], creator: current_user)
+    @project = nil
+
+    if professional_signed_in?
+      @project = Project.find_by(id: params[:id])
+    elsif user_signed_in?
+      @project = Project.find_by(id: params[:id], creator: current_user)
+    end
 
     if @project.nil?
       flash[:alert] = 'O projeto não foi encontrado'
