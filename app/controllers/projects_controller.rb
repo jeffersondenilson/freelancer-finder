@@ -1,10 +1,7 @@
 class ProjectsController < ApplicationController
-  before_action :authenticate_user!,
-    only: [:show, :new, :create, :edit, :update],
-    unless: :professional_signed_in?
-  before_action :authenticate_professional!,
-    only: [:index, :show],
-    unless: :user_signed_in?
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :authenticate_professional!, only: [:index, :search]
+  before_action :should_authenticated!, only: :show
 
   def index
     @projects = Project.all
@@ -83,5 +80,13 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:title, :description, :desired_abilities,
       :value_per_hour, :due_date, :remote)
+  end
+
+  # TODO: fix cross model visits!
+  def should_authenticated!
+    return if professional_signed_in? || user_signed_in?
+
+    flash[:alert] = "Você deve estar logado."
+    redirect_to root_path
   end
 end

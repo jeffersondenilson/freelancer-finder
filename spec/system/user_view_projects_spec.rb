@@ -99,5 +99,28 @@ describe 'User view projects' do
     expect(page).not_to have_content('Criado por: John Doe')
   end
 
-  it 'and can not view projects index page'
+  it 'and can not view projects index page' do
+    pending 'Fix cross model visits to make this work!'
+    fail
+
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
+      password: '123456')
+    john = User.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456')
+    pj2 = Project.create!({
+      title: 'Projeto 2',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, dev, design',
+      value_per_hour: 9.99,
+      due_date: '19/11/2022',
+      remote: false,
+      creator: john
+    })
+    login_as jane, scope: :user
+
+    visit projects_path
+
+    expect(current_path).to eq('where?')
+    expect(page).to have_content('what?')
+  end
 end
