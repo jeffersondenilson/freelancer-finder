@@ -38,6 +38,4 @@ describe 'User sign in' do
     expect(current_path).to eq(root_path)
     expect(page).to have_selector('h1', text: 'Encontre freelancers!')
   end
-
-  it 'and view professionals'
 end

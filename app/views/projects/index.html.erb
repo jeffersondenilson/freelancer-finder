@@ -1,3 +1,11 @@
 <div>
+  <%= form_with url: "/projects/search", method: :get do |form| %>
+    <%= form.label :query, "Buscar por" %>
+    <%= form.text_field :query, value: params[:query] || "" %>
+    <%= form.submit "Buscar" %>
+  <% end %>
+</div>
+
+<div>
   <%= render @projects %>
 </div>

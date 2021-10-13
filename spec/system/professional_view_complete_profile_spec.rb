@@ -71,4 +71,6 @@ describe 'Professional view complete profile' do
     expect(page).not_to have_content('Experiência não pode ficar em branco')
     expect(page).not_to have_content('Foto de perfil não pode ficar em branco')
   end
+
+  it 'and can edit profile after completing'
 end

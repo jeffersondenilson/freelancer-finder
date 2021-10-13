@@ -10,6 +10,19 @@ class ProjectsController < ApplicationController
     @projects = Project.all
   end
 
+  def search
+    # title = Project.arel_table[:title]
+    # description = Project.arel_table[:description]
+    # @projects = Project.where( title.matches "%#{params[:query]}%" )
+    #   .or Project.where description.matches "%#{params[:query]}%"
+
+    query = ActiveRecord::Base.sanitize_sql_like(params[:query])
+    @projects = Project.where("title LIKE :query OR description LIKE :query",
+      query: "%#{query}%")
+
+    render :index
+  end
+
   def show
     @project = nil
 

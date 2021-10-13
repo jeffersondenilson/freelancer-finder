@@ -12,5 +12,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
   
-  resources :projects, only: [:index, :show, :new, :create, :edit, :update]
+  resources :projects, only: [:index, :show, :new, :create, :edit, :update] do
+    get '/search', to: 'projects#search', on: :collection
+  end
 end
