@@ -14,5 +14,8 @@ Rails.application.routes.draw do
   
   resources :projects, only: [:index, :show, :new, :create, :edit, :update] do
     get '/search', to: 'projects#search', on: :collection
+
+    resources :proposals, shallow: true
   end
+
 end

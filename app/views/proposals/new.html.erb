@@ -1,0 +1,39 @@
+<h1>Nova proposta em <%= @project.title %></h1>
+
+<%= form_with model: [@project, @proposal] do |f| %>
+  <div>
+    <%= f.label :message %>
+    <%= f.text_area :message %>
+    <% @project.errors.full_messages_for(:message).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :value_per_hour %>
+    <%= f.number_field :value_per_hour, { step: 0.01 } %>
+    <% @project.errors.full_messages_for(:value_per_hour).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :hours_per_week %>
+    <%= f.number_field :hours_per_week %>
+    <% @project.errors.full_messages_for(:hours_per_week).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :finish_date %>
+    <%= f.date_field :finish_date %>
+    <% @project.errors.full_messages_for(:finish_date).each do |message| %>
+      <small><%= message %></small>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

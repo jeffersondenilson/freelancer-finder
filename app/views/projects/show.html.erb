@@ -1,3 +1,7 @@
-<%= link_to 'Editar', edit_project_path(@project) %>
+<% if user_signed_in? %>
+  <%= link_to 'Editar', edit_project_path(@project) %>
+<% elsif professional_signed_in? %>
+  <%= link_to 'Fazer proposta', new_project_proposal_path(@project) %>
+<% end %>
 <br>
 <%= render @project %>
