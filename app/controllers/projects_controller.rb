@@ -25,6 +25,7 @@ class ProjectsController < ApplicationController
 
     if professional_signed_in?
       @project = Project.find_by(id: params[:id])
+      @proposal = @project.proposals.find_by(professional_id: current_professional.id)
     elsif user_signed_in?
       @project = Project.find_by(id: params[:id], creator: current_user)
     end

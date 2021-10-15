@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2021_10_13_195328) do
     t.decimal "value_per_hour", default: "0.0", null: false
     t.integer "hours_per_week", default: 1, null: false
     t.date "finish_date", null: false
-    t.integer "status", default: 0, null: false
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "project_id", null: false

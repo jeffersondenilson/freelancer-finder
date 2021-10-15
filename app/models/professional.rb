@@ -1,4 +1,6 @@
 class Professional < ApplicationRecord
+  # TODO: limitar a uma proposta por projeto
+  has_many :proposals
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

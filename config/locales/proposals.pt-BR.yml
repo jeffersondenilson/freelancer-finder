@@ -9,7 +9,7 @@ pt-BR:
         value_per_hour: "Valor por hora"
         hours_per_week: "Horas disponíveis por semana"
         finish_date: "Expectativa de conclusão"
-        status:
+        statuses:
           pending: "Pendente"
           analyzing: "Analisando"
           approved: "Aprovado"

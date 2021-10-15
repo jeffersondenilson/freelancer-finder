@@ -8,13 +8,21 @@ class ProposalsController < ApplicationController
 
   def create
     @proposal = Proposal.new(proposal_params)
+    @proposal.project_id = params[:project_id]
     @proposal.professional = current_professional
+
+    if @proposal.save
+      redirect_to project_path(params[:project_id])
+    else
+      @project = Project.find(params[:project_id])
+      render :new
+    end
   end
 
   private
   def proposal_params
     params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week, 
-      :finish_date, :project_id)
+      :finish_date)
   end
 end
 

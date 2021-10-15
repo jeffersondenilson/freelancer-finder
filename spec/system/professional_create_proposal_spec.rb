@@ -38,11 +38,13 @@ describe 'Professional create proposal' do
     expect(page).to have_content('Valor por hora: R$ 100,00')
     expect(page).to have_content('Horas disponíveis por semana: 20')
     expect(page).to have_content('Expectativa de conclusão: 14/10/2021')
-    expect(page).to have_content('Status: pendente')
+    expect(page).to have_content('Status: Pendente')
   end
 
   it 'and must fill all fields'
   it 'and view own proposals'
-  it 'and edit proposal'
   it 'and cancel proposal'
+
+  it 'and edit proposal'
+  it 'and can only make one proposal per project'
 end

@@ -5,3 +5,8 @@
 <% end %>
 <br>
 <%= render @project %>
+<br>
+<% if professional_signed_in? && @proposal %>
+  <h2>Sua proposta</h2>
+  <%= render @proposal %>
+<% end %>

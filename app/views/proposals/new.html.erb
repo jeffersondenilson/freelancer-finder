@@ -3,7 +3,7 @@
 <%= form_with model: [@project, @proposal] do |f| %>
   <div>
     <%= f.label :message %>
-    <%= f.text_area :message %>
+    <%= f.text_area :message, { placeholder: "Conte por quê está se candidatando, experiência, etc..." } %>
     <% @project.errors.full_messages_for(:message).each do |message| %>
       <small><%= message %></small>
     <% end %>
