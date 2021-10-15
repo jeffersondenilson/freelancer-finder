@@ -41,7 +41,33 @@ describe 'Professional create proposal' do
     expect(page).to have_content('Status: Pendente')
   end
 
-  it 'and must fill all fields'
+  it 'and must fill all fields' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    login_as john, scope: :professional
+
+    visit new_project_proposal_path(pj1)
+    fill_in 'Valor por hora', with: ''
+    fill_in 'Horas disponíveis por semana', with: '0'
+    click_on 'Criar Proposta'
+
+    expect(page).to have_content('Mensagem não pode ficar em branco')
+    expect(page).to have_content('Valor por hora não pode ficar em branco')
+    expect(page).to have_content('Valor por hora não é um número')
+    expect(page).to have_content('Horas disponíveis por semana deve ser maior que 0')
+    expect(page).to have_content('Expectativa de conclusão não pode ficar em branco')
+  end
+
   it 'and view own proposals'
   it 'and cancel proposal'
 
