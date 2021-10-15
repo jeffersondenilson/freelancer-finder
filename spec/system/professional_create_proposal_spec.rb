@@ -2,7 +2,17 @@ require 'rails_helper'
 
 describe 'Professional create proposal' do
   it 'and must be signed in' do
-    visit new_proposal_path
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    visit new_project_proposal_path(pj1)
 
     expect(current_path).to eq(new_professional_session_path)
   end
@@ -132,6 +142,38 @@ describe 'Professional create proposal' do
     expect(page).to have_content(prop2.message)
     expect(page).to have_content('Enviado por: John Doe')
     expect(page).not_to have_content(prop3.message)
+    expect(page).not_to have_content('Enviado por: Schneider')
+  end
+
+  it 'and there\'s no proposals' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    schneider = Professional.create!(name: 'Schneider', email: 'schneider@email.com', 
+      password: '123456', birth_date: '04/03/2002', completed_profile: true)
+    prop1 = Proposal.create!({
+      message: 'Proposta irrecusável',
+      value_per_hour: 999,
+      hours_per_week: 7,
+      finish_date: '10/07/1995',
+      project: pj1,
+      professional: schneider
+    })
+    login_as john, scope: :professional
+
+    visit my_projects_path
+
+    expect(page).to have_content('Minhas propostas')
+    expect(page).to have_content('Você não fez propostas ainda')
     expect(page).not_to have_content('Enviado por: Schneider')
   end
 
