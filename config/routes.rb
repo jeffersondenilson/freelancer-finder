@@ -18,4 +18,5 @@ Rails.application.routes.draw do
     resources :proposals, shallow: true
   end
 
+  get '/my_projects', to: 'projects#my_projects'
 end

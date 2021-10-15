@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  before_action :authenticate_professional!, only: [:index, :search]
+  before_action :authenticate_professional!, only: [:index, :search, :my_projects]
   before_action :should_authenticated!, only: :show
 
   def index
@@ -75,6 +75,11 @@ class ProjectsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def my_projects
+    # @projects = 
+    @proposals = current_professional.proposals
   end
 
   private

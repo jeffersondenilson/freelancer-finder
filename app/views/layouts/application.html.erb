@@ -23,6 +23,9 @@
           <li>
             <%= link_to 'Buscar projetos', projects_path %>
           </li>
+          <li>
+            <%= link_to 'Meus projetos', my_projects_path %>
+          </li>
           <%= render 'layouts/signed_in_links', resource: current_professional %>
         <% else %>
           <li>
