@@ -13,3 +13,4 @@ pt-BR:
           pending: "Pendente"
           analyzing: "Analisando"
           approved: "Aprovado"
+        approved_at: "Aprovado em"

@@ -22,7 +22,12 @@ class ProposalsController < ApplicationController
   def destroy
     @proposal = Proposal.find(params[:id])
 
-    @proposal.destroy
+    if @proposal.can_destroy_at_current_date?
+      @proposal.destroy
+    else
+      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
+    end
+
     redirect_to my_projects_path
   end
 

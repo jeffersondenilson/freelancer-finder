@@ -11,10 +11,18 @@ class Proposal < ApplicationRecord
   
   validates :hours_per_week, numericality: { only_integer: true, greater_than: 0 }
 
-  before_destroy :check_approved_at
+  def can_destroy_at_current_date?
 
-  private
-  def check_approved_at
-    if approved? &&  Date.today <= approved_at + 3
+    if approved? && Date.current < (approved_at + 3.day).to_date
+      min_cancel_date = (approved_at + 3.day).to_date
+      days_difference = (min_cancel_date - Date.current).to_i
+      
+      errors.add(:approved_at, "#{I18n.l approved_at.to_date}. "\
+        "Você deve esperar #{days_difference} dias para cancelar a proposta.")
+
+      return false
+    end
+
+    return true
   end
 end

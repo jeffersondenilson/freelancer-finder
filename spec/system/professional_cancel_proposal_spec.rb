@@ -55,16 +55,18 @@ describe 'Professional cancel proposal' do
       project: pj1,
       professional: john,
       status: :approved,
-      approved_at: Time.current
+      approved_at: Date.new(2021,10,01)
     })
     login_as john, scope: :professional
 
-    visit my_projects_path
-    click_on 'Cancelar proposta'
+    travel_to Date.new(2021,10,01) do
+      visit my_projects_path
+      click_on 'Cancelar proposta'
 
-    travel_to Time.current do
-      expect(page).to have_content('Você deve esperar 3 dias para cancelar a proposta')
+      expect(page).to have_content("Aprovado em 01/10/2021. "\
+        "Você deve esperar 3 dias para cancelar a proposta.")
       expect(page).to have_content('Proposta irrecusável')
+      expect(page).not_to have_content('Você não fez propostas ainda')
       expect(Proposal.count).to eq(1)
     end
   end
