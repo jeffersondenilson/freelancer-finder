@@ -19,6 +19,13 @@ class ProposalsController < ApplicationController
     end
   end
 
+  def destroy
+    @proposal = Proposal.find(params[:id])
+
+    @proposal.destroy
+    redirect_to my_projects_path
+  end
+
   private
   def proposal_params
     params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week, 

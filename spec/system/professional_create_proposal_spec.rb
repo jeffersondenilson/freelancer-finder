@@ -177,8 +177,6 @@ describe 'Professional create proposal' do
     expect(page).not_to have_content('Enviado por: Schneider')
   end
 
-  it 'and cancel proposal'
-
   it 'and edit proposal'
   it 'and can only make one proposal per project'
 end

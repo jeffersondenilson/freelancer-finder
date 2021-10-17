@@ -10,4 +10,11 @@ class Proposal < ApplicationRecord
   validates :value_per_hour, numericality: true
   
   validates :hours_per_week, numericality: { only_integer: true, greater_than: 0 }
+
+  before_destroy :check_approved_at
+
+  private
+  def check_approved_at
+    if approved? &&  Date.today <= approved_at + 3
+  end
 end

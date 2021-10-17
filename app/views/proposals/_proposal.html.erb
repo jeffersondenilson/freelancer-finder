@@ -8,4 +8,8 @@
   <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
   <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
   <p>Enviado por: <%= proposal.professional.name %></p>
+  <div>
+    <%= link_to 'Cancelar proposta', proposal_path(proposal), method: :delete, 
+      data: { confirm: 'Cancelar esta proposta?' } %>
+  </div>
 </div>
