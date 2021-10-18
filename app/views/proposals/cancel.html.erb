@@ -1,0 +1,11 @@
+<%= form_with model: @proposal do |f| %>
+  <div>
+    <%= f.label :cancel_reason, 'Informe por que quer cancelar a proposta:' %>
+    <br>
+    <%= f.text_area :cancel_reason %>
+  </div>
+  
+  <div>
+    <%= f.submit 'Cancelar proposta' %>
+  </div>
+<% end %>

@@ -71,6 +71,39 @@ describe 'Professional cancel proposal' do
     end
   end
 
-  it 'and should inform reason to cancel approved'
+  it 'and should inform reason to cancel approved' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    prop1 = Proposal.create!({
+      message: 'Proposta irrecusável',
+      value_per_hour: 999,
+      hours_per_week: 7,
+      finish_date: '10/07/1995',
+      project: pj1,
+      professional: john,
+      status: :approved,
+      approved_at: Date.new(2021,10,01)
+    })
+    login_as john, scope: :professional
+
+    visit my_projects_path
+    click_on 'Cancelar proposta'
+
+    expect(current_path).to eq(cancel_proposal_path(prop1))
+    expect(page).to have_content('Informe por que quer cancelar a proposta:')
+    expect(page).to have_selector('textarea[id=proposal_cancel_reason]')
+    expect(Proposal.count).to eq(1)
+  end
+
   it 'and can cancel if approved after three days with reason'
 end

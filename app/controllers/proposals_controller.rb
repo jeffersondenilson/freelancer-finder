@@ -19,6 +19,10 @@ class ProposalsController < ApplicationController
     end
   end
 
+  def cancel
+    @proposal = Proposal.find(params[:id])
+  end
+
   def destroy
     @proposal = Proposal.find(params[:id])
 
