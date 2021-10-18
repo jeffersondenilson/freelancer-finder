@@ -12,7 +12,6 @@ class Proposal < ApplicationRecord
   validates :hours_per_week, numericality: { only_integer: true, greater_than: 0 }
 
   def can_destroy_at_current_date?
-
     if approved? && Date.current < (approved_at + 3.day).to_date
       min_cancel_date = (approved_at + 3.day).to_date
       days_difference = (min_cancel_date - Date.current).to_i

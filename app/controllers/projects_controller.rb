@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   before_action :authenticate_professional!, only: [:index, :search, :my_projects]
-  before_action :should_authenticated!, only: :show
+  before_action :should_authenticate!, only: :show
 
   def index
     @projects = Project.all
@@ -88,8 +88,7 @@ class ProjectsController < ApplicationController
       :value_per_hour, :due_date, :remote)
   end
 
-  # TODO: fix cross model visits!
-  def should_authenticated!
+  def should_authenticate!
     return if professional_signed_in? || user_signed_in?
 
     flash[:alert] = "Você deve estar logado."

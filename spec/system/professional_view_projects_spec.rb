@@ -112,6 +112,18 @@ describe 'Professional view projects' do
     expect(page).not_to have_content(pj1.title)
   end
 
+  it 'and can not create project' do
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    login_as john, scope: :professional
+
+    visit new_project_path
+
+    expect(current_path).to eq(authenticated_professional_root_path)
+    expect(page).to have_content('Meu perfil')
+    expect(page).not_to have_content('Novo projeto')
+  end
+
   it 'and can not view projects with closed registrations'
   it 'and can not view finished projects'
 end

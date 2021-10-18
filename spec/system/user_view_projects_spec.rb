@@ -100,9 +100,6 @@ describe 'User view projects' do
   end
 
   it 'and can not view projects index page' do
-    pending 'Fix cross model visits to make this work!'
-    fail
-
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
       password: '123456')
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com', 
@@ -120,7 +117,8 @@ describe 'User view projects' do
 
     visit projects_path
 
-    expect(current_path).to eq('where?')
-    expect(page).to have_content('what?')
+    expect(current_path).to eq(authenticated_user_root_path)
+    expect(page).to have_content('Você ainda não tem projetos')
+    expect(page).not_to have_content('Projeto 2')
   end
 end
