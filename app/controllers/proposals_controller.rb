@@ -20,14 +20,25 @@ class ProposalsController < ApplicationController
   end
 
   def cancel
-    @proposal = Proposal.find(params[:id])
+    @proposal = current_professional.proposals.find(params[:id])
+
+    if !@proposal.can_cancel_at_current_date?
+      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
+      redirect_to my_projects_path
+    end
   end
 
   def destroy
-    @proposal = Proposal.find(params[:id])
+    @proposal = current_professional.proposals.find(params[:id])
 
-    if @proposal.can_destroy_at_current_date?
+    if @proposal.pending?
       @proposal.destroy
+      flash[:notice] = 'Proposta cancelada com sucesso'
+    elsif @proposal.can_cancel_at_current_date?
+      @proposal.canceled!
+      @proposal.cancel_reason = params[:proposal][:cancel_reason]
+      @proposal.save
+      flash[:notice] = 'Proposta cancelada com sucesso'
     else
       flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
     end
@@ -41,11 +52,3 @@ class ProposalsController < ApplicationController
       :finish_date)
   end
 end
-
-# :message, null: false, default: ""
-# :value_per_hour, null: false, default: 0
-# :hours_per_week, null: false, default: 1
-# :finish_date, null: false
-# :status, null: false, default: 0
-# params.require(:project).permit(:title, :description, :desired_abilities,
-#       :value_per_hour, :due_date, :remote)

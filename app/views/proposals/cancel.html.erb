@@ -1,4 +1,4 @@
-<%= form_with model: @proposal do |f| %>
+<%= form_with model: @proposal, method: :delete do |f| %>
   <div>
     <%= f.label :cancel_reason, 'Informe por que quer cancelar a proposta:' %>
     <br>

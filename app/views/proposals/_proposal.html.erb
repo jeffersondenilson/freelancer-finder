@@ -7,8 +7,18 @@
   <p>Horas disponíveis por semana: <%= proposal.hours_per_week %></p>
   <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
   <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
+  <% if proposal.canceled? %>
+    <p>Motivo de cancelamento: <br> <%= proposal.cancel_reason %></p>
+  <% end %>
   <p>Enviado por: <%= proposal.professional.name %></p>
-  <div>
-    <%= link_to 'Cancelar proposta', cancel_proposal_path(proposal) %>
-  </div>
+  <% if professional_signed_in? %>
+    <div>
+      <% if proposal.pending? %>
+        <%= link_to 'Cancelar proposta', proposal_path(proposal), 
+          method: :delete, data: { confirm: 'Cancelar proposta?' } %>
+      <% elsif proposal.approved? %>
+        <%= link_to 'Cancelar proposta', cancel_proposal_path(proposal) %>
+      <% end %>
+    </div>
+  <% end %>
 </div>

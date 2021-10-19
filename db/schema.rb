@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_17_001658) do
+ActiveRecord::Schema.define(version: 2021_10_19_195604) do
 
   create_table "professionals", force: :cascade do |t|
     t.string "name", default: "", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_10_17_001658) do
     t.integer "project_id", null: false
     t.integer "professional_id", null: false
     t.datetime "approved_at"
+    t.text "cancel_reason"
     t.index ["professional_id"], name: "index_proposals_on_professional_id"
     t.index ["project_id"], name: "index_proposals_on_project_id"
   end

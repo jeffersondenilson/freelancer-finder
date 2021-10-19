@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Professional cancel proposal' do
   include ActiveSupport::Testing::TimeHelpers
 
-  it 'successfully' do
+  it 'successfully if pending' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
     pj1 = Project.create!({
       title: 'Projeto 1',
@@ -30,11 +30,12 @@ describe 'Professional cancel proposal' do
     click_on 'Cancelar proposta'
 
     expect(current_path).to eq(my_projects_path)
+    expect(page).to have_content('Proposta cancelada com sucesso')
     expect(page).to have_content('Você não fez propostas ainda')
     expect(Proposal.count).to eq(0)
   end
 
-  it 'and can not cancel if was approved in less than three days' do
+  it 'and mark as canceled within three days if approved' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
     pj1 = Project.create!({
       title: 'Projeto 1',
@@ -62,16 +63,20 @@ describe 'Professional cancel proposal' do
     travel_to Date.new(2021,10,01) do
       visit my_projects_path
       click_on 'Cancelar proposta'
+      fill_in 'Informe por que quer cancelar a proposta:', 
+        with: 'Lorem ipsum dolor sit amet'
+      click_on 'Cancelar proposta'
 
-      expect(page).to have_content("Aprovado em 01/10/2021. "\
-        "Você deve esperar 3 dias para cancelar a proposta.")
+      expect(page).to have_content('Proposta cancelada com sucesso')
       expect(page).to have_content('Proposta irrecusável')
-      expect(page).not_to have_content('Você não fez propostas ainda')
+      expect(page).to have_content('Status: Cancelada')
+      expect(page).to have_content('Motivo de cancelamento: Lorem ipsum dolor sit amet')
       expect(Proposal.count).to eq(1)
+      expect(page).not_to have_content('Você não fez propostas ainda')
     end
   end
 
-  it 'and should inform reason to cancel approved' do
+  it 'and can not cancel after three days if approved' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
     pj1 = Project.create!({
       title: 'Projeto 1',
@@ -96,14 +101,16 @@ describe 'Professional cancel proposal' do
     })
     login_as john, scope: :professional
 
-    visit my_projects_path
-    click_on 'Cancelar proposta'
+    travel_to (prop1.approved_at + 3.day) do
+      visit my_projects_path
+      click_on 'Cancelar proposta'
 
-    expect(current_path).to eq(cancel_proposal_path(prop1))
-    expect(page).to have_content('Informe por que quer cancelar a proposta:')
-    expect(page).to have_selector('textarea[id=proposal_cancel_reason]')
-    expect(Proposal.count).to eq(1)
+      expect(page).to have_content("Aprovada em 01/10/2021. "\
+        "Não é possível cancelar a proposta após 3 dias.")
+      expect(page).to have_content('Proposta irrecusável')
+      expect(page).to have_content('Status: Aprovada')
+      expect(page).not_to have_content('Você não fez propostas ainda')
+      expect(Proposal.count).to eq(1)
+    end
   end
-
-  it 'and can cancel if approved after three days with reason'
 end

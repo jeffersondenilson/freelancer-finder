@@ -20,12 +20,3 @@ class Professional < ApplicationRecord
     self.completed_profile = true
   end
 end
-
-# :full_name, :string, default: ""
-# :birth_date, :date, default: ""
-# :education, :text, default: ""
-# :description, :text, default: ""
-# :experience, :text, default: ""
-# :abilities, :text, default: ""
-# :profile_picture_url, :string, default: ""
-# :completed_profile, :boolean, default: false
