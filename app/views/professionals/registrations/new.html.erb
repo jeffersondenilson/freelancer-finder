@@ -1,34 +1,51 @@
-<h2>Criar conta</h2>
+<!-- <h2>Criar conta</h2> -->
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "professionals/shared/error_messages", resource: resource %>
+<main class="form-signin text-center">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "professionals/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name, autofocus: true %>
+    <i class="bi bi-briefcase" style="font-size: 3rem;"></i>
+
+    <h2 class="h3 mb-3 fw-normal">Criar conta como profissional</h2>
+
+    <div class="form-floating">
+      <%= f.text_field :name, autofocus: true, class: "form-control", 
+        placeholder: "John Doe" %>
+      <%= f.label :name %>
+    </div>
+
+    <div class="form-floating">
+      <%= f.email_field :email, autocomplete: "email", class: "form-control", 
+        placeholder: "john.doe@email.com" %>
+      <%= f.label :email %>
+    </div>
+
+    <div class="form-floating">
+      <%= f.password_field :password, autocomplete: "new-password", 
+        class: "form-control", placeholder: "Mínimo 6 caracteres" %>
+      <%= f.label :password %>
+      <% #if @minimum_password_length %>
+      <!-- <em>(mínimo <%= @minimum_password_length %> caracteres)</em> -->
+      <% #end %>
+    </div>
+
+    <div class="form-floating">
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", 
+        class: "form-control", placeholder: "Mínimo 6 caracteres" %>
+      <%= f.label :password_confirmation %>
+    </div>
+
+    <br>
+
+    <div class="actions">
+      <%= f.submit "Criar conta", class: "w-100 btn btn-lg btn-primary" %>
+    </div>
+  <% end %>
+
+  <br>
+
+  <div class="d-flex justify-content-evenly">
+    <%= render "professionals/shared/links" %> 
+    <%= link_to 'Voltar', root_path %>
   </div>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(mínimo <%= @minimum_password_length %> caracteres)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Criar conta" %>
-  </div>
-<% end %>
-
-<%= render "professionals/shared/links" %>
+</main>

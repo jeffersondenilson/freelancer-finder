@@ -1,26 +1,40 @@
-<h2>Entrar</h2>
+<!-- <h2>Entrar</h2> -->
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+<main class="form-signin text-center">
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+    <i class="bi bi-kanban mb-4" style="font-size: 3rem"></i>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+    <h2 class="h3 mb-3 fw-normal">Entrar como usuário</h2>
+
+    <div class="form-floating">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+        class: "form-control", placeholder: "jane.doe@email.com" %>
+      <%= f.label :email %>
+    </div>
+
+    <div class="form-floating">
+      <%= f.password_field :password, autocomplete: "current-password", 
+        class: "form-control", placeholder: "Senha" %>
+      <%= f.label :password %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="checkbox mt-3 mb-3">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.submit "Entrar", class: "w-100 btn btn-lg btn-primary" %>
     </div>
   <% end %>
 
-  <div class="actions">
-    <%= f.submit "Entrar" %>
-  </div>
-<% end %>
+  <br>
 
-<%= render "users/shared/links" %>
+  <div class="d-flex justify-content-evenly">
+    <%= render "users/shared/links" %> 
+    <%= link_to 'Voltar', root_path %>
+  </div>
+</main>
