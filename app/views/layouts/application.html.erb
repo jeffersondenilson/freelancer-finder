@@ -13,33 +13,13 @@
   <body>
     <nav>
       <ul>
-        <% # TODO: criar partial com links para cada tipo de usuario %>
         <% if user_signed_in? %>
-          <li>
-            <%= link_to 'Criar projeto', new_project_path %>
-          </li>
-          <%= render 'layouts/signed_in_links', resource: current_user %>
+          <%= render 'layouts/user_signed_in_links' %>
         <% elsif professional_signed_in? %>
-          <li>
-            <%= link_to 'Buscar projetos', projects_path %>
-          </li>
-          <li>
-            <%= link_to 'Meus projetos', my_projects_path %>
-          </li>
-          <%= render 'layouts/signed_in_links', resource: current_professional %>
-        <% #else %>
-          
+          <%= render 'layouts/professional_signed_in_links' %>
         <% end %>
       </ul>
     </nav>
-    <!-- 
-      <li>
-        <%= link_to 'Contratar freelancers', new_user_registration_path %>
-      </li>
-      <li>
-        <%= link_to 'Encontrar projetos', new_professional_registration_path %>
-      </li>
-     -->
 
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>

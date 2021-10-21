@@ -1,0 +1,12 @@
+<li>
+  <%= link_to 'Buscar projetos', projects_path %>
+</li>
+<li>
+  <%= link_to 'Meus projetos', my_projects_path %>
+</li>
+<li>
+  <%= current_professional.name %>
+</li>
+<li>
+  <%= link_to 'Sair', destroy_professional_session_path, method: :delete %>
+</li>
