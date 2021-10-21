@@ -36,6 +36,6 @@ describe 'Professional sign in' do
     click_on 'Sair'
 
     expect(current_path).to eq(root_path)
-    expect(page).to have_selector('h1', text: 'Encontre freelancers!')
+    expect(page).to have_selector('h1', text: 'Freelancer finder')
   end
 end

@@ -1,1 +1,14 @@
-<h1>Encontre freelancers!</h1>
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">Freelancer finder</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">
+      O projeto consiste em criar uma plataforma Web que reúna em torno de projetos a serem executados pessoas interessadas em contratar um freelancer com profissionais de tecnologia.
+    </p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <%= link_to 'Contratar freelancers', new_user_registration_path, 
+        class: "btn btn-primary btn-lg px-4 gap-3" %>
+      <%= link_to 'Encontrar projetos', new_professional_registration_path, 
+        class: "btn btn-outline-secondary btn-lg px-4" %>
+    </div>
+  </div>
+</div>

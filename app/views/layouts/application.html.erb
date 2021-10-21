@@ -27,16 +27,19 @@
             <%= link_to 'Meus projetos', my_projects_path %>
           </li>
           <%= render 'layouts/signed_in_links', resource: current_professional %>
-        <% else %>
-          <li>
-            <%= link_to 'Contratar freelancers', new_user_registration_path %>
-          </li>
-          <li>
-            <%= link_to 'Encontrar projetos', new_professional_registration_path %>
-          </li>
+        <% #else %>
+          
         <% end %>
       </ul>
     </nav>
+    <!-- 
+      <li>
+        <%= link_to 'Contratar freelancers', new_user_registration_path %>
+      </li>
+      <li>
+        <%= link_to 'Encontrar projetos', new_professional_registration_path %>
+      </li>
+     -->
 
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
