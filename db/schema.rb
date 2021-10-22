@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2021_10_19_195604) do
     t.text "desired_abilities", default: "", null: false
     t.decimal "value_per_hour", default: "0.0", null: false
     t.date "due_date", null: false
-    t.boolean "remote", null: false
+    t.boolean "remote", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id", null: false
