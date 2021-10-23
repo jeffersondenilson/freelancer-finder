@@ -11,7 +11,7 @@ describe 'Visitor create user account' do
     fill_in 'Confirmação de senha', with: '123456'
     click_on 'Criar conta'
 
-    expect(page).to have_selector('li', text: 'Jane Doe')
+    expect(page).to have_selector('[data-test=username]', text: 'Jane Doe')
   end
 
   it 'and must fill all fields' do

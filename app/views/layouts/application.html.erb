@@ -11,18 +11,25 @@
   </head>
 
   <body>
-    <nav>
-      <ul>
-        <% if user_signed_in? %>
-          <%= render 'layouts/user_signed_in_links' %>
-        <% elsif professional_signed_in? %>
-          <%= render 'layouts/professional_signed_in_links' %>
-        <% end %>
-      </ul>
-    </nav>
+    <% if user_signed_in? %>
+      <%= render 'layouts/user_signed_in_links' %>
+    <% elsif professional_signed_in? %>
+      <%= render 'layouts/professional_signed_in_links' %>
+    <% end %>
 
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <% if flash[:notice] %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
     
     <%= yield %>
   </body>

@@ -11,7 +11,7 @@ describe 'Professional sign in' do
     fill_in 'Senha', with: '123456'
     click_on 'Entrar'
 
-    expect(page).to have_selector('li', text: 'John Doe')
+    expect(page).to have_selector('[data-test=username]', text: 'John Doe')
     expect(page).to have_link('Buscar projetos', href: projects_path)
     expect(page).not_to have_link('Criar projeto', href: new_project_path)
   end

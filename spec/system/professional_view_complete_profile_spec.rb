@@ -41,7 +41,7 @@ describe 'Professional view complete profile' do
     expect(current_path).to eq(root_path)
     expect(page).to have_content('Sua conta foi atualizada com sucesso.')
     expect(page).to have_content('Meu perfil')
-    expect(page).to have_selector('li', text: 'J. Doe')
+    expect(page).to have_selector('[data-test=username]', text: 'J. Doe')
     expect(page).to have_content('Nome social: J. Doe')
     expect(page).to have_content('Nome completo: Just John Doe')
     expect(page).to have_content('Data de nascimento: 01/01/1980')
