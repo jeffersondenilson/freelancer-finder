@@ -7,7 +7,7 @@
   <p>Horas disponíveis por semana: <%= proposal.hours_per_week %></p>
   <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
   <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
-  <% if proposal.canceled? %>
+  <% if proposal.canceled_approved? %>
     <p>Motivo de cancelamento: <br> <%= proposal.cancel_reason %></p>
   <% end %>
   <p>Enviado por: <%= proposal.professional.name %></p>

@@ -32,7 +32,7 @@ describe 'Professional cancel proposal' do
     expect(current_path).to eq(my_projects_path)
     expect(page).to have_content('Proposta cancelada com sucesso')
     expect(page).to have_content('Você não fez propostas ainda')
-    expect(Proposal.count).to eq(0)
+    expect(Proposal.count).to eq(1)
   end
 
   it 'and mark as canceled within three days if approved' do

@@ -8,11 +8,6 @@ class ProjectsController < ApplicationController
   end
 
   def search
-    # title = Project.arel_table[:title]
-    # description = Project.arel_table[:description]
-    # @projects = Project.where( title.matches "%#{params[:query]}%" )
-    #   .or Project.where description.matches "%#{params[:query]}%"
-
     query = ActiveRecord::Base.sanitize_sql_like(params[:query])
     @projects = Project.where("title LIKE :query OR description LIKE :query",
       query: "%#{query}%")
@@ -79,7 +74,8 @@ class ProjectsController < ApplicationController
 
   def my_projects
     # @projects = 
-    @proposals = current_professional.proposals
+    @proposals = current_professional.proposals.where
+      .not(status: :canceled_pending)
   end
 
   private

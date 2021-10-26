@@ -13,6 +13,6 @@ pt-BR:
           pending: "Pendente"
           analyzing: "Analisando"
           approved: "Aprovada"
-          canceled: "Cancelada"
+          canceled_pending: "Cancelada"
+          canceled_approved: "Cancelada"
         approved_at: "Aprovada em"
-        cancel_reason: "Motivo de cancelamento"

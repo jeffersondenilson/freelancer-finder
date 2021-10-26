@@ -31,16 +31,26 @@ class ProposalsController < ApplicationController
   def destroy
     @proposal = current_professional.proposals.find(params[:id])
 
+    # if @proposal.cancel!(params[:proposal][:cancel_reason])
+    #   flash[:notice] = 'Proposta cancelada com sucesso'
+    # else
+    #   flash[:alert] = 'Não foi possível cancelar a proposta'
+    # end
+
+    # redirect_to my_projects_path
+
     if @proposal.pending?
-      @proposal.destroy
-      flash[:notice] = 'Proposta cancelada com sucesso'
+      @proposal.canceled_pending!
     elsif @proposal.can_cancel_at_current_date?
-      @proposal.canceled!
-      @proposal.cancel_reason = params[:proposal][:cancel_reason]
-      @proposal.save
+      @proposal.canceled_approved!
+      @proposal.proposal_cancelation
+        .new(cancel_reason: params[:proposal][:cancel_reason])
+    end
+
+    if @proposal.errors.empty? && @proposal.save
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
-      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
+      flash[:alert] = 'Não foi possível cancelar a proposta'
     end
 
     redirect_to my_projects_path
