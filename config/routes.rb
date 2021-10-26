@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     resources :proposals, only: [:new, :create]
   end
 
-  resources :proposals, only: [:destroy] do
+  resources :proposals, only: [:edit, :update, :destroy] do
     get '/cancel', to: 'proposals#cancel'
   end
 end

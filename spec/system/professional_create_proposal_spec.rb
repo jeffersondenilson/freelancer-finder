@@ -177,6 +177,45 @@ describe 'Professional create proposal' do
     expect(page).not_to have_content('Enviado por: Schneider')
   end
 
-  it 'and edit proposal'
+  it 'and edit proposal' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    prop1 = Proposal.create!({
+      message: 'Proposta irrecusável',
+      value_per_hour: 999,
+      hours_per_week: 7,
+      finish_date: '10/07/1995',
+      project: pj1,
+      professional: john
+    })
+    login_as john, scope: :professional
+
+    visit my_projects_path
+    within '#proposal-1' do
+      click_on 'Editar'
+    end
+    fill_in 'Mensagem', with: 'Outra mensagem'
+    fill_in 'Valor por hora', with: 100
+    fill_in 'Horas disponíveis por semana', with: 20
+    fill_in 'Expectativa de conclusão', with: '14/10/2021'
+    click_on 'Atualizar Proposta'
+
+    expect(page).to have_link('Projeto 1', href: project_path(pj1))
+    expect(page).to have_content('Mensagem: Outra mensagem')
+    expect(page).to have_content('Valor por hora: R$ 100,00')
+    expect(page).to have_content('Horas disponíveis por semana: 20')
+    expect(page).to have_content('Expectativa de conclusão: 14/10/2021')
+  end
+
   it 'and can only make one proposal per project'
 end

@@ -1,4 +1,4 @@
-<div>
+<div id=<%= "proposal-#{proposal.id}" %> >
   <p>
     Projeto: <%= link_to proposal.project.title, project_path(proposal.project) %>
   </p>
@@ -16,6 +16,8 @@
   <p>Enviado por: <%= proposal.professional.name %></p>
   <% if professional_signed_in? %>
     <div>
+      <%= link_to 'Editar', edit_proposal_path(proposal) %> | 
+
       <% if proposal.pending? %>
         <%= link_to 'Cancelar proposta', proposal_path(proposal), 
           method: :delete, data: { confirm: 'Cancelar proposta?' } %>

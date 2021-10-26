@@ -19,6 +19,26 @@ class ProposalsController < ApplicationController
     end
   end
 
+  def edit
+    @proposal = current_professional.proposals.find(params[:id])
+
+    if @proposal.nil?
+      flash[:alert] = 'Proposta não encontrada'
+      redirect_to my_projects_path
+    end
+  end
+
+  def update
+    @proposal = current_professional.proposals.find(params[:id])
+
+    if @proposal.update(proposal_params)
+      flash[:notice] = 'Proposta atualizada com sucesso'
+      redirect_to my_projects_path
+    else
+      render :edit
+    end
+  end
+
   def cancel
     @proposal = current_professional.proposals.find(params[:proposal_id])
 
