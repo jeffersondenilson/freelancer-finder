@@ -45,9 +45,12 @@ class ProposalsController < ApplicationController
       @proposal.canceled_approved!
       @proposal.proposal_cancelation = ProposalCancelation
         .new(cancel_reason: params[:proposal][:cancel_reason])
+    else
+      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
+      redirect_to my_projects_path and return
     end
 
-    if @proposal.errors.empty? && @proposal.save
+    if @proposal.save
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
       flash[:alert] = 'Não foi possível cancelar a proposta'
