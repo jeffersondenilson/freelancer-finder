@@ -20,17 +20,12 @@ Rails.application.routes.draw do
   
   resources :projects, only: [:index, :show, :new, :create, :edit, :update] do
     get '/search', to: 'projects#search', on: :collection
+    get '/my', to: 'projects#my_projects', on: :collection
 
-    resources :proposals, only: [:new, :create] #, shallow: true
+    resources :proposals, only: [:new, :create]
   end
 
   resources :proposals, only: [:destroy] do
     get '/cancel', to: 'proposals#cancel'
   end
-
-  # TODO: mover para nested de projects
-  get '/my_projects', to: 'projects#my_projects'
-
-  # get '/proposals/:id/cancel_proposal', to: 'proposals#cancel',
-  #   as: :cancel_proposal
 end

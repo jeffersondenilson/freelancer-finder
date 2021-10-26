@@ -8,7 +8,10 @@
   <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
   <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
   <% if proposal.canceled_approved? %>
-    <p>Motivo de cancelamento: <br> <%= proposal.cancel_reason %></p>
+    <p>
+      Motivo de cancelamento: <br>
+      <%= proposal.proposal_cancelation.cancel_reason %>
+    </p>
   <% end %>
   <p>Enviado por: <%= proposal.professional.name %></p>
   <% if professional_signed_in? %>
@@ -17,7 +20,7 @@
         <%= link_to 'Cancelar proposta', proposal_path(proposal), 
           method: :delete, data: { confirm: 'Cancelar proposta?' } %>
       <% elsif proposal.approved? %>
-        <%= link_to 'Cancelar proposta', cancel_proposal_path(proposal) %>
+        <%= link_to 'Cancelar proposta', proposal_cancel_path(proposal) %>
       <% end %>
     </div>
   <% end %>

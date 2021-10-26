@@ -75,7 +75,8 @@ class ProjectsController < ApplicationController
   def my_projects
     # @projects = 
     @proposals = current_professional.proposals.where
-      .not(status: :canceled_pending)
+      .not(status: [:canceled_pending, :canceled_approved])
+      .order(:updated_at)
   end
 
   private

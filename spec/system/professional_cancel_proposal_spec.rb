@@ -33,9 +33,10 @@ describe 'Professional cancel proposal' do
     expect(page).to have_content('Proposta cancelada com sucesso')
     expect(page).to have_content('Você não fez propostas ainda')
     expect(Proposal.count).to eq(1)
+    expect(Proposal.first.status).to eq('canceled_pending')
   end
 
-  it 'and mark as canceled within three days if approved' do
+  it 'and cancel with reason within three days if approved' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
     pj1 = Project.create!({
       title: 'Projeto 1',
@@ -60,7 +61,7 @@ describe 'Professional cancel proposal' do
     })
     login_as john, scope: :professional
 
-    travel_to Date.new(2021,10,01) do
+    travel_to prop1.approved_at do
       visit my_projects_path
       click_on 'Cancelar proposta'
       fill_in 'Informe por que quer cancelar a proposta:', 
@@ -68,11 +69,10 @@ describe 'Professional cancel proposal' do
       click_on 'Cancelar proposta'
 
       expect(page).to have_content('Proposta cancelada com sucesso')
-      expect(page).to have_content('Proposta irrecusável')
-      expect(page).to have_content('Status: Cancelada')
-      expect(page).to have_content('Motivo de cancelamento: Lorem ipsum dolor sit amet')
+      expect(page).to have_content('Você não fez propostas ainda')
       expect(Proposal.count).to eq(1)
-      expect(page).not_to have_content('Você não fez propostas ainda')
+      expect(Proposal.first.status).to eq('canceled_approved')
+      expect(Proposal.first.proposal_cancelation.cancel_reason).to eq('Lorem ipsum dolor sit amet')
     end
   end
 

@@ -20,7 +20,7 @@ class ProposalsController < ApplicationController
   end
 
   def cancel
-    @proposal = current_professional.proposals.find(params[:id])
+    @proposal = current_professional.proposals.find(params[:proposal_id])
 
     if !@proposal.can_cancel_at_current_date?
       flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
@@ -43,7 +43,7 @@ class ProposalsController < ApplicationController
       @proposal.canceled_pending!
     elsif @proposal.can_cancel_at_current_date?
       @proposal.canceled_approved!
-      @proposal.proposal_cancelation
+      @proposal.proposal_cancelation = ProposalCancelation
         .new(cancel_reason: params[:proposal][:cancel_reason])
     end
 
