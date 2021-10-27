@@ -3,10 +3,21 @@ class ProposalsController < ApplicationController
 
   def new
     @project = Project.find(params[:project_id])
+
+    if current_professional.proposals.find_by(project_id: params[:project_id])
+      flash[:alert] = 'Você já fez uma proposta nesse projeto'
+      redirect_to @project and return
+    end
+
     @proposal = Proposal.new
   end
 
   def create
+    if current_professional.proposals.find_by(project_id: params[:project_id])
+      flash[:alert] = 'Você já fez uma proposta nesse projeto'
+      redirect_to project_path(params[:project_id]) and return
+    end
+    
     @proposal = Proposal.new(proposal_params)
     @proposal.project_id = params[:project_id]
     @proposal.professional = current_professional
