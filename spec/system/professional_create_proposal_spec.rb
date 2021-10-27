@@ -244,5 +244,7 @@ describe 'Professional create proposal' do
 
     expect(current_path).to eq(project_path(pj1))
     expect(page).to have_content('Você já fez uma proposta nesse projeto')
+    expect(page).to have_content('Mensagem: Proposta irrecusável')
+    expect(page).not_to have_link('Fazer proposta')
   end
 end
