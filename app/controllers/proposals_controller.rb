@@ -52,10 +52,12 @@ class ProposalsController < ApplicationController
   def destroy
     @proposal = current_professional.proposals.find(params[:id])
 
+    # TODO: usar metodo cancel!
     # if @proposal.cancel!(params[:proposal][:cancel_reason])
     #   flash[:notice] = 'Proposta cancelada com sucesso'
     # else
-    #   flash[:alert] = 'Não foi possível cancelar a proposta'
+    #   flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0] || 
+    #     'Não foi possível cancelar a proposta'
     # end
 
     # redirect_to my_projects_path
