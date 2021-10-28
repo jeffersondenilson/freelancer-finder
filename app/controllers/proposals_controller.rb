@@ -8,14 +8,20 @@ class ProposalsController < ApplicationController
   end
 
   def create
+    @project = Project.find_by(id: params[:project_id])
+
+    if @project.nil?
+      flash[:alert] = 'Projeto não encontrado'
+      redirect_to root_path and return
+    end
+
     @proposal = Proposal.new(proposal_params)
-    @proposal.project_id = params[:project_id]
+    @proposal.project = @project
     @proposal.professional = current_professional
 
     if @proposal.save
       redirect_to project_path(params[:project_id])
     else
-      @project = Project.find(params[:project_id])
       render :new
     end
   end
@@ -31,6 +37,11 @@ class ProposalsController < ApplicationController
 
   def update
     @proposal = current_professional.proposals.find(params[:id])
+
+    if @proposal.nil?
+      flash[:alert] = 'Proposta não encontrada'
+      redirect_to my_projects_path
+    end
 
     if @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
