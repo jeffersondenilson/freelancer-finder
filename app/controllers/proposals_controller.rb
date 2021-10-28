@@ -27,7 +27,7 @@ class ProposalsController < ApplicationController
   end
 
   def edit
-    @proposal = current_professional.proposals.find(params[:id])
+    @proposal = current_professional.proposals.find_by(id: params[:id])
 
     if @proposal.nil?
       flash[:alert] = 'Proposta não encontrada'
@@ -36,11 +36,11 @@ class ProposalsController < ApplicationController
   end
 
   def update
-    @proposal = current_professional.proposals.find(params[:id])
+    @proposal = current_professional.proposals.find_by(id: params[:id])
 
     if @proposal.nil?
       flash[:alert] = 'Proposta não encontrada'
-      redirect_to my_projects_path
+      redirect_to my_projects_path and return
     end
 
     if @proposal.update(proposal_params)
