@@ -68,4 +68,28 @@ describe 'User create projects' do
     expect(page).to have_content('Título: Novo nome')
     expect(page).to have_content('Trabalho presencial')
   end
+
+  it 'and can not update with empty fields' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
+      password: 'he217tw8')
+    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+      desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+      remote: true, creator: jane)
+    login_as jane, scope: :user
+
+    visit project_path(project)
+    click_on 'Editar'
+    fill_in 'Título', with: ''
+    fill_in 'Descrição', with: ''
+    fill_in 'Habilidades desejadas', with: ''
+    fill_in 'Valor por hora', with: ''
+    fill_in 'Data limite', with: ''
+    click_on 'Enviar'
+
+    expect(page).to have_content('Título não pode ficar em branco')
+    expect(page).to have_content('Descrição não pode ficar em branco')
+    expect(page).to have_content('Habilidades desejadas não pode ficar em branco')
+    expect(page).to have_content('Valor por hora não pode ficar em branco')
+    expect(page).to have_content('Data limite não pode ficar em branco')
+  end
 end
