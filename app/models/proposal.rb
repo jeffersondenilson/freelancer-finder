@@ -18,20 +18,18 @@ class Proposal < ApplicationRecord
   
   validates :hours_per_week, numericality: { only_integer: true, greater_than: 0 }
 
-  # def cancel!(cancel_reason = '')
-  #   if pending?
-  #     canceled_pending!
-  #   elsif can_cancel_at_current_date?
-  #     canceled_approved!
-  #     self.proposal_cancelation.new(cancel_reason: cancel_reason)
-  #   else
-  #     errors.add(:approved_at, "#{I18n.l approved_at.to_date}. "\
-  #       "Não é possível cancelar a proposta após 3 dias.")
-  #     return false
-  #   end
+  def cancel!(cancel_reason = '')
+    if pending?
+      canceled_pending!
+    elsif can_cancel_at_current_date?
+      canceled_approved!
+      self.proposal_cancelation = ProposalCancelation.new(cancel_reason: cancel_reason)
+    else
+      return false
+    end
 
-  #   save
-  # end
+    save
+  end
 
   def can_cancel_at_current_date?
     return true if approved? && Date.current < (approved_at + 3.day).to_date
