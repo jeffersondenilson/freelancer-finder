@@ -247,4 +247,41 @@ describe 'Professional create proposal' do
     expect(page).to have_content('Mensagem: Proposta irrecusável')
     expect(page).not_to have_link('Fazer proposta')
   end
+
+  it 'and can not update with empty fields' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!({
+      title: 'Projeto 1',
+      description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX, banco de dados',
+      value_per_hour: 100,
+      due_date: '13/10/2021',
+      remote: true,
+      creator: jane
+    })
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    prop1 = Proposal.create!({
+      message: 'Proposta irrecusável',
+      value_per_hour: 999,
+      hours_per_week: 7,
+      finish_date: '10/07/1995',
+      project: pj1,
+      professional: john
+    })
+    login_as john, scope: :professional
+
+    visit edit_proposal_path(prop1)
+    fill_in 'Mensagem', with: ''
+    fill_in 'Valor por hora', with: ''
+    fill_in 'Horas disponíveis por semana', with: 0
+    fill_in 'Expectativa de conclusão', with: ''
+    click_on 'Atualizar Proposta'
+
+    expect(page).to have_content('Mensagem não pode ficar em branco')
+    expect(page).to have_content('Valor por hora não pode ficar em branco')
+    expect(page).to have_content('Valor por hora não é um número')
+    expect(page).to have_content('Horas disponíveis por semana deve ser maior que 0')
+    expect(page).to have_content('Expectativa de conclusão não pode ficar em branco')
+  end
 end
