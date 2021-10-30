@@ -14,6 +14,10 @@ class Professional < ApplicationRecord
 
   before_update :set_completed_profile
 
+  def not_canceled_proposals
+    proposals.where.not(status: [:canceled_pending, :canceled_approved])
+  end
+
   private
   def set_completed_profile
     self.completed_profile = true

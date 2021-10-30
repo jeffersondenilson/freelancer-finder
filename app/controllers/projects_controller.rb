@@ -20,7 +20,8 @@ class ProjectsController < ApplicationController
 
     if professional_signed_in?
       @project = Project.find_by(id: params[:id])
-      @proposal = @project.proposals.find_by(professional_id: current_professional.id)
+      @proposal = current_professional.not_canceled_proposals
+        .find_by(project_id: params[:id])
     elsif user_signed_in?
       @project = Project.find_by(id: params[:id], creator: current_user)
     end
@@ -74,9 +75,8 @@ class ProjectsController < ApplicationController
 
   def my_projects
     # @projects = 
-    @proposals = current_professional.proposals.where
-      .not(status: [:canceled_pending, :canceled_approved])
-      .order(:updated_at)
+    @proposals = current_professional.not_canceled_proposals
+      .order(updated_at: :desc)
   end
 
   private

@@ -20,6 +20,7 @@ class ProposalsController < ApplicationController
     @proposal.professional = current_professional
 
     if @proposal.save
+      flash[:notice] = 'Proposta criada com sucesso'
       redirect_to project_path(params[:project_id])
     else
       render :new
@@ -104,7 +105,8 @@ class ProposalsController < ApplicationController
   end
 
   def verify_duplicated_proposal
-    if current_professional.proposals.find_by(project_id: params[:project_id])
+    if current_professional.not_canceled_proposals
+        .find_by(project_id: params[:project_id])
       flash[:alert] = 'Você já fez uma proposta nesse projeto'
       redirect_to project_path(params[:project_id])
     end

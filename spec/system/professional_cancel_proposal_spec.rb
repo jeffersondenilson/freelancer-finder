@@ -113,4 +113,7 @@ describe 'Professional cancel proposal' do
       expect(Proposal.count).to eq(1)
     end
   end
+
+  it 'and can not view canceled proposals in my projects'
+  it 'and can not view canceled proposals in project page'
 end

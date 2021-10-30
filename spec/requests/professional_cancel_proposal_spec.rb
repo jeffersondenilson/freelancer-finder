@@ -34,7 +34,5 @@ describe 'Professional cancel proposal' do
       expect(response).to redirect_to('/projects/my')
       expect(Proposal.first.status).to eq('approved')
     end
-  end 
-
-  it 'can not view canceled proposals ...'
+  end
 end
