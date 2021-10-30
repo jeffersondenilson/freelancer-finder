@@ -77,7 +77,5 @@ RSpec.describe Proposal, type: :model do
         )
       end
     end
-
-    it 'return false if is pending?'
   end
 end

@@ -36,5 +36,40 @@ describe 'Professional cancel proposal' do
     end
   end
 
-  it 'should not view cancel form if is pending'
+  it 'should not view cancel form if is pending' do
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+      desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+      remote: true, creator: jane)
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    prop1 = Proposal.create!(
+      message: 'John\'s proposal on project 1',
+      value_per_hour: 80.80,
+      hours_per_week: 20,
+      finish_date: Time.current + 3.day,
+      status: :pending,
+      project: pj1,
+      professional: john
+    )
+    login_as john, scope: :professional
+
+    get '/proposals/1/cancel'
+
+    expect(response).to redirect_to('/projects/my')
+    expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
+    expect(Proposal.first.status).to eq('canceled_pending')
+    # TODO: usar shoulda matchers?
+    # should redirect_to('/proposals/1')
+    # should redirect_to(action: :destroy)
+  end
+
+  it 'can not view edit form for canceled_pending proposal'
+  it 'can not view edit form for canceled_approved proposal'
+  it 'can not update canceled_pending proposal'
+  it 'can not update canceled_approved proposal'
+  it 'can not view cancel form for canceled_pending proposal'
+  it 'can not view cancel form for canceled_approved proposal'
+  it 'can not cancel canceled_pending proposal'
+  it 'can not cancel canceled_approved proposal'
 end

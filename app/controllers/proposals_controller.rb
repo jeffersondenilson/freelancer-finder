@@ -55,7 +55,12 @@ class ProposalsController < ApplicationController
   def cancel
     @proposal = current_professional.proposals.find(params[:proposal_id])
 
-    if !@proposal.can_cancel_at_current_date?
+    # TODO: redirecionar para destroy
+    if @proposal.pending?
+      @proposal.cancel!
+      flash[:notice] = 'Proposta cancelada com sucesso'
+      redirect_to my_projects_path
+    elsif !@proposal.can_cancel_at_current_date?
       flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0] || 
         'Não foi possível cancelar a proposta'
       redirect_to my_projects_path
