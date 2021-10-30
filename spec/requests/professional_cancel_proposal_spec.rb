@@ -35,4 +35,6 @@ describe 'Professional cancel proposal' do
       expect(Proposal.first.status).to eq('approved')
     end
   end
+
+  it 'should not view cancel form if is pending'
 end
