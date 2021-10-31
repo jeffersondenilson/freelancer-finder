@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Professional, type: :model do
+  it { should have_many :proposals }
+  it { should validate_presence_of :name }
+  it { should validate_presence_of(:full_name).on(:update) }
+  it { should validate_presence_of(:birth_date).on(:update) }
+  it { should validate_presence_of(:education).on(:update) }
+  it { should validate_presence_of(:description).on(:update) }
+  it { should validate_presence_of(:abilities).on(:update) }
+  it { should_not validate_presence_of(:experience).on(:update) }
+  it { should_not validate_presence_of(:profile_picture_url).on(:update) }
+  
   it 'should set profile as completed when update profile' do
     john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
       password: '123456')

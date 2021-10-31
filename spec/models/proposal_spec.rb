@@ -3,6 +3,19 @@ require 'rails_helper'
 RSpec.describe Proposal, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
+  it { should belong_to :project }
+  it { should belong_to :professional }
+  it { should have_one :proposal_cancelation }
+  it { should define_enum_for(:status).with_values(pending: 0, analyzing: 10, 
+      approved: 20, canceled_pending: 30, canceled_approved: 40) }
+  it { should validate_presence_of :message }
+  it { should validate_presence_of :value_per_hour }
+  it { should validate_presence_of :hours_per_week }
+  it { should validate_presence_of :finish_date }
+  it { should validate_numericality_of :value_per_hour }
+  it { should validate_numericality_of(:hours_per_week).only_integer
+    .is_greater_than(0) }
+
   context '#can_cancel_at_current_date?' do
     it 'return true if approved the same day' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
