@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  # TODO: adicionar rescue_from para 404
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   before_action :redirect_professional_to_complete_profile,

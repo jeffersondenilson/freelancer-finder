@@ -7,7 +7,7 @@ class Professional < ApplicationRecord
 
   validates :name, presence: true
 
-  # TODO: metodo customizado para validar e completar perfil
+  # TODO: metodo customizado para validar e completar perfil?
   # https://www.dan-manges.com/blog/action-dependent-validations-and-why-on-update-is-bad
   validates :full_name, :birth_date, :education, :description, :abilities, 
     presence: true, on: :update
