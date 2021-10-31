@@ -78,4 +78,106 @@ RSpec.describe Proposal, type: :model do
       end
     end
   end
+
+  context '#cancel!' do
+    it 'cancel pending proposal' do
+      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+        desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+        remote: true, creator: jane)
+      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+        password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      prop1 = Proposal.create!(
+        message: 'John\'s proposal on project 1',
+        value_per_hour: 80.80,
+        hours_per_week: 20,
+        finish_date: '10/01/2021',
+        project: pj1,
+        professional: john,
+        status: :pending
+      )
+
+      expect(prop1.cancel!).to eq(true)
+      expect(prop1.status).to eq('canceled_pending')
+    end
+
+    it 'cancel approved proposal with cancel reason' do
+      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+        desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+        remote: true, creator: jane)
+      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+        password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      prop1 = Proposal.create!(
+        message: 'John\'s proposal on project 1',
+        value_per_hour: 80.80,
+        hours_per_week: 20,
+        finish_date: '10/01/2021',
+        project: pj1,
+        professional: john,
+        status: :approved,
+        approved_at: '01/01/2021'
+      )
+
+      travel_to prop1.approved_at do
+        expect(prop1.cancel!('I Cancel')).to eq(true)
+        expect(prop1.errors.empty?).to eq(true)
+        expect(prop1.status).to eq('canceled_approved')
+        expect(prop1.proposal_cancelation.cancel_reason).to eq('I Cancel')
+      end
+    end
+
+    it 'cancel approved proposal with empty cancel reason' do
+      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+        desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+        remote: true, creator: jane)
+      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+        password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      prop1 = Proposal.create!(
+        message: 'John\'s proposal on project 1',
+        value_per_hour: 80.80,
+        hours_per_week: 20,
+        finish_date: '10/01/2021',
+        project: pj1,
+        professional: john,
+        status: :approved,
+        approved_at: '01/01/2021'
+      )
+
+      travel_to prop1.approved_at do
+        expect(prop1.cancel!).to eq(true)
+        expect(prop1.errors.empty?).to eq(true)
+        expect(prop1.status).to eq('canceled_approved')
+        expect(prop1.proposal_cancelation.cancel_reason).to eq('')
+      end
+    end
+
+    it 'return false if approved in more than three days' do
+      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
+        desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
+        remote: true, creator: jane)
+      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', 
+        password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      prop1 = Proposal.create!(
+        message: 'John\'s proposal on project 1',
+        value_per_hour: 80.80,
+        hours_per_week: 20,
+        finish_date: '10/01/2021',
+        project: pj1,
+        professional: john,
+        status: :approved,
+        approved_at: '01/01/2021'
+      )
+
+      travel_to prop1.approved_at + 3.day do
+        expect(prop1.cancel!).to eq(false)
+        expect(prop1.errors.full_messages_for(:approved_at)).to include(
+          'Aprovada em 01/01/2021. Não é possível cancelar a proposta após 3 dias.'
+        )
+        expect(prop1.status).to eq('approved')
+      end
+    end
+  end
 end
