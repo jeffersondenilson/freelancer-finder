@@ -29,9 +29,11 @@ describe 'Professional cancel proposal' do
     }
 
     travel_to prop1.approved_at + 3.day do
-      expect(flash[:alert]).to eq("Aprovada em 10/10/2021. "\
+      # expect(flash[:alert]).to eq("Aprovada em 10/10/2021. "\
+      #   "Não é possível cancelar a proposta após 3 dias.")
+      # expect(response).to redirect_to('/projects/my')
+      expect(response.body).to include("Aprovada em 10/10/2021. "\
         "Não é possível cancelar a proposta após 3 dias.")
-      expect(response).to redirect_to('/projects/my')
       expect(Proposal.first.status).to eq('approved')
     end
   end

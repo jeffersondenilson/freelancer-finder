@@ -60,9 +60,10 @@ class ProposalsController < ApplicationController
       flash[:notice] = 'Proposta cancelada com sucesso'
       redirect_to my_projects_path
     elsif !@proposal.can_cancel_at_current_date?
-      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0] || 
-        'Não foi possível cancelar a proposta'
-      redirect_to my_projects_path
+      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join || 
+      #   'Não foi possível cancelar a proposta'
+      @proposals = current_professional.not_canceled_proposals.order(:updated_at)
+      render 'projects/my_projects'
     end
   end
 
@@ -72,8 +73,10 @@ class ProposalsController < ApplicationController
     if @proposal.cancel!(get_cancel_reason)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
-      flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0] || 
-        'Não foi possível cancelar a proposta'
+      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join || 
+      #   'Não foi possível cancelar a proposta'
+      @proposals = current_professional.not_canceled_proposals.order(:updated_at)
+      render 'projects/my_projects' and return
     end
 
     redirect_to my_projects_path
