@@ -12,18 +12,33 @@
       <%= f.text_field :name, autofocus: true, class: "form-control", 
         placeholder: "John Doe" %>
       <%= f.label :name %>
+      <% resource.errors.full_messages_for(:name).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
     </div>
 
     <div class="form-floating">
       <%= f.email_field :email, autocomplete: "email", class: "form-control", 
         placeholder: "john.doe@email.com" %>
       <%= f.label :email %>
+      <% resource.errors.full_messages_for(:email).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
     </div>
 
     <div class="form-floating">
       <%= f.password_field :password, autocomplete: "new-password", 
         class: "form-control", placeholder: "Mínimo 6 caracteres" %>
       <%= f.label :password %>
+      <% resource.errors.full_messages_for(:password).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
       <% #if @minimum_password_length %>
       <!-- <em>(mínimo <%= @minimum_password_length %> caracteres)</em> -->
       <% #end %>
@@ -33,6 +48,11 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password", 
         class: "form-control", placeholder: "Mínimo 6 caracteres" %>
       <%= f.label :password_confirmation %>
+      <% resource.errors.full_messages_for(:password_confirmation).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
     </div>
 
     <br>

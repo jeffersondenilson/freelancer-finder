@@ -13,8 +13,10 @@
     <% # TODO: criar partial para perfil %>
     <h2>Meu perfil</h2>
     <div>
-      <%= tag.img id: "profile-picture", alt: current_professional.name,
-        src: current_professional.profile_picture_url %>
+      <% if current_professional.profile_picture_url %>
+        <%= tag.img id: "profile-picture", alt: current_professional.name,
+          src: current_professional.profile_picture_url %>
+      <% end %>
       <p>Nome social: <%= current_professional.name %></p>
       <p>Nome completo: <%= current_professional.full_name %></p>
       <p>Data de nascimento: <%= I18n.l current_professional.birth_date %></p>
