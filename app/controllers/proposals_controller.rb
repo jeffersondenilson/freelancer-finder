@@ -82,29 +82,6 @@ class ProposalsController < ApplicationController
     redirect_to my_projects_path
   end
 
-  # def destroy
-  #   @proposal = current_professional.proposals.find(params[:id])
-
-  #   if @proposal.pending?
-  #     @proposal.canceled_pending!
-  #   elsif @proposal.can_cancel_at_current_date?
-  #     @proposal.canceled_approved!
-  #     @proposal.proposal_cancelation = ProposalCancelation
-  #       .new(cancel_reason: params[:proposal][:cancel_reason])
-  #   else
-  #     flash[:alert] = @proposal.errors.full_messages_for(:approved_at)[0]
-  #     redirect_to my_projects_path and return
-  #   end
-
-  #   if @proposal.save
-  #     flash[:notice] = 'Proposta cancelada com sucesso'
-  #   else
-  #     flash[:alert] = 'Não foi possível cancelar a proposta'
-  #   end
-
-  #   redirect_to my_projects_path
-  # end
-
   private
   def proposal_params
     params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week, 
