@@ -19,6 +19,10 @@ body {
   padding-top: 4.5rem;
 }
 
+.form-floating > textarea.form-control {
+  min-height: 120px;
+}
+
 .nav-link:hover, .nav-link:focus {
   text-decoration: underline;
 }

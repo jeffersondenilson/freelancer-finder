@@ -46,7 +46,7 @@
 
     <div class="form-floating">
       <%= f.password_field :password_confirmation, autocomplete: "new-password", 
-        class: "form-control", placeholder: "Mínimo 6 caracteres" %>
+        class: "form-control", placeholder: "Confirme a senha" %>
       <%= f.label :password_confirmation %>
       <% resource.errors.full_messages_for(:password_confirmation).each do |message| %>
         <div class="invalid-feedback">

@@ -1,86 +1,163 @@
-<% if !resource.completed_profile? %>
-  <h2>Complete o seu perfil para continuar</h2>
-<% else %>
-  <h2>Editar Perfil <%#= resource_name.to_s.humanize %></h2>
-<% end %>
+<main class="form-signin text-center">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "professionals/shared/error_messages", resource: resource %>
 
-<% # TODO: adicionar estilos e mensagens de erro %>
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "professionals/shared/error_messages", resource: resource %>
+    <i class="bi bi-briefcase" style="font-size: 3rem;"></i>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+    <h2 class="h3 mb-3 fw-normal">
+      <% if !resource.completed_profile? %>
+        Complete o seu perfil para continuar
+      <% else %>
+        Editar Perfil <%#= resource_name.to_s.humanize %>
+      <% end %>
+    </h2>
 
-  <div class="field">
-    <%= f.label :name, "Nome social" %><br />
-    <%= f.text_field :name %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",
+        class: "form-control", placeholder: "john.doe@email.com" %>
+      <%= f.label :email %>
+      <% resource.errors.full_messages_for(:email).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :full_name %><br />
-    <%= f.text_field :full_name %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_field :name, class: "form-control", placeholder: "John Doe" %>
+      <%= f.label :name, "Nome social" %>
+      <% resource.errors.full_messages_for(:name).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :birth_date %><br />
-    <%= f.date_field :birth_date %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_field :full_name, class: "form-control", placeholder: "John Doe" %>
+      <%= f.label :full_name %>
+      <% resource.errors.full_messages_for(:full_name).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :education %><br />
-    <%= f.text_area :education %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.date_field :birth_date, class: "form-control", 
+        placeholder: "DD/MM/AAAA" %>
+      <%= f.label :birth_date %>
+      <% resource.errors.full_messages_for(:birth_date).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_area :education, class: "form-control", 
+        placeholder: "Onde estudou", rows: "5" %>
+      <%= f.label :education %>
+      <% resource.errors.full_messages_for(:education).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :experience %><br />
-    <%= f.text_area :experience %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_area :description, class: "form-control", 
+        placeholder: "Conte sobre você" %>
+      <%= f.label :description %>
+      <% resource.errors.full_messages_for(:description).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :abilities %><br />
-    <%= f.text_area :abilities %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_area :experience, class: "form-control", 
+        placeholder: "Se possui experiência" %>
+      <%= f.label :experience %>
+      <% resource.errors.full_messages_for(:experience).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :profile_picture_url %><br />
-    <%= f.text_field :profile_picture_url %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_area :abilities, class: "form-control", 
+        placeholder: "ex: Dev, design, etc." %>
+      <%= f.label :abilities %>
+      <% resource.errors.full_messages_for(:abilities).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
+    <div class="form-floating my-3">
+      <%= f.text_field :profile_picture_url, class: "form-control", 
+        placeholder: "https://" %>
+      <%= f.label :profile_picture_url %>
+      <% resource.errors.full_messages_for(:profile_picture_url).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
     <% end %>
-  </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+    <div class="form-floating my-3">
+      <!-- <i>(leave blank if you don't want to change it)</i><br /> -->
+      <%= f.password_field :password, autocomplete: "new-password", 
+        class: "form-control", placeholder: "Deixe em branco se não quiser mudar" %>
+      <%= f.label :password %>
+      <% resource.errors.full_messages_for(:password).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+      <% #if @minimum_password_length %>
+        <!-- <br />
+        <em><%= @minimum_password_length %> characters minimum</em> -->
+      <% #end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", 
+        class: "form-control", placeholder: "Confirme a senha" %>
+      <%= f.label :password_confirmation %>
+      <% resource.errors.full_messages_for(:password_confirmation)
+        .each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div class="actions">
-    <%= f.submit "Enviar" %>
-  </div>
-<% end %>
+    <div class="form-floating my-3">
+      <!-- <i>(we need your current password to confirm your changes)</i><br /> -->
+      <%= f.password_field :current_password, autocomplete: "current-password",
+        class: "form-control", placeholder: "Precisamos da sua senha atual para confirmar suas mudanças" %>
+      <%= f.label :current_password %>
+      <% resource.errors.full_messages_for(:current_password).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
+    <div class="actions">
+      <%= f.submit "Enviar", class: "w-100 btn btn-lg btn-primary" %>
+    </div>
+  <% end %>
+</main>
 <!--
 <h3>Cancel my account</h3>
 
