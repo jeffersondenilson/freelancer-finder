@@ -34,7 +34,7 @@ describe 'Professional view complete profile' do
     fill_in 'Descrição', with: 'Lorem ipsum dolor sit amet'
     fill_in 'Experiência', with: 'consectetur adipisicing elit'
     fill_in 'Habilidades', with: 'dev, UX, designer'
-    fill_in 'Foto de perfil', with: 'http://placekitten.com/200/300'
+    fill_in 'URL da foto de perfil', with: 'http://placekitten.com/200/300'
     fill_in 'Senha atual', with: '123456'
     click_on 'Enviar'
 
