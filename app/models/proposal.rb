@@ -1,7 +1,7 @@
 class Proposal < ApplicationRecord
   belongs_to :project
   belongs_to :professional
-  has_one :proposal_cancelation
+  has_one :proposal_cancelation, dependent: :destroy
 
   enum status: {
     pending: 0,
@@ -12,11 +12,12 @@ class Proposal < ApplicationRecord
   }
 
   validates :message, :value_per_hour, :hours_per_week, :finish_date,
-    presence: true
+            presence: true
 
   validates :value_per_hour, numericality: true
-  
-  validates :hours_per_week, numericality: { only_integer: true, greater_than: 0 }
+
+  validates :hours_per_week,
+            numericality: { only_integer: true, greater_than: 0 }
 
   def cancel!(cancel_reason = '')
     if pending?
@@ -32,11 +33,11 @@ class Proposal < ApplicationRecord
   end
 
   def can_cancel_at_current_date?
-    return true if approved? && Date.current < (approved_at + 3.day).to_date
+    return true if approved? && Date.current < (approved_at + 3.days).to_date
 
     errors.add(:approved_at, "#{I18n.l approved_at.to_date}. "\
-      "Não é possível cancelar a proposta após 3 dias.")
+                             'Não é possível cancelar a proposta após 3 dias.')
 
-    return false
+    false
   end
 end

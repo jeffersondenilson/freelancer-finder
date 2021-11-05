@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  before_action :authenticate_professional!, only: [:index, :search, :my_projects]
+  before_action :authenticate_user!, only: %i[new create edit update]
+  before_action :authenticate_professional!, only: %i[index search my_projects]
   before_action :should_authenticate!, only: :show
 
   def index
@@ -9,8 +9,8 @@ class ProjectsController < ApplicationController
 
   def search
     query = ActiveRecord::Base.sanitize_sql_like(params[:query])
-    @projects = Project.where("title LIKE :query OR description LIKE :query",
-      query: "%#{query}%")
+    @projects = Project.where('title LIKE :query OR description LIKE :query',
+                              query: "%#{query}%")
 
     render :index
   end
@@ -21,7 +21,7 @@ class ProjectsController < ApplicationController
     if professional_signed_in?
       @project = Project.find_by(id: params[:id])
       @proposal = current_professional.not_canceled_proposals
-        .find_by(project_id: params[:id])
+                                      .find_by(project_id: params[:id])
     elsif user_signed_in?
       @project = Project.find_by(id: params[:id], creator: current_user)
     end
@@ -74,21 +74,22 @@ class ProjectsController < ApplicationController
   end
 
   def my_projects
-    # @projects = 
+    # @projects =
     @proposals = current_professional.not_canceled_proposals
-      .order(updated_at: :desc)
+                                     .order(updated_at: :desc)
   end
 
   private
+
   def project_params
     params.require(:project).permit(:title, :description, :desired_abilities,
-      :value_per_hour, :due_date, :remote)
+                                    :value_per_hour, :due_date, :remote)
   end
 
   def should_authenticate!
     return if professional_signed_in? || user_signed_in?
 
-    flash[:alert] = "Você deve estar logado."
+    flash[:alert] = 'Você deve estar logado.'
     redirect_to root_path
   end
 end

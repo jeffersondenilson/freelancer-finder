@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe 'User sign in' do
   it 'successfully' do
-    User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                 password: '123456')
     visit root_path
 
     click_on 'Contratar freelancers'
@@ -17,7 +18,8 @@ describe 'User sign in' do
   end
 
   it 'and must fill all fields' do
-    User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                 password: '123456')
     visit root_path
 
     click_on 'Contratar freelancers'
@@ -29,7 +31,8 @@ describe 'User sign in' do
   end
 
   it 'and sign out' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456')
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                        password: '123456')
     login_as jane, scope: :user
     visit root_path
 

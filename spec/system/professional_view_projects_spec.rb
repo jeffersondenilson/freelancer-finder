@@ -3,29 +3,29 @@ require 'rails_helper'
 describe 'Professional view projects' do
   it 'successfully' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-      password: '123456')
-    pj1, pj2 = Project.create!([
-      {
-        title: 'Projeto 1',
-        description: 'lorem ipsum...',
-        desired_abilities: 'design',
-        value_per_hour: 12.34,
-        due_date: '09/10/2021',
-        remote: true,
-        creator: jane
-      },
-      {
-        title: 'Projeto 2',
-        description: 'lorem ipsum dolor sit amet',
-        desired_abilities: 'UX, dev, design',
-        value_per_hour: 9.99,
-        due_date: '19/11/2022',
-        remote: false,
-        creator: jane
-      }
-    ])
+                        password: '123456')
+    Project.create!([
+                      {
+                        title: 'Projeto 1',
+                        description: 'lorem ipsum...',
+                        desired_abilities: 'design',
+                        value_per_hour: 12.34,
+                        due_date: '09/10/2021',
+                        remote: true,
+                        creator: jane
+                      },
+                      {
+                        title: 'Projeto 2',
+                        description: 'lorem ipsum dolor sit amet',
+                        desired_abilities: 'UX, dev, design',
+                        value_per_hour: 9.99,
+                        due_date: '19/11/2022',
+                        remote: false,
+                        creator: jane
+                      }
+                    ])
     john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
     login_as john, scope: :professional
 
     visit root_path
@@ -38,18 +38,18 @@ describe 'Professional view projects' do
 
   it 'and view one project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-      password: '123456')
+                        password: '123456')
     pj1 = Project.create!({
-      title: 'Projeto 1',
-      description: 'lorem ipsum...',
-      desired_abilities: 'design',
-      value_per_hour: 12.34,
-      due_date: '09/10/2021',
-      remote: true,
-      creator: jane
-    })
+                            title: 'Projeto 1',
+                            description: 'lorem ipsum...',
+                            desired_abilities: 'design',
+                            value_per_hour: 12.34,
+                            due_date: '09/10/2021',
+                            remote: true,
+                            creator: jane
+                          })
     john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
     login_as john, scope: :professional
 
     visit root_path
@@ -68,38 +68,38 @@ describe 'Professional view projects' do
 
   it 'and search projects' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-      password: '123456')
+                        password: '123456')
     pj1, pj2, pj3 = Project.create!([
-      {
-        title: 'Laughing Pancake',
-        description: 'Similique illo, asperiores eos officiis',
-        desired_abilities: 'design',
-        value_per_hour: 12.34,
-        due_date: '09/10/2021',
-        remote: true,
-        creator: jane
-      },
-      {
-        title: 'Symmetrical Octo Parakeet',
-        description: 'lorem ipsum dolor sit amet',
-        desired_abilities: 'UX, dev, design',
-        value_per_hour: 9.99,
-        due_date: '19/11/2022',
-        remote: false,
-        creator: jane
-      },
-      {
-        title: 'Redesigned Sniffle',
-        description: 'fantastic octo potato',
-        desired_abilities: 'UX, dev, design',
-        value_per_hour: 9.99,
-        due_date: '19/11/2022',
-        remote: false,
-        creator: jane
-      }
-    ])
+                                      {
+                                        title: 'Laughing Pancake',
+                                        description: 'Similique illo, asperiores eos officiis',
+                                        desired_abilities: 'design',
+                                        value_per_hour: 12.34,
+                                        due_date: '09/10/2021',
+                                        remote: true,
+                                        creator: jane
+                                      },
+                                      {
+                                        title: 'Symmetrical Octo Parakeet',
+                                        description: 'lorem ipsum dolor sit amet',
+                                        desired_abilities: 'UX, dev, design',
+                                        value_per_hour: 9.99,
+                                        due_date: '19/11/2022',
+                                        remote: false,
+                                        creator: jane
+                                      },
+                                      {
+                                        title: 'Redesigned Sniffle',
+                                        description: 'fantastic octo potato',
+                                        desired_abilities: 'UX, dev, design',
+                                        value_per_hour: 9.99,
+                                        due_date: '19/11/2022',
+                                        remote: false,
+                                        creator: jane
+                                      }
+                                    ])
     john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
     login_as john, scope: :professional
 
     visit root_path
@@ -114,7 +114,7 @@ describe 'Professional view projects' do
 
   it 'and can not create project' do
     john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
     login_as john, scope: :professional
 
     visit new_project_path

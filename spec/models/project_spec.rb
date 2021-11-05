@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
-  it { should belong_to(:creator).class_name('User').with_foreign_key('user_id') }
+  it {
+    should belong_to(:creator).class_name('User').with_foreign_key('user_id')
+  }
   it { should have_many :proposals }
   it { should validate_presence_of :title }
   it { should validate_presence_of :description }

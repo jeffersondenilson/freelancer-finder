@@ -8,8 +8,8 @@ describe 'User create projects' do
   end
 
   it 'successfully' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
-      password: 'he217tw8')
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                        password: 'he217tw8')
     login_as jane, scope: :user
 
     visit root_path
@@ -35,8 +35,8 @@ describe 'User create projects' do
   end
 
   it 'and must fill all fields' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
-      password: 'he217tw8')
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                        password: 'he217tw8')
     login_as jane, scope: :user
 
     visit new_project_path
@@ -51,11 +51,11 @@ describe 'User create projects' do
   end
 
   it 'and edit project' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
-      password: 'he217tw8')
-    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
-      desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
-      remote: true, creator: jane)
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                        password: 'he217tw8')
+    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
+                              desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
+                              remote: true, creator: jane)
     login_as jane, scope: :user
 
     visit project_path(project)
@@ -70,11 +70,11 @@ describe 'User create projects' do
   end
 
   it 'and can not update with empty fields' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com', 
-      password: 'he217tw8')
-    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...', 
-      desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021', 
-      remote: true, creator: jane)
+    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                        password: 'he217tw8')
+    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
+                              desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
+                              remote: true, creator: jane)
     login_as jane, scope: :user
 
     visit project_path(project)

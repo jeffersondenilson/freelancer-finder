@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe 'Professional sign in' do
   it 'successfully' do
-    Professional.create!(name: 'John Doe', email: 'john.doe@email.com', password: '123456')
+    Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
+                         password: '123456')
     visit root_path
 
     click_on 'Encontrar projetos'
@@ -17,7 +18,8 @@ describe 'Professional sign in' do
   end
 
   it 'and must fill all fields' do
-    Professional.create!(name: 'John Doe', email: 'john.doe@email.com', password: '123456')
+    Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
+                         password: '123456')
     visit root_path
 
     click_on 'Encontrar projetos'
@@ -29,7 +31,8 @@ describe 'Professional sign in' do
   end
 
   it 'and sign out' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com', password: '123456')
+    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
+                                password: '123456')
     login_as john, scope: :professional
     visit root_path
 

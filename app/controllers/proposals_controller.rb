@@ -1,6 +1,6 @@
 class ProposalsController < ApplicationController
   before_action :authenticate_professional!
-  before_action :verify_duplicated_proposal, only: [:new, :create]
+  before_action :verify_duplicated_proposal, only: %i[new create]
 
   def new
     @project = Project.find(params[:project_id])
@@ -60,7 +60,7 @@ class ProposalsController < ApplicationController
       flash[:notice] = 'Proposta cancelada com sucesso'
       redirect_to my_projects_path
     elsif !@proposal.can_cancel_at_current_date?
-      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join || 
+      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join ||
       #   'Não foi possível cancelar a proposta'
       @proposals = current_professional.not_canceled_proposals.order(:updated_at)
       render 'projects/my_projects'
@@ -70,10 +70,10 @@ class ProposalsController < ApplicationController
   def destroy
     @proposal = current_professional.proposals.find(params[:id])
 
-    if @proposal.cancel!(get_cancel_reason)
+    if @proposal.cancel!(cancel_reason_params)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
-      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join || 
+      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join ||
       #   'Não foi possível cancelar a proposta'
       @proposals = current_professional.not_canceled_proposals.order(:updated_at)
       render 'projects/my_projects' and return
@@ -83,23 +83,23 @@ class ProposalsController < ApplicationController
   end
 
   private
+
   def proposal_params
-    params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week, 
-      :finish_date)
+    params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week,
+                                     :finish_date)
   end
 
   def verify_duplicated_proposal
     if current_professional.not_canceled_proposals
-        .find_by(project_id: params[:project_id])
+                           .find_by(project_id: params[:project_id])
       flash[:alert] = 'Você já fez uma proposta nesse projeto'
       redirect_to project_path(params[:project_id])
     end
   end
 
-  def get_cancel_reason
+  def cancel_reason_params
     params[:proposal][:cancel_reason] || ''
-
-    rescue
-      return ''
+  rescue StandardError
+    ''
   end
 end
