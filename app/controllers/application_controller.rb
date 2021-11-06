@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_professional_to_complete_profile
     return if current_professional.completed_profile?
+
     redirect_to edit_professional_registration_path(current_professional)
   end
 end

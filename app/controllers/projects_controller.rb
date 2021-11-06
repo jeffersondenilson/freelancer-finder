@@ -16,8 +16,6 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = nil
-
     if professional_signed_in?
       @project = Project.find_by(id: params[:id])
       @proposal = current_professional.not_canceled_proposals
@@ -26,10 +24,8 @@ class ProjectsController < ApplicationController
       @project = Project.find_by(id: params[:id], creator: current_user)
     end
 
-    if @project.nil?
-      flash[:alert] = 'O projeto não foi encontrado'
-      redirect_to root_path
-    end
+    redirect_to root_path, alert: 'O projeto não foi encontrado' if
+      @project.nil?
   end
 
   def new
@@ -51,19 +47,15 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.find_by(id: params[:id], creator: current_user)
 
-    if @project.nil?
-      flash[:alert] = 'O projeto não foi encontrado'
-      redirect_to root_path
-    end
+    redirect_to root_path, alert: 'O projeto não foi encontrado' if
+      @project.nil?
   end
 
   def update
     @project = Project.find_by(id: params[:id], creator: current_user)
 
-    if @project.nil?
-      flash[:alert] = 'O projeto não foi encontrado'
-      redirect_to root_path and return
-    end
+    return redirect_to root_path, alert: 'O projeto não foi encontrado' if
+      @project.nil?
 
     if @project.update(project_params)
       flash[:notice] = 'Projeto atualizado com sucesso'

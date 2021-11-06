@@ -16,6 +16,7 @@ AllCops:
    - 'node_modules/**/*'
    - 'app/controllers/professionals/**/*'
    - 'app/controllers/users/**/*'
+   - 'Gemfile.lock'
 
 Style/FrozenStringLiteralComment:
  Enabled: false
@@ -28,3 +29,6 @@ Metrics/BlockLength:
 
 Layout/LineLength:
   Max: 80
+  Exclude:
+    - 'Gemfile'
+    - 'Rakefile'

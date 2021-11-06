@@ -10,18 +10,15 @@ class ProposalsController < ApplicationController
   def create
     @project = Project.find_by(id: params[:project_id])
 
-    if @project.nil?
-      flash[:alert] = 'Projeto não encontrado'
-      redirect_to root_path and return
-    end
+    return redirect_to root_path, alert: 'Projeto não encontrada' if
+      @proposal.nil?
 
-    @proposal = Proposal.new(proposal_params)
-    @proposal.project = @project
-    @proposal.professional = current_professional
+    @proposal = Proposal.new(**proposal_params, project: @project,
+                                                professional: current_professional)
 
     if @proposal.save
-      flash[:notice] = 'Proposta criada com sucesso'
-      redirect_to project_path(params[:project_id])
+      redirect_to project_path(@project.id),
+                  notice: 'Proposta criada com sucesso'
     else
       render :new
     end
@@ -30,19 +27,15 @@ class ProposalsController < ApplicationController
   def edit
     @proposal = current_professional.proposals.find_by(id: params[:id])
 
-    if @proposal.nil?
-      flash[:alert] = 'Proposta não encontrada'
-      redirect_to my_projects_path
-    end
+    redirect_to my_projects_path, alert: 'Proposta não encontrada' if
+      @proposal.nil?
   end
 
   def update
     @proposal = current_professional.proposals.find_by(id: params[:id])
 
-    if @proposal.nil?
-      flash[:alert] = 'Proposta não encontrada'
-      redirect_to my_projects_path and return
-    end
+    return redirect_to my_projects_path, alert: 'Proposta não encontrada' if
+      @proposal.nil?
 
     if @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
@@ -57,11 +50,8 @@ class ProposalsController < ApplicationController
 
     if @proposal.pending?
       @proposal.cancel!
-      flash[:notice] = 'Proposta cancelada com sucesso'
-      redirect_to my_projects_path
+      redirect_to my_projects_path, notice: 'Proposta cancelada com sucesso'
     elsif !@proposal.can_cancel_at_current_date?
-      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join ||
-      #   'Não foi possível cancelar a proposta'
       @proposals = current_professional.not_canceled_proposals.order(:updated_at)
       render 'projects/my_projects'
     end
@@ -73,8 +63,6 @@ class ProposalsController < ApplicationController
     if @proposal.cancel!(cancel_reason_params)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
-      # flash[:alert] = @proposal.errors.full_messages_for(:approved_at).join ||
-      #   'Não foi possível cancelar a proposta'
       @proposals = current_professional.not_canceled_proposals.order(:updated_at)
       render 'projects/my_projects' and return
     end
