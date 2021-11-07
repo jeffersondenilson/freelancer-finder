@@ -4,12 +4,13 @@ describe 'Professional authentication' do
   it 'must complete profile to view projects' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: jane)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456')
-    login_as john, scope: :professional
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:professional)
+    login_as professional, scope: :professional
 
     get '/projects/1'
 
@@ -19,11 +20,12 @@ describe 'Professional authentication' do
   it 'must be signed in to create proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: jane)
-    Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                         password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:professional)
 
     post '/projects/1/proposals', params: {
       proposal: {
@@ -31,7 +33,7 @@ describe 'Professional authentication' do
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: Time.current + 3.days,
-        professional_id: 1
+        professional: professional
       }
     }
 
@@ -42,22 +44,24 @@ describe 'Professional authentication' do
   it 'can not view edit page of another professional\'s proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                          desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                          remote: true, creator: jane)
-    schneider = Professional.create!(name: 'Schneider', email: 'schneider@email.com',
-                                     password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    Proposal.create!({
-                       message: 'Schneider\'s proposal on project 1',
-                       value_per_hour: 99.99,
-                       hours_per_week: 30,
-                       finish_date: Time.current + 1.week,
-                       project: pj1,
-                       professional: schneider
-                     })
-    login_as john, scope: :professional
+    pj1 = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
+    another_professional = create(:completed_profile_professional)
+    Proposal.create!(
+      {
+        message: 'Schneider\'s proposal on project 1',
+        value_per_hour: 99.99,
+        hours_per_week: 30,
+        finish_date: Time.current + 1.week,
+        project: pj1,
+        professional: another_professional
+      }
+    )
+    login_as professional, scope: :professional
 
     get '/proposals/1/edit'
 
@@ -68,22 +72,24 @@ describe 'Professional authentication' do
   it 'can not update another professional\'s proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                          desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                          remote: true, creator: jane)
-    schneider = Professional.create!(name: 'Schneider', email: 'schneider@email.com',
-                                     password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    Proposal.create!({
-                       message: 'Schneider\'s proposal on project 1',
-                       value_per_hour: 99.99,
-                       hours_per_week: 30,
-                       finish_date: Time.current + 1.week,
-                       project: pj1,
-                       professional: schneider
-                     })
-    login_as john, scope: :professional
+    pj1 = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
+    another_professional = create(:completed_profile_professional)
+    Proposal.create!(
+      {
+        message: 'Schneider\'s proposal on project 1',
+        value_per_hour: 99.99,
+        hours_per_week: 30,
+        finish_date: Time.current + 1.week,
+        project: pj1,
+        professional: another_professional
+      }
+    )
+    login_as professional, scope: :professional
 
     put '/proposals/1', params: {
       proposal: {
@@ -91,8 +97,8 @@ describe 'Professional authentication' do
         value_per_hour: 99.99,
         hours_per_week: 30,
         finish_date: Time.current + 1.week,
-        project_id: 1,
-        professional_id: 2
+        project: pj1,
+        professional: another_professional
       }
     }
 

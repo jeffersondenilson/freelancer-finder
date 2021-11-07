@@ -2,9 +2,8 @@ require 'rails_helper'
 
 describe 'Professional creates proposal' do
   it 'can not create proposal on unexistent project' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    login_as john, scope: :professional
+    professional = create(:completed_profile_professional)
+    login_as professional, scope: :professional
 
     post '/projects/1/proposals', params: {
       proposal: {
@@ -23,14 +22,14 @@ describe 'Professional creates proposal' do
   it 'can not create proposal as another professional' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: jane)
-    schneider = Professional.create!(name: 'Schneider', email: 'schneider@email.com',
-                                     password: 'uw891#&', birth_date: '16/12/2000', completed_profile: true)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    login_as john, scope: :professional
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
+    another_professional = create(:completed_profile_professional)
+    login_as professional, scope: :professional
 
     post '/projects/1/proposals', params: {
       proposal: {
@@ -38,24 +37,25 @@ describe 'Professional creates proposal' do
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: Time.current + 3.days,
-        professional: schneider
+        professional: another_professional
       }
     }
 
-    expect(schneider.proposals.count).to eq(0)
-    expect(john.proposals.count).to eq(1)
-    expect(Proposal.first.professional_id).to eq(john.id)
+    expect(another_professional.proposals.count).to eq(0)
+    expect(professional.proposals.count).to eq(1)
+    expect(Proposal.first.professional_id).to eq(professional.id)
   end
 
   it 'can not choose proposal status when create' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: jane)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
-    login_as john, scope: :professional
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
+    login_as professional, scope: :professional
 
     post '/projects/1/proposals', params: {
       proposal: {
@@ -73,20 +73,21 @@ describe 'Professional creates proposal' do
   it 'can not choose proposal status when update' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                          desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                          remote: true, creator: jane)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    pj1 = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
     Proposal.create!(
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
       finish_date: Time.current + 3.days,
       project: pj1,
-      professional: john
+      professional: professional
     )
-    login_as john, scope: :professional
+    login_as professional, scope: :professional
 
     put '/proposals/1', params: {
       proposal: {
@@ -104,20 +105,21 @@ describe 'Professional creates proposal' do
   it 'can not create two proposals in a project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                          desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                          remote: true, creator: jane)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    pj1 = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
     Proposal.create!(
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
       finish_date: Time.current + 3.days,
       project: pj1,
-      professional: john
+      professional: professional
     )
-    login_as john, scope: :professional
+    login_as professional, scope: :professional
 
     post '/projects/1/proposals', params: {
       proposal: {
@@ -135,21 +137,22 @@ describe 'Professional creates proposal' do
   it 'and can create proposal with canceled proposal in same project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                          desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                          remote: true, creator: jane)
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    pj1 = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
+    professional = create(:completed_profile_professional)
     Proposal.create!(
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
       finish_date: Time.current + 3.days,
       project: pj1,
-      professional: john,
+      professional: professional,
       status: :canceled_approved
     )
-    login_as john, scope: :professional
+    login_as professional, scope: :professional
 
     post '/projects/1/proposals', params: {
       proposal: {

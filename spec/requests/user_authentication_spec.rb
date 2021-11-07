@@ -34,12 +34,16 @@ describe 'User authentication' do
                         password: '123456')
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: john)
-    Project.create!(title: 'Projeto 2', description: 'lorem ipsum dolor sit amet',
-                    desired_abilities: 'UX', value_per_hour: 44.44, due_date: '01/10/2021',
-                    remote: true, creator: jane)
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: john
+    )
+    Project.create!(
+      title: 'Projeto 2', description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX', value_per_hour: 44.44,
+      due_date: '01/10/2021', remote: true, creator: jane
+    )
     login_as jane, scope: :user
 
     get '/projects/1/edit'
@@ -53,12 +57,16 @@ describe 'User authentication' do
                         password: '123456')
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: john)
-    Project.create!(title: 'Projeto 2', description: 'lorem ipsum dolor sit amet',
-                    desired_abilities: 'UX', value_per_hour: 44.44, due_date: '01/10/2021',
-                    remote: true, creator: jane)
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: john
+    )
+    Project.create!(
+      title: 'Projeto 2', description: 'lorem ipsum dolor sit amet',
+      desired_abilities: 'UX', value_per_hour: 44.44,
+      due_date: '01/10/2021', remote: true, creator: jane
+    )
     login_as jane, scope: :user
 
     put '/projects/1', params: {
@@ -79,9 +87,11 @@ describe 'User authentication' do
   it 'can not create proposal' do
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
-    Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                    desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                    remote: true, creator: john)
+    Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: john
+    )
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     login_as jane, scope: :user
