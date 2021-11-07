@@ -92,18 +92,19 @@ RSpec.describe Proposal, type: :model do
     it 'return false if was approved in more than three days' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: '10/01/2021',
         project: pj1,
-        professional: john,
+        professional: professional,
         status: :approved,
         approved_at: '01/01/2021'
       )
@@ -111,7 +112,8 @@ RSpec.describe Proposal, type: :model do
       travel_to prop1.approved_at + 3.days do
         expect(prop1.can_cancel_at_current_date?).to eq(false)
         expect(prop1.errors.full_messages_for(:approved_at)).to include(
-          'Aprovada em 01/01/2021. Não é possível cancelar a proposta após 3 dias.'
+          'Aprovada em 01/01/2021. '\
+          'Não é possível cancelar a proposta após 3 dias.'
         )
       end
     end
@@ -121,18 +123,19 @@ RSpec.describe Proposal, type: :model do
     it 'cancel pending proposal' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: '10/01/2021',
         project: pj1,
-        professional: john,
+        professional: professional,
         status: :pending
       )
 
@@ -143,18 +146,19 @@ RSpec.describe Proposal, type: :model do
     it 'cancel approved proposal with cancel reason' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: '10/01/2021',
         project: pj1,
-        professional: john,
+        professional: professional,
         status: :approved,
         approved_at: '01/01/2021'
       )
@@ -170,18 +174,19 @@ RSpec.describe Proposal, type: :model do
     it 'cancel approved proposal with empty cancel reason' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: '10/01/2021',
         project: pj1,
-        professional: john,
+        professional: professional,
         status: :approved,
         approved_at: '01/01/2021'
       )
@@ -197,18 +202,19 @@ RSpec.describe Proposal, type: :model do
     it 'return false if approved in more than three days' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
         finish_date: '10/01/2021',
         project: pj1,
-        professional: john,
+        professional: professional,
         status: :approved,
         approved_at: '01/01/2021'
       )
@@ -216,7 +222,8 @@ RSpec.describe Proposal, type: :model do
       travel_to prop1.approved_at + 3.days do
         expect(prop1.cancel!).to eq(false)
         expect(prop1.errors.full_messages_for(:approved_at)).to include(
-          'Aprovada em 01/01/2021. Não é possível cancelar a proposta após 3 dias.'
+          'Aprovada em 01/01/2021. Não é possível cancelar a proposta após 3 '\
+          'dias.'
         )
         expect(prop1.status).to eq('approved')
       end
