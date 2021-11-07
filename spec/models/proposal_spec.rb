@@ -7,8 +7,11 @@ RSpec.describe Proposal, type: :model do
   it { should belong_to :professional }
   it { should have_one :proposal_cancelation }
   it {
-    should define_enum_for(:status).with_values(pending: 0, analyzing: 10,
-                                                approved: 20, canceled_pending: 30, canceled_approved: 40)
+    should define_enum_for(:status)
+      .with_values(
+        pending: 0, analyzing: 10, approved: 20, canceled_pending: 30,
+        canceled_approved: 40
+      )
   }
   it { should validate_presence_of :message }
   it { should validate_presence_of :value_per_hour }
@@ -16,19 +19,29 @@ RSpec.describe Proposal, type: :model do
   it { should validate_presence_of :finish_date }
   it { should validate_numericality_of :value_per_hour }
   it {
-    should validate_numericality_of(:hours_per_week).only_integer
-                                                    .is_greater_than(0)
+    should validate_numericality_of(:hours_per_week)
+      .only_integer
+      .is_greater_than(0)
   }
 
   context '#can_cancel_at_current_date?' do
     it 'return true if approved the same day' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      jane = User.create!(
+        name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456'
+      )
+      pj1 = Project.create!(
+        title: 'Projeto 1',
+        description: 'lorem ipsum...',
+        desired_abilities: 'design',
+        value_per_hour: 12.34,
+        due_date: '09/10/2021',
+        remote: true,
+        creator: jane
+      )
+      john = Professional.create!(
+        name: 'John Doe', email: 'john.doe@email.com', password: '123456',
+        birth_date: '01/01/1980', completed_profile: true
+      )
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
@@ -49,11 +62,16 @@ RSpec.describe Proposal, type: :model do
     it 'return true if approved in less than three days' do
       jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                           password: '123456')
-      pj1 = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                            desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                            remote: true, creator: jane)
-      john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                  password: '123456', birth_date: '01/01/1980', completed_profile: true)
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      john = Professional.create!(
+        name: 'John Doe', email: 'john.doe@email.com',
+        password: '123456', birth_date: '01/01/1980',
+        completed_profile: true
+      )
       prop1 = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,

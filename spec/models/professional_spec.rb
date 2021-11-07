@@ -61,8 +61,10 @@ RSpec.describe Professional, type: :model do
         }
       ]
     )
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-      password: '123456', birth_date: '01/01/1980', completed_profile: true)
+    john = Professional.create!(
+      name: 'John Doe', email: 'john.doe@email.com', password: '123456',
+      birth_date: '01/01/1980', completed_profile: true
+    )
     prop1, prop2, prop3, prop4 = Proposal.create!(
       [
         {
@@ -85,7 +87,9 @@ RSpec.describe Professional, type: :model do
           approved_at: Date.new(
             2021, 10, 0o1
           ),
-          proposal_cancelation: ProposalCancelation.new(cancel_reason: 'whatever')
+          proposal_cancelation: ProposalCancelation.new(
+            cancel_reason: 'whatever'
+          )
         },
         {
           message: 'Proposta :pending',

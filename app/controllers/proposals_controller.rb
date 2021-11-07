@@ -13,8 +13,9 @@ class ProposalsController < ApplicationController
     return redirect_to root_path, alert: 'Projeto não encontrada' if
       @proposal.nil?
 
-    @proposal = Proposal.new(**proposal_params, project: @project,
-                                                professional: current_professional)
+    @proposal = Proposal.new(
+      **proposal_params, project: @project, professional: current_professional
+    )
 
     if @proposal.save
       redirect_to project_path(@project.id),
@@ -52,7 +53,8 @@ class ProposalsController < ApplicationController
       @proposal.cancel!
       redirect_to my_projects_path, notice: 'Proposta cancelada com sucesso'
     elsif !@proposal.can_cancel_at_current_date?
-      @proposals = current_professional.not_canceled_proposals.order(:updated_at)
+      @proposals = current_professional.not_canceled_proposals
+        .order(:updated_at)
       render 'projects/my_projects'
     end
   end
@@ -63,7 +65,8 @@ class ProposalsController < ApplicationController
     if @proposal.cancel!(cancel_reason_params)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
-      @proposals = current_professional.not_canceled_proposals.order(:updated_at)
+      @proposals = current_professional.not_canceled_proposals
+        .order(:updated_at)
       render 'projects/my_projects' and return
     end
 

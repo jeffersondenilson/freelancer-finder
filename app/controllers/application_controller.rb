@@ -16,9 +16,11 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters_for_professional_update
-    devise_parameter_sanitizer.permit(:account_update, keys: %i[name full_name
-                                                                birth_date education description experience abilities
-                                                                profile_picture_url])
+    devise_parameter_sanitizer.permit(
+      :account_update,
+      keys: %i[name full_name birth_date education description experience
+               abilities profile_picture_url]
+    )
   end
 
   def redirect_professional_to_complete_profile
