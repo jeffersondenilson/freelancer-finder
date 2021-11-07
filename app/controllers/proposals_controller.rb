@@ -10,8 +10,8 @@ class ProposalsController < ApplicationController
   def create
     @project = Project.find_by(id: params[:project_id])
 
-    return redirect_to root_path, alert: 'Projeto não encontrada' if
-      @proposal.nil?
+    return redirect_to root_path, alert: 'Projeto não encontrado' if
+      @project.nil?
 
     @proposal = Proposal.new(
       **proposal_params, project: @project, professional: current_professional
