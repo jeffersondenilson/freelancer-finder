@@ -2,17 +2,19 @@ require 'rails_helper'
 
 describe 'Professional sign in' do
   it 'successfully' do
-    create(:professional)
+    professional = create(:professional)
 
     visit root_path
 
     click_on 'Encontrar projetos'
     click_on 'Entrar'
-    fill_in 'Email', with: 'john.doe@email.com'
-    fill_in 'Senha', with: '123456'
+    fill_in 'Email', with: professional.email
+    fill_in 'Senha', with: professional.password
     click_on 'Entrar'
 
-    expect(page).to have_selector('[data-test=username]', text: 'John Doe')
+    expect(page).to have_selector(
+      '[data-test=username]', text: professional.name
+    )
     expect(page).to have_link('Buscar projetos', href: projects_path)
     expect(page).not_to have_link('Criar projeto', href: new_project_path)
   end

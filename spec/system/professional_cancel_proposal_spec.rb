@@ -41,7 +41,7 @@ describe 'Professional cancel proposal' do
   end
 
   it 'and cancel with reason within three days if approved' do
-    user
+    user = create(:user)
     pj1 = Project.create!(
       {
         title: 'Projeto 1',

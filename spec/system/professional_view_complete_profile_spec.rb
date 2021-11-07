@@ -43,7 +43,7 @@ describe 'Professional view complete profile' do
     fill_in 'Experiência', with: 'consectetur adipisicing elit'
     fill_in 'Habilidades', with: 'dev, UX, designer'
     fill_in 'URL da foto de perfil', with: 'http://placekitten.com/200/300'
-    fill_in 'Senha atual', with: '123456'
+    fill_in 'Senha atual', with: professional.password
     click_on 'Enviar'
 
     expect(current_path).to eq(root_path)

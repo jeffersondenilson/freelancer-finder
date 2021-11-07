@@ -74,7 +74,7 @@ describe 'Professional create proposal' do
       }
     )
     professional = create(:completed_profile_professional)
-    login_as professional, scope: :professional0
+    login_as professional, scope: :professional
 
     visit new_project_proposal_path(pj1)
     fill_in 'Valor por hora', with: ''
