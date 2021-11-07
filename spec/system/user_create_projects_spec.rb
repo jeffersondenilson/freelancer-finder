@@ -8,9 +8,10 @@ describe 'User create projects' do
   end
 
   it 'successfully' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                        password: 'he217tw8')
-    login_as jane, scope: :user
+    # jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+    #                     password: 'he217tw8')
+    user = create(:user)
+    login_as user, scope: :user
 
     visit root_path
     click_on 'Criar projeto'
@@ -31,7 +32,7 @@ describe 'User create projects' do
     expect(page).to have_content('Valor por hora: R$ 5,99')
     expect(page).to have_content('Data limite: 08/10/2021')
     expect(page).to have_content('Trabalho remoto')
-    expect(page).to have_content('Criado por: Jane Doe')
+    expect(page).to have_content("Criado por: #{user.name}")
   end
 
   it 'and must fill all fields' do
