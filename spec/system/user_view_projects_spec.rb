@@ -17,26 +17,28 @@ describe 'User view projects' do
                         password: '123456')
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
-    pj1, pj2 = Project.create!([
-                                 {
-                                   title: 'Projeto 1',
-                                   description: 'lorem ipsum...',
-                                   desired_abilities: 'design',
-                                   value_per_hour: 12.34,
-                                   due_date: '09/10/2021',
-                                   remote: true,
-                                   creator: jane
-                                 },
-                                 {
-                                   title: 'Projeto 2',
-                                   description: 'lorem ipsum dolor sit amet',
-                                   desired_abilities: 'UX, dev, design',
-                                   value_per_hour: 9.99,
-                                   due_date: '19/11/2022',
-                                   remote: false,
-                                   creator: john
-                                 }
-                               ])
+    pj1, pj2 = Project.create!(
+      [
+        {
+          title: 'Projeto 1',
+          description: 'lorem ipsum...',
+          desired_abilities: 'design',
+          value_per_hour: 12.34,
+          due_date: '09/10/2021',
+          remote: true,
+          creator: jane
+        },
+        {
+          title: 'Projeto 2',
+          description: 'lorem ipsum dolor sit amet',
+          desired_abilities: 'UX, dev, design',
+          value_per_hour: 9.99,
+          due_date: '19/11/2022',
+          remote: false,
+          creator: john
+        }
+      ]
+    )
     login_as jane, scope: :user
 
     visit root_path
@@ -53,15 +55,17 @@ describe 'User view projects' do
                         password: '123456')
     login_as jane, scope: :user
 
-    pj1 = Project.create!({
-                            title: 'Projeto 1',
-                            description: 'lorem ipsum...',
-                            desired_abilities: 'design',
-                            value_per_hour: 12.34,
-                            due_date: '09/10/2021',
-                            remote: true,
-                            creator: jane
-                          })
+    pj1 = Project.create!(
+      {
+        title: 'Projeto 1',
+        description: 'lorem ipsum...',
+        desired_abilities: 'design',
+        value_per_hour: 12.34,
+        due_date: '09/10/2021',
+        remote: true,
+        creator: jane
+      }
+    )
 
     visit root_path
     click_on 'Projeto 1'
@@ -81,15 +85,17 @@ describe 'User view projects' do
                         password: '123456')
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
-    pj2 = Project.create!({
-                            title: 'Projeto 2',
-                            description: 'lorem ipsum dolor sit amet',
-                            desired_abilities: 'UX, dev, design',
-                            value_per_hour: 9.99,
-                            due_date: '19/11/2022',
-                            remote: false,
-                            creator: john
-                          })
+    pj2 = Project.create!(
+      {
+        title: 'Projeto 2',
+        description: 'lorem ipsum dolor sit amet',
+        desired_abilities: 'UX, dev, design',
+        value_per_hour: 9.99,
+        due_date: '19/11/2022',
+        remote: false,
+        creator: john
+      }
+    )
     login_as jane, scope: :user
 
     visit project_path(pj2)
@@ -104,15 +110,17 @@ describe 'User view projects' do
                         password: '123456')
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
-    Project.create!({
-                      title: 'Projeto 2',
-                      description: 'lorem ipsum dolor sit amet',
-                      desired_abilities: 'UX, dev, design',
-                      value_per_hour: 9.99,
-                      due_date: '19/11/2022',
-                      remote: false,
-                      creator: john
-                    })
+    Project.create!(
+      {
+        title: 'Projeto 2',
+        description: 'lorem ipsum dolor sit amet',
+        desired_abilities: 'UX, dev, design',
+        value_per_hour: 9.99,
+        due_date: '19/11/2022',
+        remote: false,
+        creator: john
+      }
+    )
     login_as jane, scope: :user
 
     visit projects_path

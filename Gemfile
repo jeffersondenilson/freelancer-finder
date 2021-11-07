@@ -34,12 +34,12 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'capybara'
+  gem 'factory_bot_rails'
+  gem 'ffaker'
   gem 'rspec-rails', '~> 5.0.0'
   gem 'rubocop-rails', require: false
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', require: false
-  gem 'factory_bot_rails'
-  gem 'ffaker'
 end
 
 group :development do

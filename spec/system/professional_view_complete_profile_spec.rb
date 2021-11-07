@@ -2,34 +2,37 @@ require 'rails_helper'
 
 describe 'Professional view complete profile' do
   it 'successfully' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456')
-    login_as john, scope: :professional
+    professional = create(:professional)
+    login_as professional, scope: :professional
 
     visit root_path
 
-    expect(current_path).to eq(edit_professional_registration_path(john))
-    expect(page).to have_selector('h2',
-                                  text: 'Complete o seu perfil para continuar')
+    expect(current_path).to eq(
+      edit_professional_registration_path(professional)
+    )
+    expect(page).to have_selector(
+      'h2', text: 'Complete o seu perfil para continuar'
+    )
   end
 
   it 'and must complete profile to navigate' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456')
-    login_as john, scope: :professional
+    professional = create(:professional)
+    login_as professional, scope: :professional
 
     visit root_path
     click_on 'Buscar projetos'
 
-    expect(current_path).to eq(edit_professional_registration_path(john))
-    expect(page).to have_selector('h2',
-                                  text: 'Complete o seu perfil para continuar')
+    expect(current_path).to eq(
+      edit_professional_registration_path(professional)
+    )
+    expect(page).to have_selector(
+      'h2', text: 'Complete o seu perfil para continuar'
+    )
   end
 
   it 'and complete profile' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456')
-    login_as john, scope: :professional
+    professional = create(:professional)
+    login_as professional, scope: :professional
 
     visit root_path
     fill_in 'Nome social', with: 'J. Doe'
@@ -58,9 +61,8 @@ describe 'Professional view complete profile' do
   end
 
   it 'and must fill all required fields to complete profile' do
-    john = Professional.create!(name: 'John Doe', email: 'john.doe@email.com',
-                                password: '123456')
-    login_as john, scope: :professional
+    professional = create(:professional)
+    login_as professional, scope: :professional
 
     visit root_path
     fill_in 'Nome social', with: ''

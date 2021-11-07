@@ -8,8 +8,6 @@ describe 'User create projects' do
   end
 
   it 'successfully' do
-    # jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-    #                     password: 'he217tw8')
     user = create(:user)
     login_as user, scope: :user
 
@@ -46,7 +44,8 @@ describe 'User create projects' do
 
     expect(page).to have_content('Título não pode ficar em branco')
     expect(page).to have_content('Descrição não pode ficar em branco')
-    expect(page).to have_content('Habilidades desejadas não pode ficar em branco')
+    expect(page).to have_content('Habilidades desejadas não pode '\
+                                 'ficar em branco')
     expect(page).to have_content('Valor por hora não pode ficar em branco')
     expect(page).to have_content('Data limite não pode ficar em branco')
   end
@@ -54,9 +53,11 @@ describe 'User create projects' do
   it 'and edit project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: 'he217tw8')
-    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                              desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                              remote: true, creator: jane)
+    project = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
     login_as jane, scope: :user
 
     visit project_path(project)
@@ -73,9 +74,11 @@ describe 'User create projects' do
   it 'and can not update with empty fields' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: 'he217tw8')
-    project = Project.create!(title: 'Projeto 1', description: 'lorem ipsum...',
-                              desired_abilities: 'design', value_per_hour: 12.34, due_date: '09/10/2021',
-                              remote: true, creator: jane)
+    project = Project.create!(
+      title: 'Projeto 1', description: 'lorem ipsum...',
+      desired_abilities: 'design', value_per_hour: 12.34,
+      due_date: '09/10/2021', remote: true, creator: jane
+    )
     login_as jane, scope: :user
 
     visit project_path(project)
@@ -89,7 +92,9 @@ describe 'User create projects' do
 
     expect(page).to have_content('Título não pode ficar em branco')
     expect(page).to have_content('Descrição não pode ficar em branco')
-    expect(page).to have_content('Habilidades desejadas não pode ficar em branco')
+    expect(page).to have_content(
+      'Habilidades desejadas não pode ficar em branco'
+    )
     expect(page).to have_content('Valor por hora não pode ficar em branco')
     expect(page).to have_content('Data limite não pode ficar em branco')
   end

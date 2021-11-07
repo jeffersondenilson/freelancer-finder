@@ -54,7 +54,7 @@ class ProposalsController < ApplicationController
       redirect_to my_projects_path, notice: 'Proposta cancelada com sucesso'
     elsif !@proposal.can_cancel_at_current_date?
       @proposals = current_professional.not_canceled_proposals
-        .order(:updated_at)
+                                       .order(:updated_at)
       render 'projects/my_projects'
     end
   end
@@ -66,7 +66,7 @@ class ProposalsController < ApplicationController
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
       @proposals = current_professional.not_canceled_proposals
-        .order(:updated_at)
+                                       .order(:updated_at)
       render 'projects/my_projects' and return
     end
 
