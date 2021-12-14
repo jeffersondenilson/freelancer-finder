@@ -42,3 +42,4 @@ yarn-debug.log*
 coverage
 
 /rubocop_cops
+.env
