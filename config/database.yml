@@ -12,7 +12,6 @@ default: &default
 development:
   <<: *default
   database: db/development.sqlite3
-  # url: <%= ENV['DATABASE_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -20,10 +19,9 @@ development:
 test:
   <<: *default
   database: db/test.sqlite3
-  # url: <%= ENV['DATABASE_URL'] %>
 
 production:
   <<: *default
-  database: db/production.sqlite3
-  # adapter: postgresql
-  # url: <%= ENV['DATABASE_URL'] %>
+  # database: db/production.sqlite3
+  adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>
