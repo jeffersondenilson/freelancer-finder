@@ -1,29 +1,42 @@
-<div class="mx-4">
-  <% if user_signed_in? %>
-    <h2>Meus projetos</h2>
-    <% if current_user.projects.empty? %>
-      <p>Você ainda não tem projetos</p>
-      <%= link_to 'Crie um projeto', new_project_path %>
-    <% else %>
-      <%= render current_user.projects %>
-    <% end %>
+<% if user_signed_in? %>
+  <h2>Meus projetos</h2>
+  <% if current_user.projects.empty? %>
+    <p>Você ainda não tem projetos</p>
+    <%= link_to 'Crie um projeto', new_project_path, class: 'btn btn-primary' %>
+  <% else %>
+    <%= render current_user.projects %>
   <% end %>
+<% end %>
 
-  <% if professional_signed_in? %>
-    <% # TODO: criar partial para perfil %>
-    <h2>Meu perfil</h2>
-    <div>
-      <% if current_professional.profile_picture_url %>
-        <%= tag.img id: "profile-picture", alt: current_professional.name,
-          src: current_professional.profile_picture_url %>
-      <% end %>
-      <p>Nome social: <%= current_professional.name %></p>
-      <p>Nome completo: <%= current_professional.full_name %></p>
-      <p>Data de nascimento: <%= I18n.l current_professional.birth_date %></p>
-      <p>Formação: <br> <%= current_professional.education %></p>
-      <p>Descrição: <br> <%= current_professional.description %></p>
-      <p>Experiência: <br> <%= current_professional.experience %></p>
-      <p>Habilidades: <%= current_professional.abilities %></p>
+<% if professional_signed_in? %>
+  <h2>Meu perfil</h2>
+
+  <div class="card">
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-sm-2">
+          <% if current_professional.profile_picture_url %>
+          <%= tag.img id: "profile-picture", alt: current_professional.name,
+          src: current_professional.profile_picture_url, width: '100', height: '150' %>
+          <% end %>
+        </div>
+
+        <div class="col-sm">
+          <p>Nome social: <%= current_professional.name %></p>
+          <p>Nome completo: <%= current_professional.full_name %></p>
+          <p>Data de nascimento: <%= I18n.l current_professional.birth_date %></p>
+          <p>Descrição: <br> <%= current_professional.description %></p>
+        </div>
+      </div>
+
+      <hr>
+      <div class="row">
+        <p>Formação: <br> <%= current_professional.education %></p>
+        <p>Experiência: <br> <%= current_professional.experience %></p>
+        <p>Habilidades: <%= current_professional.abilities %></p>
+      </div>
+
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

@@ -1,14 +1,13 @@
-<div class="mx-4">
-  <%= render @project %>
-  <br>
-  <% if user_signed_in? %>
-    <%= link_to 'Editar', edit_project_path(@project), class: 'btn btn-primary' %>
-  <% elsif professional_signed_in? %>
-    <% if @proposal %>
-      <h2>Sua proposta</h2>
-      <%= render @proposal %>
-    <% else %>
-      <%= link_to 'Fazer proposta', new_project_proposal_path(@project) %>
-    <% end %>
+<%= render @project %>
+<br>
+
+<% if user_signed_in? %>
+  <%= link_to 'Editar', edit_project_path(@project), class: 'btn btn-primary' %>
+<% elsif professional_signed_in? %>
+  <% if @proposal %>
+    <h2>Sua proposta</h2>
+    <%= render @proposal %>
+  <% else %>
+    <%= link_to 'Fazer proposta', new_project_proposal_path(@project) %>
   <% end %>
-</div>
+<% end %>
