@@ -21,7 +21,7 @@ project_2 = Project.create!({
 project_3 = Project.create!({
   title: 'Jane\'s project 2',
   description: 'Neque porro quisquam est qui',
-  desired_abilities: 'creatividade',
+  desired_abilities: 'criatividade',
   value_per_hour: 23.85,
   due_date: Time.current - 3.day,
   remote: false,
