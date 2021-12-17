@@ -2,27 +2,37 @@
 
 Projeto que simula plataforma web onde pessoas interessadas em criar um projeto podem encontrar freelancers. Os profissionais podem buscar projetos e enviar propostas. Os donos de projetos podem cadastrar seus projetos e avaliar as propostas.
 
-**Ainda em construção** ([Projeto](https://github.com/jeffersondenilson/freelancer-finder/projects/1))
+http://freelancer-finder-90193.herokuapp.com
 
 ## Funcionalidades
 
-* TODO
+**Em construção** ([Projeto](https://github.com/jeffersondenilson/freelancer-finder/projects/1))
+
+- [x] Criação de conta (usuário e profissional)
+- [x] Profissional completa perfil
+- [x] Profissional faz/cancela proposta em projeto
+- [ ] Usuário aceita/rejeita propostas
+- [ ] Usuário encerra inscrições para projeto
+- [ ] Visualizar time do projeto
+- [ ] Fornecer feedback após o projeto (usuário e profissional)
+- [ ] Marcar usuário/profissional como favorito
 
 ## Tecnologias utilizadas
 
-* [ruby on rails](https://rubyonrails.org)
-* [sqlite3](https://github.com/sparklemotion/sqlite3-ruby) como banco de dados (desenvolvimento e teste)
-* [devise](https://github.com/heartcombo/devise) para autenticação
-* [rspec-rails](https://github.com/rspec/rspec-rails) e [capybara](http://teamcapybara.github.io/capybara/) para testes
+- [ruby on rails](https://rubyonrails.org)
+- [sqlite3](https://github.com/sparklemotion/sqlite3-ruby) (desenvolvimento e teste) e [postgresql](https://github.com/ged/ruby-pg) (produção)
+- [devise](https://github.com/heartcombo/devise) para autenticação
+- [rspec-rails](https://github.com/rspec/rspec-rails) e [capybara](http://teamcapybara.github.io/capybara/) para testes
 
 ## Requisitos
 
-* Ruby 2.7
-* Rails 6
-* Bundler 2.2
-* SQLite3 3.22
-* Nodejs 14.17
-* Yarn 1.22
+- Ruby 3.0.2
+- Rails 6.1.4
+- Bundler 2.2.8
+- SQLite3 3.22
+- Postgresql 10+
+- Nodejs 14.17
+- Yarn 1.22
 
 ## Instalação
 
@@ -44,7 +54,7 @@ rails db:migrate
 rails db:seed
 ```
 
-Na versão de desenvolvimento, é possível logar como usuário usando as credenciais:
+Na versão de desenvolvimento e [neste exemplo](http://freelancer-finder-90193.herokuapp.com), é possível logar como usuário usando as credenciais:
 
 ```
 email: jane.doe@email.com
@@ -58,7 +68,7 @@ email: john.doe@email.com
 senha: 123456
 ```
 
-Outros dados podem ser vistos em [db/seeds/development](db/seeds/development)
+Outros dados podem ser vistos em [db/seeds/](db/seeds/)
 
 ## Rodando a aplicação
 
