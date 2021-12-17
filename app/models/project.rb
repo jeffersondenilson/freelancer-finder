@@ -5,4 +5,6 @@ class Project < ApplicationRecord
 
   validates :title, :description, :desired_abilities, :value_per_hour,
             :due_date, presence: true
+
+  # TODO: validar data após hoje
 end
