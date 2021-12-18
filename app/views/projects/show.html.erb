@@ -8,6 +8,7 @@
     <h2>Sua proposta</h2>
     <%= render @proposal %>
   <% else %>
-    <%= link_to 'Fazer proposta', new_project_proposal_path(@project) %>
+    <%= link_to 'Fazer proposta', new_project_proposal_path(@project),
+    class: 'btn btn-primary' %>
   <% end %>
 <% end %>

@@ -1,14 +1,20 @@
 <h1>Projetos disponíveis</h1>
 <br>
-<div>
-  <%= form_with url: '/projects/search', method: :get, class: 'd-flex align-items-center flex-row flex-wrap' do |form| %>
-    <%= form.label :query, 'Buscar por:' %>
-    <%= form.text_field :query, { value: params[:query] || '',
-      class: 'form-control w-sm-25 w-25 mx-sm-2', placeholder: 'Título ou descrição...' } %>
-    <%= form.submit 'Buscar', class: 'btn btn-primary mt-2 mt-sm-0' %>
-  <% end %>
-</div>
+
+<%= form_with url: '/projects/search', method: :get,
+  class: 'd-flex flex-column align-items-start flex-sm-row align-items-sm-center' do |form| %>
+  <%= form.label :query, 'Buscar por:' %>
+  <%= form.text_field :query, { value: params[:query] || '',
+    class: 'form-control mx-sm-2', placeholder: 'Título ou descrição...',
+    style: 'width: 300px;' } %>
+  <%= form.submit 'Buscar', class: 'btn btn-primary mt-2 mt-sm-0' %>
+<% end %>
+
 <br>
 <div>
-  <%= render @projects %>
+  <% if @projects.empty? %>
+    <h5>Nenhum projeto encontrado</h5>
+  <% else %>
+    <%= render @projects %>
+  <% end %>
 </div>
