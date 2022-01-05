@@ -1,29 +1,44 @@
-<div id=<%= "proposal-#{proposal.id}" %> >
-  <p>
-    Projeto: <%= link_to proposal.project.title, project_path(proposal.project) %>
-  </p>
-  <p>Mensagem: <br><%= proposal.message %></p>
-  <p>Valor por hora: <%= number_to_currency proposal.value_per_hour %></p>
-  <p>Horas disponíveis por semana: <%= proposal.hours_per_week %></p>
-  <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
-  <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
-  <% if proposal.canceled_approved? %>
-    <p>
-      Motivo de cancelamento: <br>
-      <%= proposal.proposal_cancelation.cancel_reason %>
-    </p>
-  <% end %>
-  <p>Enviado por: <%= proposal.professional.name %></p>
-  <% if professional_signed_in? %>
-    <div>
-      <%= link_to 'Editar', edit_proposal_path(proposal) %> | 
+<div class="card col-lg-8" id=<%= "proposal-#{proposal.id}" %> >
+  <div class="card-body row">
+    <div class="col-md-8">
+      <h5 class="card-title">
+        Projeto: <%= link_to proposal.project.title, project_path(proposal.project) %>
+      </h5>
+      <p>Mensagem: <br><%= proposal.message %></p>
 
-      <% if proposal.pending? %>
-        <%= link_to 'Cancelar proposta', proposal_path(proposal), 
-          method: :delete, data: { confirm: 'Cancelar proposta?' } %>
-      <% elsif proposal.approved? %>
-        <%= link_to 'Cancelar proposta', proposal_cancel_path(proposal) %>
+      <% if user_signed_in? %>
+        <p>Enviado por: <%= proposal.professional.name %></p>
+      <% end %>
+
+      <% if proposal.canceled_approved? %>
+        <p>
+          Motivo de cancelamento: <br>
+          <%= proposal.proposal_cancelation.cancel_reason %>
+        </p>
       <% end %>
     </div>
-  <% end %>
+
+    <div class="col">
+      <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
+      <p>Valor por hora: <%= number_to_currency proposal.value_per_hour %></p>
+      <p>Horas disponíveis por semana: <%= proposal.hours_per_week %></p>
+      <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
+    </div>
+
+    <% if professional_signed_in? %>
+      <div>
+        <%= link_to 'Editar', edit_proposal_path(proposal), class: 'btn btn-primary' %> 
+
+        <% if proposal.pending? %>
+          <%= link_to 'Cancelar proposta', proposal_path(proposal),
+            class: 'btn btn-danger', method: :delete,
+            data: { confirm: 'Cancelar proposta?' } %>
+        <% elsif proposal.approved? %>
+          <%= link_to 'Cancelar proposta', proposal_cancel_path(proposal),
+            class: 'btn btn-danger' %>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
 </div>
