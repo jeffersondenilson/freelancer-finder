@@ -57,7 +57,6 @@ describe 'Professional create proposal' do
     expect(page).to have_content('Horas disponíveis por semana: 20')
     expect(page).to have_content('Expectativa de conclusão: 14/10/2021')
     expect(page).to have_content('Status: Pendente')
-    expect(page).to have_content("Enviado por: #{professional.name}")
   end
 
   it 'and must fill all fields' do
@@ -156,11 +155,7 @@ describe 'Professional create proposal' do
     expect(page).to have_content('Minhas propostas')
     expect(page).to have_content(prop1.message)
     expect(page).to have_content(prop2.message)
-    expect(page).to have_content("Enviado por: #{professional.name}")
     expect(page).not_to have_content(prop3.message)
-    expect(page).not_to have_content(
-      "Enviado por: #{another_professional.name}"
-    )
   end
 
   it 'and there\'s no proposals' do

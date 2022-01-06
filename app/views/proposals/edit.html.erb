@@ -1,39 +1,51 @@
-<h1>Editar proposta</h1>
+<main class="form-signin text-center">
+  <%= form_with model: @proposal do |f| %>
 
-<%= form_with model: @proposal do |f| %>
-  <div>
-    <%= f.label :message %>
-    <%= f.text_area :message, { placeholder: "Conte por quê está se candidatando, experiência, etc..." } %>
-    <% @proposal.errors.full_messages_for(:message).each do |message| %>
-      <small><%= message %></small>
-    <% end %>
-  </div>
+    <h2 class="h3 mb-3 fw-normal">Editar proposta em <%= @proposal.project.title %></h2>
 
-  <div>
-    <%= f.label :value_per_hour %>
-    <%= f.number_field :value_per_hour, { step: 0.01 } %>
-    <% @proposal.errors.full_messages_for(:value_per_hour).each do |message| %>
-      <small><%= message %></small>
-    <% end %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.text_area :message, autofocus: true, class: 'form-control', placeholder: 'Conte por quê está se candidatando, experiência, etc...' %>
+      <%= f.label :message %>
+      <% @proposal.errors.full_messages_for(:message).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div>
-    <%= f.label :hours_per_week %>
-    <%= f.number_field :hours_per_week %>
-    <% @proposal.errors.full_messages_for(:hours_per_week).each do |message| %>
-      <small><%= message %></small>
-    <% end %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.number_field :value_per_hour, class: 'form-control', placeholder: 'Valor por hora', step: 0.01 %>
+      <%= f.label :value_per_hour %>
+      <% @proposal.errors.full_messages_for(:value_per_hour).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div>
-    <%= f.label :finish_date %>
-    <%= f.date_field :finish_date %>
-    <% @proposal.errors.full_messages_for(:finish_date).each do |message| %>
-      <small><%= message %></small>
-    <% end %>
-  </div>
+    <div class="form-floating my-3">
+      <%= f.number_field :hours_per_week, class: 'form-control', placeholder: 'Horas por semana' %>
+      <%= f.label :hours_per_week %>
+      <% @proposal.errors.full_messages_for(:hours_per_week).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
 
-  <div>
-    <%= f.submit %>
-  </div>
-<% end %>
+    <div class="form-floating my-3">
+      <%= f.date_field :finish_date, class: 'form-control', placeholder: 'Expectativa de conclusão' %>
+      <%= f.label :finish_date %>
+      <% @proposal.errors.full_messages_for(:finish_date).each do |message| %>
+        <div class="invalid-feedback">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
+
+    <br>
+    <div class="actions">
+      <%= f.submit class: "w-100 btn btn-lg btn-primary" %>
+    </div>
+  <% end %>
+</main>

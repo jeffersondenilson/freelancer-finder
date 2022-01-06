@@ -1,11 +1,15 @@
-<%= form_with model: @proposal, method: :delete do |f| %>
-  <div>
-    <%= f.label :cancel_reason, 'Informe por que quer cancelar a proposta:' %>
+<main class="form-signin text-center">
+  <%= form_with model: @proposal, method: :delete do |f| %>
+    <div>
+      <%= f.label :cancel_reason, 'Informe por que quer cancelar a proposta:',
+        class: 'h4 mb-3 fw-normal' %>
+      <br>
+      <%= f.text_area :cancel_reason, class: 'form-control', rows: '5' %>
+    </div>
+    
     <br>
-    <%= f.text_area :cancel_reason %>
-  </div>
-  
-  <div>
-    <%= f.submit 'Cancelar proposta' %>
-  </div>
-<% end %>
+    <div class="actions">
+      <%= f.submit 'Cancelar proposta', class: "w-100 btn btn-lg btn-primary" %>
+    </div>
+  <% end %>
+</main>

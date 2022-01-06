@@ -229,4 +229,33 @@ RSpec.describe Proposal, type: :model do
       end
     end
   end
+
+  context '#approved_date' do
+    it 'should set approved_at when approved' do
+      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
+                          password: '123456')
+      pj1 = Project.create!(
+        title: 'Projeto 1', description: 'lorem ipsum...',
+        desired_abilities: 'design', value_per_hour: 12.34,
+        due_date: '09/10/2021', remote: true, creator: jane
+      )
+      professional = create(:completed_profile_professional)
+      prop1 = Proposal.create!(
+        message: 'John\'s proposal on project 1',
+        value_per_hour: 80.80,
+        hours_per_week: 20,
+        finish_date: '10/01/2021',
+        project: pj1,
+        professional: professional,
+        status: :pending
+      )
+
+      travel_to '2022-01-06' do
+        prop1.approved!
+      end
+      
+      expect(prop1.status).to eq('approved')
+      expect(prop1.approved_at).to eq('2022-01-06')
+    end
+  end
 end
