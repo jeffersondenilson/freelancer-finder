@@ -27,3 +27,13 @@ project_3 = Project.create!({
   remote: false,
   user_id: 1
 })
+
+project_4 = Project.create!({
+  title: 'Alice\'s project 2',
+  description: 'Maiores dolor autem similique et ratione labore consequuntur',
+  desired_abilities: 'banco de dados',
+  value_per_hour: 10.00,
+  due_date: Time.current + 4.day,
+  remote: false,
+  user_id: 2
+})
