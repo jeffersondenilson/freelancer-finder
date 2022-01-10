@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-sm-2">
+        <% if current_professional.profile_picture_url %>
+        <%= tag.img id: "profile-picture", alt: current_professional.name,
+        src: current_professional.profile_picture_url, width: '100', height: '150' %>
+        <% end %>
+      </div>
+
+      <div class="col-sm">
+        <p>Nome: <%= current_professional.name %></p>
+        <p>E-mail: <%= current_professional.email %></p>
+        <p>Descrição: <br> <%= current_professional.description %></p>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row">
+      <p>Formação: <br> <%= current_professional.education %></p>
+      <p>Experiência: <br> <%= current_professional.experience %></p>
+      <p>Habilidades: <%= current_professional.abilities %></p>
+    </div>
+
+  </div>
+</div>

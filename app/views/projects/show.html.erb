@@ -5,9 +5,13 @@
   <%= link_to 'Editar', edit_project_path(@project), class: 'btn btn-primary' %>
   <br>
   <h2>Propostas</h2>
+  <% if @proposals.any? %>
   <div>
-    <%= render @project.proposals %>
+    <%= render @proposals %>
   </div>
+  <% else %>
+    <p>Esse projeto ainda não recebeu propostas</p>
+  <% end %>
 <% elsif professional_signed_in? %>
   <% if @proposal %>
     <h2>Sua proposta</h2>

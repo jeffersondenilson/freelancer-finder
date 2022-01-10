@@ -5,6 +5,6 @@ FactoryBot.define do
     hours_per_week { FFaker::Number.number + 1 }
     finish_date { 1.week.from_now }
     project
-    professional
+    professional { create(:full_profile_professional) }
   end
 end

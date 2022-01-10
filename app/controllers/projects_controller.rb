@@ -22,6 +22,7 @@ class ProjectsController < ApplicationController
                                       .find_by(project_id: params[:id])
     elsif user_signed_in?
       @project = Project.find_by(id: params[:id], creator: current_user)
+      @proposals = @project.proposals.where.not(status: :canceled_pending)
     end
 
     redirect_to root_path, alert: 'O projeto não foi encontrado' if
