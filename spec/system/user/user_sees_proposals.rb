@@ -82,6 +82,7 @@ describe 'User sees proposals' do
     visit project_path(project)
     click_on professional.name
 
+    expect(current_path).to eq('/professionals/1')
     expect(page).to have_content("Nome: #{professional.name}")
     expect(page).to have_content("E-mail: #{professional.email}")
     expect(page).to have_content("Descrição: #{professional.description}")
