@@ -3,6 +3,11 @@
 
 <% if user_signed_in? %>
   <%= link_to 'Editar', edit_project_path(@project), class: 'btn btn-primary' %>
+  <br>
+  <h2>Propostas</h2>
+  <div>
+    <%= render @project.proposals %>
+  </div>
 <% elsif professional_signed_in? %>
   <% if @proposal %>
     <h2>Sua proposta</h2>
