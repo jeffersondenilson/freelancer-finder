@@ -26,3 +26,12 @@
 
   </div>
 </div>
+
+<% if @proposals.any? %>
+  <br>
+  <h3>Propostas pendentes</h3>
+
+  <div>
+    <%= render @proposals %>
+  </div>
+<% end %>

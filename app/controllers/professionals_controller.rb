@@ -3,5 +3,7 @@ class ProfessionalsController < ApplicationController
 
   def show
     @professional = Professional.find(params[:id])
+    @proposals = Proposal.where(project: [current_user.projects],
+                                professional: @professional, status: :pending)
   end
 end

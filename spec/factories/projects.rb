@@ -3,7 +3,7 @@ FactoryBot.define do
     title { FFaker::Lorem.phrase }
     description { FFaker::Lorem.paragraph }
     desired_abilities { FFaker::Skill.specialties.join(', ') }
-    value_per_hour { FFaker::Number.decimal }
+    value_per_hour { 9.99 }
     due_date { 1.week.from_now }
     remote { true }
     creator

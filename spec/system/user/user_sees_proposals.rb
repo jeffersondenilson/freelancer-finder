@@ -15,9 +15,7 @@ describe 'User sees proposals' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
       expect(page).to have_content("Enviado por: #{proposal.professional.name}")
       expect(page).to have_content('Status: Pendente')
-      expect(page).to have_content(
-        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
-      )
+      expect(page).to have_content('Valor por hora: R$ 9,99')
       expect(page).to have_content('Horas disponíveis por semana: '\
                                    "#{proposal.hours_per_week}")
       expect(page).to have_content('Expectativa de conclusão: '\
@@ -28,10 +26,7 @@ describe 'User sees proposals' do
       expect(page).to have_content('Enviado por: '\
                                    "#{another_proposal.professional.name}")
       expect(page).to have_content('Status: Pendente')
-      expect(page).to have_content(
-        'Valor por hora: '\
-        "R$ #{another_proposal.value_per_hour.to_s.sub('.', ',')}"
-      )
+      expect(page).to have_content('Valor por hora: R$ 9,99')
       expect(page).to have_content('Horas disponíveis por semana: '\
                                    "#{another_proposal.hours_per_week}")
       expect(page).to have_content('Expectativa de conclusão: '\
@@ -64,9 +59,7 @@ describe 'User sees proposals' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
       expect(page).to have_content("Enviado por: #{proposal.professional.name}")
       expect(page).to have_content('Status: Pendente')
-      expect(page).to have_content(
-        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
-      )
+      expect(page).to have_content('Valor por hora: R$ 9,99')
       expect(page).to have_content('Horas disponíveis por semana: '\
                                    "#{proposal.hours_per_week}")
       expect(page).to have_content('Expectativa de conclusão: '\
@@ -97,9 +90,7 @@ describe 'User sees proposals' do
       expect(page).to have_content(
         "Motivo de cancelamento: #{proposal.proposal_cancelation.cancel_reason}"
       )
-      expect(page).to have_content(
-        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
-      )
+      expect(page).to have_content('Valor por hora: R$ 9,99')
       expect(page).to have_content('Horas disponíveis por semana: '\
                                    "#{proposal.hours_per_week}")
       expect(page).to have_content('Expectativa de conclusão: '\
@@ -132,5 +123,85 @@ describe 'User sees proposals' do
 
     expect(current_path).to eq('/users/sign_in')
     expect(page).to have_content('Para continuar, efetue login ou registre-se.')
+  end
+
+  it 'and should see proposals at professional profile' do
+    user = create(:user)
+    project1 = create(:project, creator: user)
+    project2 = create(:project, creator: user)
+
+    professional = create(:full_profile_professional)
+    proposal1 = create(
+      :proposal, project: project1, professional: professional
+    )
+    proposal2 = create(
+      :proposal, project: project2, professional: professional
+    )
+    login_as user, scope: :user
+
+    visit professional_path(professional)
+
+    expect(page).to have_content('Propostas pendentes')
+    within '#proposal-1' do
+      expect(page).to have_content("Projeto: #{project1.title}")
+      expect(page).to have_content("Mensagem: #{proposal1.message}")
+      expect(page).to have_content("Enviado por: #{professional.name}")
+    end
+    within '#proposal-2' do
+      expect(page).to have_content("Projeto: #{project2.title}")
+      expect(page).to have_content("Mensagem: #{proposal2.message}")
+      expect(page).to have_content("Enviado por: #{professional.name}")
+    end
+  end
+
+  it 'and should not see another projects proposals at professional profile' do
+    project1 = create(:project)
+    project2 = create(:project)
+
+    professional = create(:full_profile_professional)
+    proposal1 = create(
+      :proposal, project: project1, professional: professional
+    )
+    proposal2 = create(
+      :proposal, project: project2, professional: professional,
+                 message: 'Should not be seen'
+    )
+    login_as project1.creator, scope: :user
+
+    visit professional_path(professional)
+
+    expect(page).to have_content('Propostas pendentes')
+    within '#proposal-1' do
+      expect(page).to have_content("Projeto: #{project1.title}")
+      expect(page).to have_content("Mensagem: #{proposal1.message}")
+      expect(page).to have_content("Enviado por: #{professional.name}")
+    end
+    expect(page).not_to have_content("Projeto: #{project2.title}")
+    expect(page).not_to have_content("Mensagem: #{proposal2.message}")
+  end
+
+  it 'and should see only pending proposals at professional profile' do
+    project = create(:project)
+
+    professional = create(:full_profile_professional)
+    proposal1 = create(
+      :proposal, project: project, professional: professional
+    )
+    proposal2 = create(
+      :proposal, project: project, professional: professional,
+                 message: 'Should not be seen'
+    )
+    proposal2.canceled_pending!
+    login_as project.creator, scope: :user
+
+    visit professional_path(professional)
+
+    expect(page).to have_content('Propostas pendentes')
+    within '#proposal-1' do
+      expect(page).to have_content("Projeto: #{project.title}")
+      expect(page).to have_content("Mensagem: #{proposal1.message}")
+      expect(page).to have_content("Enviado por: #{professional.name}")
+    end
+    expect(page).not_to have_content("Mensagem: #{proposal2.message}")
   end
 end
