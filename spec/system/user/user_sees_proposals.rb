@@ -78,33 +78,6 @@ describe 'User sees proposals' do
                                      "#{another_proposal.professional.name}")
   end
 
-  it 'and should see professional profile' do
-    project = create(:project)
-    proposal = create(:proposal, project: project)
-    professional = proposal.professional
-
-    login_as project.creator, scope: :user
-    visit project_path(project)
-    click_on professional.name
-
-    expect(current_path).to eq('/professionals/1')
-    expect(page).to have_content("Nome: #{professional.name}")
-    expect(page).to have_content("E-mail: #{professional.email}")
-    expect(page).to have_content("Descrição: #{professional.description}")
-    expect(page).to have_content("Formação: #{professional.education}")
-    expect(page).to have_content("Experiência: #{professional.experience}")
-    expect(page).to have_content("Habilidades: #{professional.abilities}")
-  end
-
-  it 'and should authenticate to see professional profile' do
-    professional = create(:full_profile_professional)
-
-    visit professional_path(professional)
-
-    expect(current_path).to eq('/users/sign_in')
-    expect(page).to have_content('Para continuar, efetue login ou registre-se.')
-  end
-
   it 'and should see cancel reason when canceled_approved' do
     project = create(:project)
     proposal = create(:proposal, project: project, approved_at: Time.zone.today)
@@ -132,5 +105,32 @@ describe 'User sees proposals' do
       expect(page).to have_content('Expectativa de conclusão: '\
                                    "#{I18n.l proposal.finish_date}")
     end
+  end
+
+  it 'and should see professional profile' do
+    project = create(:project)
+    proposal = create(:proposal, project: project)
+    professional = proposal.professional
+
+    login_as project.creator, scope: :user
+    visit project_path(project)
+    click_on professional.name
+
+    expect(current_path).to eq('/professionals/1')
+    expect(page).to have_content("Nome: #{professional.name}")
+    expect(page).to have_content("E-mail: #{professional.email}")
+    expect(page).to have_content("Descrição: #{professional.description}")
+    expect(page).to have_content("Formação: #{professional.education}")
+    expect(page).to have_content("Experiência: #{professional.experience}")
+    expect(page).to have_content("Habilidades: #{professional.abilities}")
+  end
+
+  it 'and should authenticate to see professional profile' do
+    professional = create(:full_profile_professional)
+
+    visit professional_path(professional)
+
+    expect(current_path).to eq('/users/sign_in')
+    expect(page).to have_content('Para continuar, efetue login ou registre-se.')
   end
 end

@@ -26,3 +26,11 @@ body {
 .nav-link:hover, .nav-link:focus {
   text-decoration: underline;
 }
+
+.card.border-approved {
+  border: 2px solid limegreen;
+}
+
+.card.border-canceled_approved {
+  border: 2px solid red;
+}
