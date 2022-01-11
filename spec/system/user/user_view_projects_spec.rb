@@ -100,7 +100,6 @@ describe 'User view projects' do
 
     visit project_path(pj2)
 
-    expect(current_path).to eq(root_path)
     expect(page).not_to have_content('Título: Projeto 2')
     expect(page).not_to have_content('Criado por: John Doe')
   end

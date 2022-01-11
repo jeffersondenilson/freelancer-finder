@@ -90,4 +90,40 @@ describe 'User sees proposals' do
     expect(page).to have_content("Experiência: #{professional.experience}")
     expect(page).to have_content("Habilidades: #{professional.abilities}")
   end
+
+  it 'and should authenticate to see professional profile' do
+    professional = create(:full_profile_professional)
+
+    visit professional_path(professional)
+
+    expect(current_path).to eq('/users/sign_in')
+    expect(page).to have_content('Para continuar, efetue login ou registre-se.')
+  end
+
+  it 'and should see cancel reason when canceled_approved' do
+    project = create(:project)
+    proposal = create(:proposal, project: project, approved_at: Date.today)
+    proposal.canceled_approved!
+    ProposalCancelation.create!(
+      cancel_reason: 'This was canceled',
+      proposal: proposal
+    )
+
+    login_as project.creator, scope: :user
+    visit project_path(project)
+
+    within '#proposal-1' do
+      expect(page).to have_content("Mensagem: #{proposal.message}")
+      expect(page).to have_content("Enviado por: #{proposal.professional.name}")
+      expect(page).to have_content("Status: Cancelada")
+      expect(page).to have_content("Motivo de cancelamento: "\
+        "#{proposal.proposal_cancelation.cancel_reason}")
+      expect(page).to have_content("Valor por hora: "\
+        "R$ #{proposal.value_per_hour.to_s.sub('.', ',')}")
+      expect(page).to have_content("Horas disponíveis por semana: "\
+        "#{proposal.hours_per_week}")
+      expect(page).to have_content("Expectativa de conclusão: "\
+        "#{I18n.l proposal.finish_date}")
+    end
+  end
 end
