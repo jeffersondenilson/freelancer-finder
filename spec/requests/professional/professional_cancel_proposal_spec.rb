@@ -16,7 +16,7 @@ describe 'Professional cancel proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       status: :approved,
       approved_at: '10/10/2021',
       project: pj1,
@@ -52,7 +52,7 @@ describe 'Professional cancel proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       status: :pending,
       project: pj1,
       professional: professional

@@ -10,7 +10,7 @@ describe 'Professional creates proposal' do
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days
+        finish_date: 3.days.from_now
       }
     }
 
@@ -35,7 +35,7 @@ describe 'Professional creates proposal' do
         message: 'NOT John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days,
+        finish_date: 3.days.from_now,
         professional: another_professional
       }
     }
@@ -61,7 +61,7 @@ describe 'Professional creates proposal' do
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days,
+        finish_date: 3.days.from_now,
         status: :approved
       }
     }
@@ -82,7 +82,7 @@ describe 'Professional creates proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       project: pj1,
       professional: professional
     )
@@ -93,7 +93,7 @@ describe 'Professional creates proposal' do
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days,
+        finish_date: 3.days.from_now,
         status: :canceled_approved
       }
     }
@@ -114,7 +114,7 @@ describe 'Professional creates proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       project: pj1,
       professional: professional
     )
@@ -125,7 +125,7 @@ describe 'Professional creates proposal' do
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days
+        finish_date: 3.days.from_now
       }
     }
 
@@ -146,7 +146,7 @@ describe 'Professional creates proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       project: pj1,
       professional: professional,
       status: :canceled_approved
@@ -158,7 +158,7 @@ describe 'Professional creates proposal' do
         message: 'John\'s new proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days
+        finish_date: 3.days.from_now
       }
     }
 
