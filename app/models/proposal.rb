@@ -26,9 +26,8 @@ class Proposal < ApplicationRecord
       canceled_pending!
     elsif can_cancel_at_current_date?
       canceled_approved!
-      self.proposal_cancelation = ProposalCancelation.new(
-        cancel_reason: cancel_reason
-      )
+      self.proposal_cancelation = ProposalCancelation
+                                  .new(cancel_reason: cancel_reason)
     else
       return false
     end

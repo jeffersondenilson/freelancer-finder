@@ -17,12 +17,9 @@ class ProjectsController < ApplicationController
 
   def show
     if professional_signed_in?
-      @project = Project.find(params[:id])
-      @proposal = current_professional.not_canceled_proposals
-                                      .find_by(project_id: params[:id])
+      find_project_and_proposals_for_professional
     elsif user_signed_in?
-      @project = current_user.projects.find(params[:id])
-      @proposals = @project.proposals.where.not(status: :canceled_pending)
+      find_project_and_proposals_for_user
     end
   end
 
@@ -74,5 +71,16 @@ class ProjectsController < ApplicationController
 
     flash[:alert] = 'Você deve estar logado.'
     redirect_to root_path
+  end
+
+  def find_project_and_proposals_for_professional
+    @project = Project.find(params[:id])
+    @proposal = current_professional.not_canceled_proposals
+                                    .find_by(project_id: params[:id])
+  end
+
+  def find_project_and_proposals_for_user
+    @project = current_user.projects.find(params[:id])
+    @proposals = @project.proposals.where.not(status: :canceled_pending)
   end
 end
