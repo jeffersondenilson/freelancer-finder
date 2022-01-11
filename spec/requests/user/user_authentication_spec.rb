@@ -48,8 +48,7 @@ describe 'User authentication' do
 
     get '/projects/1/edit'
 
-    expect(flash[:alert]).to eq('O projeto não foi encontrado')
-    expect(response).to redirect_to('/')
+    expect(response).to have_http_status(:not_found)
   end
 
   it 'can not update another user\'s project' do
@@ -80,8 +79,7 @@ describe 'User authentication' do
       }
     }
 
-    expect(flash[:alert]).to eq('O projeto não foi encontrado')
-    expect(response).to redirect_to('/')
+    expect(response).to have_http_status(:not_found)
   end
 
   it 'can not create proposal' do

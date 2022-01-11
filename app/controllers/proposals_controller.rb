@@ -8,10 +8,7 @@ class ProposalsController < ApplicationController
   end
 
   def create
-    @project = Project.find_by(id: params[:project_id])
-
-    return redirect_to root_path, alert: 'Projeto não encontrado' if
-      @project.nil?
+    @project = Project.find(params[:project_id])
 
     @proposal = Proposal.new(
       **proposal_params, project: @project, professional: current_professional
@@ -26,17 +23,11 @@ class ProposalsController < ApplicationController
   end
 
   def edit
-    @proposal = current_professional.proposals.find_by(id: params[:id])
-
-    redirect_to my_projects_path, alert: 'Proposta não encontrada' if
-      @proposal.nil?
+    @proposal = current_professional.proposals.find(params[:id])
   end
 
   def update
-    @proposal = current_professional.proposals.find_by(id: params[:id])
-
-    return redirect_to my_projects_path, alert: 'Proposta não encontrada' if
-      @proposal.nil?
+    @proposal = current_professional.proposals.find(params[:id])
 
     if @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'

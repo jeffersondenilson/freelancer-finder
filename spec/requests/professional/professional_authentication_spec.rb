@@ -65,8 +65,7 @@ describe 'Professional authentication' do
 
     get '/proposals/1/edit'
 
-    expect(flash[:alert]).to eq('Proposta não encontrada')
-    expect(response).to redirect_to('/projects/my')
+    expect(response).to have_http_status(:not_found)
   end
 
   it 'can not update another professional\'s proposal' do
@@ -102,7 +101,6 @@ describe 'Professional authentication' do
       }
     }
 
-    expect(flash[:alert]).to eq('Proposta não encontrada')
-    expect(response).to redirect_to('/projects/my')
+    expect(response).to have_http_status(:not_found)
   end
 end

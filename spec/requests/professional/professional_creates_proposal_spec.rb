@@ -14,8 +14,7 @@ describe 'Professional creates proposal' do
       }
     }
 
-    expect(flash[:alert]).to eq('Projeto não encontrado')
-    expect(response).to redirect_to('/')
+    expect(response).to have_http_status(:not_found)
     expect(Proposal.count).to eq(0)
   end
 
