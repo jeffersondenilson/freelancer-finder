@@ -14,25 +14,28 @@ describe 'User sees proposals' do
     within '#proposal-1' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
       expect(page).to have_content("Enviado por: #{proposal.professional.name}")
-      expect(page).to have_content("Status: Pendente")
-      expect(page).to have_content("Valor por hora: "\
-        "R$ #{proposal.value_per_hour.to_s.sub('.', ',')}")
-      expect(page).to have_content("Horas disponíveis por semana: "\
-        "#{proposal.hours_per_week}")
-      expect(page).to have_content("Expectativa de conclusão: "\
-        "#{I18n.l proposal.finish_date}")
+      expect(page).to have_content('Status: Pendente')
+      expect(page).to have_content(
+        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
+      )
+      expect(page).to have_content('Horas disponíveis por semana: '\
+                                   "#{proposal.hours_per_week}")
+      expect(page).to have_content('Expectativa de conclusão: '\
+                                   "#{I18n.l proposal.finish_date}")
     end
     within '#proposal-2' do
       expect(page).to have_content("Mensagem: #{another_proposal.message}")
-      expect(page).to have_content("Enviado por: "\
-        "#{another_proposal.professional.name}")
-      expect(page).to have_content("Status: Pendente")
-      expect(page).to have_content("Valor por hora: "\
-        "R$ #{another_proposal.value_per_hour.to_s.sub('.', ',')}")
-      expect(page).to have_content("Horas disponíveis por semana: "\
-        "#{another_proposal.hours_per_week}")
-      expect(page).to have_content("Expectativa de conclusão: "\
-        "#{I18n.l another_proposal.finish_date}")
+      expect(page).to have_content('Enviado por: '\
+                                   "#{another_proposal.professional.name}")
+      expect(page).to have_content('Status: Pendente')
+      expect(page).to have_content(
+        'Valor por hora: '\
+        "R$ #{another_proposal.value_per_hour.to_s.sub('.', ',')}"
+      )
+      expect(page).to have_content('Horas disponíveis por semana: '\
+                                   "#{another_proposal.hours_per_week}")
+      expect(page).to have_content('Expectativa de conclusão: '\
+                                   "#{I18n.l another_proposal.finish_date}")
     end
   end
 
@@ -48,8 +51,9 @@ describe 'User sees proposals' do
   it 'and should not see canceled_pending proposals' do
     project = create(:project)
     proposal = create(:proposal, project: project)
-    another_proposal = create(:proposal, project: project,
-      message: 'Will be canceled while pending')
+    another_proposal = create(
+      :proposal, project: project, message: 'Will be canceled while pending'
+    )
     another_proposal.canceled_pending!
 
     login_as project.creator, scope: :user
@@ -59,18 +63,19 @@ describe 'User sees proposals' do
     within '#proposal-1' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
       expect(page).to have_content("Enviado por: #{proposal.professional.name}")
-      expect(page).to have_content("Status: Pendente")
-      expect(page).to have_content("Valor por hora: "\
-        "R$ #{proposal.value_per_hour.to_s.sub('.', ',')}")
-      expect(page).to have_content("Horas disponíveis por semana: "\
-        "#{proposal.hours_per_week}")
-      expect(page).to have_content("Expectativa de conclusão: "\
-        "#{I18n.l proposal.finish_date}")
+      expect(page).to have_content('Status: Pendente')
+      expect(page).to have_content(
+        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
+      )
+      expect(page).to have_content('Horas disponíveis por semana: '\
+                                   "#{proposal.hours_per_week}")
+      expect(page).to have_content('Expectativa de conclusão: '\
+                                   "#{I18n.l proposal.finish_date}")
     end
 
     expect(page).not_to have_content("Mensagem: #{another_proposal.message}")
-    expect(page).not_to have_content("Enviado por: "\
-      "#{another_proposal.professional.name}")
+    expect(page).not_to have_content('Enviado por: '\
+                                     "#{another_proposal.professional.name}")
   end
 
   it 'and should see professional profile' do
@@ -102,7 +107,7 @@ describe 'User sees proposals' do
 
   it 'and should see cancel reason when canceled_approved' do
     project = create(:project)
-    proposal = create(:proposal, project: project, approved_at: Date.today)
+    proposal = create(:proposal, project: project, approved_at: Time.zone.today)
     proposal.canceled_approved!
     ProposalCancelation.create!(
       cancel_reason: 'This was canceled',
@@ -115,15 +120,17 @@ describe 'User sees proposals' do
     within '#proposal-1' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
       expect(page).to have_content("Enviado por: #{proposal.professional.name}")
-      expect(page).to have_content("Status: Cancelada")
-      expect(page).to have_content("Motivo de cancelamento: "\
-        "#{proposal.proposal_cancelation.cancel_reason}")
-      expect(page).to have_content("Valor por hora: "\
-        "R$ #{proposal.value_per_hour.to_s.sub('.', ',')}")
-      expect(page).to have_content("Horas disponíveis por semana: "\
-        "#{proposal.hours_per_week}")
-      expect(page).to have_content("Expectativa de conclusão: "\
-        "#{I18n.l proposal.finish_date}")
+      expect(page).to have_content('Status: Cancelada')
+      expect(page).to have_content(
+        "Motivo de cancelamento: #{proposal.proposal_cancelation.cancel_reason}"
+      )
+      expect(page).to have_content(
+        "Valor por hora: R$ #{proposal.value_per_hour.to_s.sub('.', ',')}"
+      )
+      expect(page).to have_content('Horas disponíveis por semana: '\
+                                   "#{proposal.hours_per_week}")
+      expect(page).to have_content('Expectativa de conclusão: '\
+                                   "#{I18n.l proposal.finish_date}")
     end
   end
 end

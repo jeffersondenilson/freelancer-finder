@@ -30,6 +30,6 @@ class ApplicationController < ActionController::Base
   end
 
   def render_not_found(_exception)
-    render file: "#{Rails.root}/public/404.html", status: :not_found
+    render file: Rails.root.join('public/404.html'), status: :not_found
   end
 end

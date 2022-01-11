@@ -253,7 +253,7 @@ RSpec.describe Proposal, type: :model do
       travel_to '2022-01-06' do
         prop1.approved!
       end
-      
+
       expect(prop1.status).to eq('approved')
       expect(prop1.approved_at).to eq('2022-01-06')
     end

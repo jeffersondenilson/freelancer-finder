@@ -65,13 +65,4 @@ describe 'Professional cancel proposal' do
     expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
     expect(Proposal.first.status).to eq('canceled_pending')
   end
-
-  it 'can not view edit form for canceled_pending proposal'
-  it 'can not view edit form for canceled_approved proposal'
-  it 'can not update canceled_pending proposal'
-  it 'can not update canceled_approved proposal'
-  it 'can not view cancel form for canceled_pending proposal'
-  it 'can not view cancel form for canceled_approved proposal'
-  it 'can not cancel canceled_pending proposal'
-  it 'can not cancel canceled_approved proposal'
 end
