@@ -15,7 +15,7 @@ FactoryBot.define do
     education { FFaker::Education.degree }
     description { FFaker::Lorem.paragraph }
     experience { FFaker::Job.title }
-    abilities { FFaker::Skill.specialties }
+    abilities { FFaker::Skill.specialties.join(', ') }
     profile_picture_url { FFaker::Avatar.image }
   end
 end

@@ -17,15 +17,10 @@ class ProjectsController < ApplicationController
 
   def show
     if professional_signed_in?
-      @project = Project.find_by(id: params[:id])
-      @proposal = current_professional.not_canceled_proposals
-                                      .find_by(project_id: params[:id])
+      find_project_and_proposals_for_professional
     elsif user_signed_in?
-      @project = Project.find_by(id: params[:id], creator: current_user)
+      find_project_and_proposals_for_user
     end
-
-    redirect_to root_path, alert: 'O projeto não foi encontrado' if
-      @project.nil?
   end
 
   def new
@@ -45,17 +40,11 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Project.find_by(id: params[:id], creator: current_user)
-
-    redirect_to root_path, alert: 'O projeto não foi encontrado' if
-      @project.nil?
+    @project = current_user.projects.find(params[:id])
   end
 
   def update
-    @project = Project.find_by(id: params[:id], creator: current_user)
-
-    return redirect_to root_path, alert: 'O projeto não foi encontrado' if
-      @project.nil?
+    @project = current_user.projects.find(params[:id])
 
     if @project.update(project_params)
       flash[:notice] = 'Projeto atualizado com sucesso'
@@ -66,7 +55,6 @@ class ProjectsController < ApplicationController
   end
 
   def my_projects
-    # @projects =
     @proposals = current_professional.not_canceled_proposals
                                      .order(updated_at: :desc)
   end
@@ -83,5 +71,16 @@ class ProjectsController < ApplicationController
 
     flash[:alert] = 'Você deve estar logado.'
     redirect_to root_path
+  end
+
+  def find_project_and_proposals_for_professional
+    @project = Project.find(params[:id])
+    @proposal = current_professional.not_canceled_proposals
+                                    .find_by(project_id: params[:id])
+  end
+
+  def find_project_and_proposals_for_user
+    @project = current_user.projects.find(params[:id])
+    @proposals = @project.proposals.where.not(status: :canceled_pending)
   end
 end

@@ -16,7 +16,7 @@ describe 'Professional cancel proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       status: :approved,
       approved_at: '10/10/2021',
       project: pj1,
@@ -52,7 +52,7 @@ describe 'Professional cancel proposal' do
       message: 'John\'s proposal on project 1',
       value_per_hour: 80.80,
       hours_per_week: 20,
-      finish_date: Time.current + 3.days,
+      finish_date: 3.days.from_now,
       status: :pending,
       project: pj1,
       professional: professional
@@ -65,13 +65,4 @@ describe 'Professional cancel proposal' do
     expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
     expect(Proposal.first.status).to eq('canceled_pending')
   end
-
-  it 'can not view edit form for canceled_pending proposal'
-  it 'can not view edit form for canceled_approved proposal'
-  it 'can not update canceled_pending proposal'
-  it 'can not update canceled_approved proposal'
-  it 'can not view cancel form for canceled_pending proposal'
-  it 'can not view cancel form for canceled_approved proposal'
-  it 'can not cancel canceled_pending proposal'
-  it 'can not cancel canceled_approved proposal'
 end

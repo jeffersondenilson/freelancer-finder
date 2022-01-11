@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  # TODO: adicionar rescue_from para 404
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -27,5 +27,9 @@ class ApplicationController < ActionController::Base
     return if current_professional.completed_profile?
 
     redirect_to edit_professional_registration_path(current_professional)
+  end
+
+  def render_not_found(_exception)
+    render file: Rails.root.join('public/404.html'), status: :not_found
   end
 end

@@ -32,7 +32,7 @@ describe 'Professional authentication' do
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
-        finish_date: Time.current + 3.days,
+        finish_date: 3.days.from_now,
         professional: professional
       }
     }
@@ -56,7 +56,7 @@ describe 'Professional authentication' do
         message: 'Schneider\'s proposal on project 1',
         value_per_hour: 99.99,
         hours_per_week: 30,
-        finish_date: Time.current + 1.week,
+        finish_date: 1.week.from_now,
         project: pj1,
         professional: another_professional
       }
@@ -65,8 +65,7 @@ describe 'Professional authentication' do
 
     get '/proposals/1/edit'
 
-    expect(flash[:alert]).to eq('Proposta não encontrada')
-    expect(response).to redirect_to('/projects/my')
+    expect(response).to have_http_status(:not_found)
   end
 
   it 'can not update another professional\'s proposal' do
@@ -84,7 +83,7 @@ describe 'Professional authentication' do
         message: 'Schneider\'s proposal on project 1',
         value_per_hour: 99.99,
         hours_per_week: 30,
-        finish_date: Time.current + 1.week,
+        finish_date: 1.week.from_now,
         project: pj1,
         professional: another_professional
       }
@@ -96,13 +95,12 @@ describe 'Professional authentication' do
         message: 'NOT Schneider\'s proposal on project 1',
         value_per_hour: 99.99,
         hours_per_week: 30,
-        finish_date: Time.current + 1.week,
+        finish_date: 1.week.from_now,
         project: pj1,
         professional: another_professional
       }
     }
 
-    expect(flash[:alert]).to eq('Proposta não encontrada')
-    expect(response).to redirect_to('/projects/my')
+    expect(response).to have_http_status(:not_found)
   end
 end
