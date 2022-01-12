@@ -66,13 +66,6 @@ class ProjectsController < ApplicationController
                                     :value_per_hour, :due_date, :remote)
   end
 
-  def should_authenticate!
-    return if professional_signed_in? || user_signed_in?
-
-    flash[:alert] = 'Você deve estar logado.'
-    redirect_to root_path
-  end
-
   def find_project_and_proposals_for_professional
     @project = Project.find(params[:id])
     @proposal = current_professional.not_canceled_proposals
@@ -81,6 +74,8 @@ class ProjectsController < ApplicationController
 
   def find_project_and_proposals_for_user
     @project = current_user.projects.find(params[:id])
-    @proposals = @project.proposals.where.not(status: :canceled_pending)
+    @proposals = @project.proposals.where.not(
+      status: %i[canceled_pending refused]
+    )
   end
 end

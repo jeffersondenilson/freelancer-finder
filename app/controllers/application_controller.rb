@@ -23,6 +23,13 @@ class ApplicationController < ActionController::Base
     )
   end
 
+  def should_authenticate!
+    return if professional_signed_in? || user_signed_in?
+
+    flash[:alert] = 'Você deve estar logado.'
+    redirect_to root_path
+  end
+
   def redirect_professional_to_complete_profile
     return if current_professional.completed_profile?
 

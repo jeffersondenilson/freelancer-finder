@@ -1,6 +1,9 @@
 class ProposalsController < ApplicationController
-  before_action :authenticate_professional!
+  before_action :authenticate_professional!, only: %i[new create edit update
+                                                      cancel]
   before_action :verify_duplicated_proposal, only: %i[new create]
+  before_action :authenticate_user!, only: %i[refuse]
+  before_action :should_authenticate!, only: :destroy
 
   def new
     @project = Project.find(params[:project_id])
@@ -50,18 +53,17 @@ class ProposalsController < ApplicationController
     end
   end
 
+  def refuse
+    @proposal = Proposal.find_by!(id: params[:proposal_id],
+                                  project: [current_user.projects])
+  end
+
   def destroy
-    @proposal = current_professional.proposals.find(params[:id])
-
-    if @proposal.cancel!(cancel_reason_params)
-      flash[:notice] = 'Proposta cancelada com sucesso'
-    else
-      @proposals = current_professional.not_canceled_proposals
-                                       .order(:updated_at)
-      render 'projects/my_projects' and return
+    if professional_signed_in?
+      professional_cancel_proposal
+    elsif user_signed_in?
+      user_refuse_proposal
     end
-
-    redirect_to my_projects_path
   end
 
   private
@@ -83,5 +85,27 @@ class ProposalsController < ApplicationController
     params[:proposal][:cancel_reason] || ''
   rescue StandardError
     ''
+  end
+
+  def professional_cancel_proposal
+    @proposal = current_professional.proposals.find(params[:id])
+
+    if @proposal.cancel!(cancel_reason_params)
+      flash[:notice] = 'Proposta cancelada com sucesso'
+    else
+      @proposals = current_professional.not_canceled_proposals
+                                       .order(:updated_at)
+      render 'projects/my_projects' and return
+    end
+
+    redirect_to my_projects_path
+  end
+
+  def user_refuse_proposal
+    @proposal = Proposal.find_by!(id: params[:id],
+                                  project: [current_user.projects])
+    @proposal.refuse!(params[:proposal][:refuse_reason])
+
+    redirect_to project_path(@proposal.project)
   end
 end

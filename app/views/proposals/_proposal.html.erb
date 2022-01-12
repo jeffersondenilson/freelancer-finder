@@ -48,5 +48,10 @@
       </div>
     <% end %>
 
+    <% if user_signed_in? %>
+      <div>
+        <%= link_to 'Recusar', proposal_refuse_path(proposal) %>
+      </div>
+    <% end %>
   </div>
 </div>

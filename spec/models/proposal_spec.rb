@@ -10,7 +10,7 @@ RSpec.describe Proposal, type: :model do
     should define_enum_for(:status)
       .with_values(
         pending: 0, analyzing: 10, approved: 20, canceled_pending: 30,
-        canceled_approved: 40
+        canceled_approved: 40, refused: 50
       )
   }
   it { should validate_presence_of :message }
