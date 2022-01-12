@@ -1,9 +1,9 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
 SimpleCov.start 'rails' do
-  # add_filter '/helpers/'
   add_filter '/channels/'
   add_filter '/jobs/'
+  add_filter '/mailers/'
   add_filter '/controllers/professionals/'
   add_filter '/controllers/users/'
 end
