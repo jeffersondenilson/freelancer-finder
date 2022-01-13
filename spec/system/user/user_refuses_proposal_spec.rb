@@ -30,6 +30,7 @@ describe 'User refuses proposal' do
     expect(Proposal.first.status).to eq('refused')
     expect(ProposalRefusal.first.refuse_reason).to eq('Recusando')
     expect(current_path).to eq('/projects/1')
+    expect(page).to have_content('Proposta recusada com sucesso')
     expect(page).to have_content('Esse projeto ainda não recebeu propostas')
   end
 
@@ -48,6 +49,7 @@ describe 'User refuses proposal' do
     expect(Proposal.first.status).to eq('refused')
     expect(ProposalRefusal.first.refuse_reason).to eq('Recusando')
     expect(current_path).to eq('/projects/1')
+    expect(page).to have_content('Proposta recusada com sucesso')
     expect(page).to have_content('Esse projeto ainda não recebeu propostas')
   end
 
@@ -109,6 +111,7 @@ describe 'User refuses proposal' do
     expect(Proposal.first.status).to eq('refused')
     expect(ProposalRefusal.first.refuse_reason).to eq('Recusando')
     expect(current_path).to eq('/projects/1')
+    expect(page).to have_content('Proposta recusada com sucesso')
     expect(page).to have_content('Esse projeto ainda não recebeu propostas')
   end
 

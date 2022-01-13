@@ -48,10 +48,13 @@ class Proposal < ApplicationRecord
 
   # TODO: testar metodo
   def refuse!(refuse_reason = '')
+    return false if canceled_pending? || canceled_approved? || refused?
+
     refused!
     self.proposal_refusal = ProposalRefusal
                             .new(refuse_reason: refuse_reason)
-    save!
+
+    save
   end
 
   private

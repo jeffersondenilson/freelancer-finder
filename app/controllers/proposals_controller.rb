@@ -104,8 +104,13 @@ class ProposalsController < ApplicationController
   def user_refuse_proposal
     @proposal = Proposal.find_by!(id: params[:id],
                                   project: [current_user.projects])
-    @proposal.refuse!(params[:proposal][:refuse_reason])
-
-    redirect_to project_path(@proposal.project)
+    
+    if @proposal.refuse!(params[:proposal][:refuse_reason])
+      flash[:notice] = 'Proposta recusada com sucesso'
+      redirect_to project_path(@proposal.project)
+    else
+      flash[:alert] = 'Não é possível recusar essa proposta'
+      redirect_to project_path(@proposal.project), status: 400
+    end
   end
 end
