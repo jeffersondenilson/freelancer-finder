@@ -34,3 +34,7 @@ body {
 .card.border-canceled_approved {
   border: 2px solid red;
 }
+
+.card.border-refused {
+  border: 2px solid red;
+}
