@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'User authentication' do
-  it 'can not create projects without sign in' do
+  it 'should not create projects without sign in' do
     get '/projects/new'
 
     expect(response).to redirect_to('/users/sign_in')
@@ -29,7 +29,7 @@ describe 'User authentication' do
     expect(response).to redirect_to('/')
   end
 
-  it 'can not view edit page of another user\'s project' do
+  it 'should not view edit page of another user\'s project' do
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
@@ -51,7 +51,7 @@ describe 'User authentication' do
     expect(response).to have_http_status(:not_found)
   end
 
-  it 'can not update another user\'s project' do
+  it 'should not update another user\'s project' do
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
@@ -82,7 +82,7 @@ describe 'User authentication' do
     expect(response).to have_http_status(:not_found)
   end
 
-  it 'can not create proposal' do
+  it 'should not create proposal' do
     john = User.create!(name: 'John Doe', email: 'john.doe@email.com',
                         password: '123456')
     Project.create!(
