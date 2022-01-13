@@ -3,7 +3,36 @@ require 'rails_helper'
 describe 'Professional cancel proposal' do
   include ActiveSupport::Testing::TimeHelpers
 
-  it 'can not cancel approved proposal after three days' do
+  it 'successfully if pending' do
+    proposal = create(:proposal)
+
+    login_as proposal.professional, scope: :professional
+
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_pending')
+    expect(response).to redirect_to('/projects/my')
+    expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
+  end
+
+  it 'successfully if approved' do
+    proposal = create(:proposal, status: :approved, approved_at: Time.current)
+
+    login_as proposal.professional, scope: :professional
+
+    delete '/proposals/1', params: {
+      proposal: {
+        cancel_reason: 'canceling'
+      }
+    }
+
+    expect(Proposal.first.status).to eq('canceled_approved')
+    expect(ProposalCancelation.first.cancel_reason).to eq('canceling')
+    expect(response).to redirect_to('/projects/my')
+    expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
+  end
+
+  it 'should not cancel approved proposal after three days' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -39,7 +68,7 @@ describe 'Professional cancel proposal' do
     end
   end
 
-  it 'can not view cancel form if is pending' do
+  it 'should not view cancel form if is pending' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
