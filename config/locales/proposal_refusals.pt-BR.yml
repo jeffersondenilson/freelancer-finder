@@ -1,0 +1,8 @@
+---
+pt-BR:
+  activerecord:
+    models:
+      proposal_refusal: "Recusa"
+    attributes:
+      proposal_refusal:
+        refuse_reason: "Motivo de Recusa"

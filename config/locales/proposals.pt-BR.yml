@@ -15,4 +15,5 @@ pt-BR:
           approved: "Aprovada"
           canceled_pending: "Cancelada"
           canceled_approved: "Cancelada"
+          refused: "Recusada"
         approved_at: "Aprovada em"
