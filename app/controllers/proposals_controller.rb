@@ -1,10 +1,11 @@
 class ProposalsController < ApplicationController
+  before_action :should_authenticate!, only: :destroy
   before_action :authenticate_professional!, only: %i[new create edit update
                                                       cancel]
-  before_action :verify_duplicated_proposal, only: %i[new create]
-  before_action :verify_refused_proposal, only: %i[edit update]
   before_action :authenticate_user!, only: %i[refuse]
-  before_action :should_authenticate!, only: :destroy
+  before_action :verify_duplicated_proposal, only: %i[new create]
+  before_action :verify_refused_proposal, only: %i[edit update cancel destroy],
+                                          if: :professional_signed_in?
 
   def new
     @project = Project.find(params[:project_id])
@@ -80,10 +81,12 @@ class ProposalsController < ApplicationController
   end
 
   def verify_refused_proposal
-    @proposal = current_professional.proposals.find(params[:id])
+    @proposal = current_professional.proposals.find(
+      params[:id] || params[:proposal_id]
+    )
 
     if @proposal.refused?
-      flash[:alert] = 'Esta proposta não pode ser editada'
+      flash[:alert] = 'Propostas recusadas não podem ser alteradas'
       redirect_to @proposal.project
     end
   end

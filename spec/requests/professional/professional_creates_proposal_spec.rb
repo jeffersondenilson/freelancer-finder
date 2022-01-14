@@ -184,6 +184,6 @@ describe 'Professional creates proposal' do
 
     expect(Proposal.first.status).to eq('refused')
     expect(response).to redirect_to(project_path proposal.project)
-    expect(flash[:alert]).to eq('Esta proposta não pode ser editada')
+    expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
   end
 end
