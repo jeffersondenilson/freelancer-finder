@@ -82,7 +82,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('canceled_approved')
-    expect(response).to have_http_status(400)
+    expect(response).to redirect_to(project_path proposal.project)
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 
@@ -98,7 +98,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('canceled_pending')
-    expect(response).to have_http_status(400)
+    expect(response).to redirect_to(project_path proposal.project)
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 
@@ -115,7 +115,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('refused')
-    expect(response).to have_http_status(400)
+    expect(response).to redirect_to(project_path proposal.project)
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 end

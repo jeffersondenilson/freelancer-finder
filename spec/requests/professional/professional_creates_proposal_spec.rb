@@ -166,4 +166,24 @@ describe 'Professional creates proposal' do
     expect(flash[:notice]).to eq('Proposta criada com sucesso')
     expect(response).to redirect_to(project_path(pj1))
   end
+
+  it 'should not update refused proposal' do
+    proposal = create(:proposal)
+    proposal.refused!
+    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+    login_as proposal.professional, scope: :professional
+    put '/proposals/1', params: {
+      proposal: {
+        message: 'Should not be updated',
+        value_per_hour: 10,
+        hours_per_week: 10,
+        finish_date: Time.current + 3.days
+      }
+    }
+
+    expect(Proposal.first.status).to eq('refused')
+    expect(response).to redirect_to(project_path proposal.project)
+    expect(flash[:alert]).to eq('Esta proposta não pode ser editada')
+  end
 end

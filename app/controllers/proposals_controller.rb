@@ -2,6 +2,7 @@ class ProposalsController < ApplicationController
   before_action :authenticate_professional!, only: %i[new create edit update
                                                       cancel]
   before_action :verify_duplicated_proposal, only: %i[new create]
+  before_action :verify_refused_proposal, only: %i[edit update]
   before_action :authenticate_user!, only: %i[refuse]
   before_action :should_authenticate!, only: :destroy
 
@@ -26,12 +27,9 @@ class ProposalsController < ApplicationController
   end
 
   def edit
-    @proposal = current_professional.proposals.find(params[:id])
   end
 
   def update
-    @proposal = current_professional.proposals.find(params[:id])
-
     if @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
       redirect_to my_projects_path
@@ -81,6 +79,15 @@ class ProposalsController < ApplicationController
     end
   end
 
+  def verify_refused_proposal
+    @proposal = current_professional.proposals.find(params[:id])
+
+    if @proposal.refused?
+      flash[:alert] = 'Esta proposta não pode ser editada'
+      redirect_to @proposal.project
+    end
+  end
+
   def cancel_reason_params
     params[:proposal][:cancel_reason] || ''
   rescue StandardError
@@ -107,10 +114,10 @@ class ProposalsController < ApplicationController
     
     if @proposal.refuse!(params[:proposal][:refuse_reason])
       flash[:notice] = 'Proposta recusada com sucesso'
-      redirect_to project_path(@proposal.project)
     else
       flash[:alert] = 'Não é possível recusar essa proposta'
-      redirect_to project_path(@proposal.project), status: 400
     end
+    
+    redirect_to project_path(@proposal.project)
   end
 end

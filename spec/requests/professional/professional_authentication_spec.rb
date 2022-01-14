@@ -113,24 +113,4 @@ describe 'Professional authentication' do
     follow_redirect!
     expect(response).to redirect_to(root_path)
   end
-
-  it 'should not update refused proposal' do
-    proposal = create(:proposal)
-    proposal.refused!
-    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
-
-    login_as proposal.professional, scope: :professional
-    put '/proposals/1', params: {
-      proposal: {
-        message: 'Should not be updated',
-        value_per_hour: 10,
-        hours_per_week: 10,
-        finish_date: Time.current + 3.days
-      }
-    }
-
-    expect(Proposal.first.status).to eq('refused')
-    expect(response).to have_http_status(400)
-    expect(flash[:alert]).to eq('smth')
-  end
 end
