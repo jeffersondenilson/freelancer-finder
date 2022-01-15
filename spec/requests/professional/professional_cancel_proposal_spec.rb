@@ -89,4 +89,25 @@ describe 'Professional cancel proposal' do
     expect(response).to redirect_to(project_path proposal.project)
     expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
   end
+
+  it 'and should not cancel if already canceled_pending' do
+    proposal = create(:proposal)
+    proposal.canceled_pending!
+
+    login_as proposal.professional, scope: :professional
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_pending')
+  end
+
+  it 'and should not cancel if already canceled_approved' do
+    proposal = create(:proposal)
+    proposal.canceled_approved!
+    ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Cancel')
+
+    login_as proposal.professional, scope: :professional
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_approved')
+  end
 end

@@ -38,6 +38,8 @@ class Proposal < ApplicationRecord
   end
 
   def can_cancel_at_current_date?
+    return false if canceled_pending? || canceled_approved? || refused?
+
     return true if approved? && Date.current < (approved_at + 3.days).to_date
 
     errors.add(:approved_at, "#{I18n.l approved_at.to_date}. "\

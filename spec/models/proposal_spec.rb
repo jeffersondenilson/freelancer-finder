@@ -3,229 +3,175 @@ require 'rails_helper'
 RSpec.describe Proposal, type: :model do
   include ActiveSupport::Testing::TimeHelpers
 
-  it { should belong_to :project }
-  it { should belong_to :professional }
-  it { should have_one :proposal_cancelation }
-  it {
-    should define_enum_for(:status)
-      .with_values(
-        pending: 0, analyzing: 10, approved: 20, canceled_pending: 30,
-        canceled_approved: 40, refused: 50
-      )
-  }
-  it { should validate_presence_of :message }
-  it { should validate_presence_of :value_per_hour }
-  it { should validate_presence_of :hours_per_week }
-  it { should validate_presence_of :finish_date }
-  it { should validate_numericality_of :value_per_hour }
-  it {
-    should validate_numericality_of(:hours_per_week)
-      .only_integer
-      .is_greater_than(0)
-  }
+  context 'associations' do
+    it { should belong_to :project }
+    it { should belong_to :professional }
+    it { should have_one :proposal_cancelation }
+  end
+
+  context 'validations' do
+    it {
+      should define_enum_for(:status)
+        .with_values(
+          pending: 0, analyzing: 10, approved: 20, canceled_pending: 30,
+          canceled_approved: 40, refused: 50
+        )
+    }
+    it { should validate_presence_of :message }
+    it { should validate_presence_of :value_per_hour }
+    it { should validate_presence_of :hours_per_week }
+    it { should validate_presence_of :finish_date }
+    it { should validate_numericality_of :value_per_hour }
+    it {
+      should validate_numericality_of(:hours_per_week)
+        .only_integer
+        .is_greater_than(0)
+    }
+  end
 
   context '#can_cancel_at_current_date?' do
-    it 'return true if approved the same day' do
-      jane = User.create!(
-        name: 'Jane Doe', email: 'jane.doe@email.com', password: '123456'
-      )
-      pj1 = Project.create!(
-        title: 'Projeto 1',
-        description: 'lorem ipsum...',
-        desired_abilities: 'design',
-        value_per_hour: 12.34,
-        due_date: '09/10/2021',
-        remote: true,
-        creator: jane
-      )
-      john = Professional.create!(
-        name: 'John Doe', email: 'john.doe@email.com', password: '123456',
-        birth_date: '01/01/1980', completed_profile: true
-      )
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: john,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at do
-        expect(prop1.can_cancel_at_current_date?).to eq(true)
-        expect(prop1.errors.empty?).to eq(true)
-      end
-    end
-
-    it 'return true if approved in less than three days' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      john = Professional.create!(
-        name: 'John Doe', email: 'john.doe@email.com',
-        password: '123456', birth_date: '01/01/1980',
-        completed_profile: true
-      )
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: john,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at + 2.days do
-        expect(prop1.can_cancel_at_current_date?).to eq(true)
-        expect(prop1.errors.empty?).to eq(true)
-      end
-    end
-
-    it 'return false if was approved in more than three days' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: professional,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at + 3.days do
-        expect(prop1.can_cancel_at_current_date?).to eq(false)
-        expect(prop1.errors.full_messages_for(:approved_at)).to include(
-          'Aprovada em 01/01/2021. '\
-          'Não é possível cancelar a proposta após 3 dias.'
+    context 'should permit cancelation' do
+      it 'if approved the same day' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
         )
+
+        travel_to proposal.approved_at do
+          expect(proposal.can_cancel_at_current_date?).to eq(true)
+          expect(proposal.errors.empty?).to eq(true)
+        end
+      end
+
+      it 'if approved in less than three days' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
+        )
+
+        travel_to proposal.approved_at + 2.days do
+          expect(proposal.can_cancel_at_current_date?).to eq(true)
+          expect(proposal.errors.empty?).to eq(true)
+        end
+      end
+    end
+
+    context 'should not permit cancelation' do
+      it 'if was approved in more than three days' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
+        )
+
+        travel_to proposal.approved_at + 3.days do
+          expect(proposal.can_cancel_at_current_date?).to eq(false)
+          expect(proposal.errors.full_messages_for(:approved_at)).to include(
+            'Aprovada em 15/01/2022. '\
+            'Não é possível cancelar a proposta após 3 dias.'
+          )
+        end
+      end
+
+      it 'if refused' do
+        proposal = create(:proposal)
+        proposal.refused!
+        ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+        expect(proposal.can_cancel_at_current_date?).to eq(false)
+        expect(proposal.errors.empty?).to eq(true)
+      end
+
+      it 'if canceled_pending' do
+        proposal = create(:proposal)
+        proposal.canceled_pending!
+
+        expect(proposal.can_cancel_at_current_date?).to eq(false)
+        expect(proposal.errors.empty?).to eq(true)
+      end
+
+      it 'if canceled_approved' do
+        proposal = create(:proposal)
+        proposal.canceled_approved!
+        ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Cancel')
+
+        expect(proposal.can_cancel_at_current_date?).to eq(false)
+        expect(proposal.errors.empty?).to eq(true)
       end
     end
   end
 
   context '#cancel!' do
-    it 'cancel pending proposal' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: professional,
-        status: :pending
-      )
+    context 'should cancel' do
+      it 'pending proposal' do
+        proposal = create(:proposal)
 
-      expect(prop1.cancel!).to eq(true)
-      expect(prop1.status).to eq('canceled_pending')
-    end
-
-    it 'cancel approved proposal with cancel reason' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: professional,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at do
-        expect(prop1.cancel!('I Cancel')).to eq(true)
-        expect(prop1.errors.empty?).to eq(true)
-        expect(prop1.status).to eq('canceled_approved')
-        expect(prop1.proposal_cancelation.cancel_reason).to eq('I Cancel')
+        expect(proposal.cancel!).to eq(true)
+        expect(proposal.status).to eq('canceled_pending')
       end
-    end
 
-    it 'cancel approved proposal with empty cancel reason' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: professional,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at do
-        expect(prop1.cancel!).to eq(true)
-        expect(prop1.errors.empty?).to eq(true)
-        expect(prop1.status).to eq('canceled_approved')
-        expect(prop1.proposal_cancelation.cancel_reason).to eq('')
-      end
-    end
-
-    it 'return false if approved in more than three days' do
-      jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                          password: '123456')
-      pj1 = Project.create!(
-        title: 'Projeto 1', description: 'lorem ipsum...',
-        desired_abilities: 'design', value_per_hour: 12.34,
-        due_date: '09/10/2021', remote: true, creator: jane
-      )
-      professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
-        message: 'John\'s proposal on project 1',
-        value_per_hour: 80.80,
-        hours_per_week: 20,
-        finish_date: '10/01/2021',
-        project: pj1,
-        professional: professional,
-        status: :approved,
-        approved_at: '01/01/2021'
-      )
-
-      travel_to prop1.approved_at + 3.days do
-        expect(prop1.cancel!).to eq(false)
-        expect(prop1.errors.full_messages_for(:approved_at)).to include(
-          'Aprovada em 01/01/2021. Não é possível cancelar a proposta após 3 '\
-          'dias.'
+      it 'approved proposal with cancel reason' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
         )
-        expect(prop1.status).to eq('approved')
+
+        travel_to proposal.approved_at do
+          expect(proposal.cancel!('I Cancel')).to eq(true)
+          expect(proposal.errors.empty?).to eq(true)
+          expect(proposal.status).to eq('canceled_approved')
+          expect(proposal.proposal_cancelation.cancel_reason).to eq('I Cancel')
+        end
+      end
+
+      it 'approved proposal with empty cancel reason' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
+        )
+
+        travel_to proposal.approved_at do
+          expect(proposal.cancel!).to eq(true)
+          expect(proposal.errors.empty?).to eq(true)
+          expect(proposal.status).to eq('canceled_approved')
+          expect(proposal.proposal_cancelation.cancel_reason).to eq('')
+        end
+      end
+    end
+
+    context 'should not cancel' do
+      it 'if approved in more than three days' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
+        )
+
+        travel_to proposal.approved_at + 3.days do
+          expect(proposal.cancel!).to eq(false)
+          expect(proposal.errors.full_messages_for(:approved_at)).to include(
+            'Aprovada em 15/01/2022. Não é possível cancelar a proposta após '\
+            '3 dias.'
+          )
+          expect(proposal.status).to eq('approved')
+        end
+      end
+
+      it 'if refused' do
+        proposal = create(:proposal)
+        proposal.refused!
+        ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+        expect(proposal.cancel!).to eq(false)
+        expect(ProposalCancelation.count).to eq(0)
+      end
+
+      it 'if canceled_pending' do
+        proposal = create(:proposal)
+        proposal.canceled_pending!
+
+        expect(proposal.cancel!).to eq(false)
+        expect(ProposalCancelation.count).to eq(0)
+      end
+
+      it 'if canceled_approved' do
+        proposal = create(:proposal)
+        proposal.canceled_approved!
+        ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Cancel')
+
+        expect(proposal.cancel!).to eq(false)
       end
     end
   end
@@ -240,7 +186,7 @@ RSpec.describe Proposal, type: :model do
         due_date: '09/10/2021', remote: true, creator: jane
       )
       professional = create(:completed_profile_professional)
-      prop1 = Proposal.create!(
+      proposal = Proposal.create!(
         message: 'John\'s proposal on project 1',
         value_per_hour: 80.80,
         hours_per_week: 20,
@@ -251,57 +197,65 @@ RSpec.describe Proposal, type: :model do
       )
 
       travel_to '2022-01-06' do
-        prop1.approved!
+        proposal.approved!
       end
 
-      expect(prop1.status).to eq('approved')
-      expect(prop1.approved_at).to eq('2022-01-06')
+      expect(proposal.status).to eq('approved')
+      expect(proposal.approved_at).to eq('2022-01-06')
     end
   end
 
   context '#refuse!' do
-    it 'should refuse if pending' do
-      proposal = create(:proposal)
+    context 'should refuse' do
+      it 'if pending' do
+        proposal = create(:proposal)
 
-      proposal.refuse!('Refused!')
+        proposal.refuse!('Refused!')
 
-      expect(Proposal.first.status).to eq('refused')
-      expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
+        expect(Proposal.first.status).to eq('refused')
+        expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
+      end
+
+      it 'if approved' do
+        proposal = create(
+          :proposal, status: :approved, approved_at: '15/01/2022'
+        )
+
+        proposal.refuse!('Refused!')
+
+        expect(Proposal.first.status).to eq('refused')
+        expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
+      end
     end
 
-    it 'should refuse if approved' do
-      proposal = create(:proposal, status: :approved, approved_at: Time.current)
+    context 'should not refuse' do
+      it 'if canceled_pending' do
+        proposal = create(:proposal)
+        proposal.canceled_pending!
 
-      proposal.refuse!('Refused!')
+        expect(proposal.refuse!).to eq(false)
+        expect(Proposal.first.status).to eq('canceled_pending')
+      end
 
-      expect(Proposal.first.status).to eq('refused')
-      expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
-    end
+      it 'if canceled_approved' do
+        proposal = create(:proposal)
+        proposal.canceled_approved!
+        ProposalCancelation.create!(
+          proposal: proposal, cancel_reason: 'Canceled'
+        )
 
-    it 'should not refuse if canceled_pending' do
-      proposal = create(:proposal)
-      proposal.canceled_pending!
+        expect(proposal.refuse!).to eq(false)
+        expect(Proposal.first.status).to eq('canceled_approved')
+      end
 
-      expect(proposal.refuse!).to eq(false)
-      expect(Proposal.first.status).to eq('canceled_pending')
-    end
+      it 'if already refused' do
+        proposal = create(:proposal)
+        proposal.refused!
+        ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused')
 
-    it 'should not refuse if canceled_approved' do
-      proposal = create(:proposal)
-      proposal.canceled_approved!
-      ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Canceled')
-
-      expect(proposal.refuse!).to eq(false)
-      expect(Proposal.first.status).to eq('canceled_approved')
-    end
-
-    it 'should not refuse if already refused' do
-      proposal = create(:proposal)
-      proposal.refused!
-      ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused')
-
-      expect(proposal.refuse!).to eq(false)
-      expect(Proposal.first.status).to eq('refused')
+        expect(proposal.refuse!).to eq(false)
+        expect(Proposal.first.status).to eq('refused')
+      end
     end
   end
 end
