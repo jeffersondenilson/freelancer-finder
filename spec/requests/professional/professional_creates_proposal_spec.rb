@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Professional creates proposal' do
-  it 'can not create proposal on unexistent project' do
+  it 'and should not create proposal on unexistent project' do
     professional = create(:completed_profile_professional)
     login_as professional, scope: :professional
 
@@ -18,7 +18,7 @@ describe 'Professional creates proposal' do
     expect(Proposal.count).to eq(0)
   end
 
-  it 'can not create proposal as another professional' do
+  it 'and should not create proposal as another professional' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     Project.create!(
@@ -45,7 +45,7 @@ describe 'Professional creates proposal' do
     expect(Proposal.first.professional_id).to eq(professional.id)
   end
 
-  it 'can not choose proposal status when create' do
+  it 'and should not choose proposal status when create' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     Project.create!(
@@ -69,7 +69,7 @@ describe 'Professional creates proposal' do
     expect(Proposal.first.status).to eq('pending')
   end
 
-  it 'can not choose proposal status when update' do
+  it 'and should not choose proposal status when update' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -101,7 +101,7 @@ describe 'Professional creates proposal' do
     expect(Proposal.first.status).to eq('pending')
   end
 
-  it 'can not create two proposals in a project' do
+  it 'and should not create two proposals in a project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -133,7 +133,7 @@ describe 'Professional creates proposal' do
     expect(response).to redirect_to('/projects/1')
   end
 
-  it 'and can create proposal with canceled proposal in same project' do
+  it 'and should create proposal with canceled proposal in same project' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -167,7 +167,7 @@ describe 'Professional creates proposal' do
     expect(response).to redirect_to(project_path(pj1))
   end
 
-  it 'should not update refused proposal' do
+  it 'and should not update refused proposal' do
     proposal = create(:proposal)
     proposal.refused!
     ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
@@ -185,5 +185,42 @@ describe 'Professional creates proposal' do
     expect(Proposal.first.status).to eq('refused')
     expect(response).to redirect_to(project_path proposal.project)
     expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
+  end
+
+  it 'and should not create proposal in project with refused proposal' do
+    proposal = create(:proposal)
+    proposal.refused!
+    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+    login_as proposal.professional, scope: :professional
+
+    post '/projects/1/proposals', params: {
+      message: 'Should not create',
+      value_per_hour: 10,
+      hours_per_week: 10,
+      finish_date: 3.days.from_now
+    }
+
+    expect(Proposal.count).to eq(1)
+    expect(response).to redirect_to(project_path proposal.project)
+    expect(flash[:alert]).to eq(
+      'Você já tem uma proposta recusada nesse projeto'
+    )
+  end
+
+  it 'and should not see new proposal form in project with refused proposal' do
+    proposal = create(:proposal)
+    proposal.refused!
+    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+    login_as proposal.professional, scope: :professional
+
+    get '/projects/1/proposals/new'
+
+    expect(Proposal.count).to eq(1)
+    expect(response).to redirect_to(project_path proposal.project)
+    expect(flash[:alert]).to eq(
+      'Você já tem uma proposta recusada nesse projeto'
+    )
   end
 end

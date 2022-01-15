@@ -3,7 +3,7 @@ class ProposalsController < ApplicationController
   before_action :authenticate_professional!, only: %i[new create edit update
                                                       cancel]
   before_action :authenticate_user!, only: %i[refuse]
-  before_action :verify_duplicated_proposal, only: %i[new create]
+  before_action :verify_duplicated_or_refused_proposal, only: %i[new create]
   before_action :verify_refused_proposal, only: %i[edit update cancel destroy],
                                           if: :professional_signed_in?
 
@@ -72,9 +72,14 @@ class ProposalsController < ApplicationController
                                      :finish_date)
   end
 
-  def verify_duplicated_proposal
-    if current_professional.not_canceled_proposals
+  def verify_duplicated_or_refused_proposal
+    duplicated_proposal = current_professional.not_canceled_proposals
                            .find_by(project_id: params[:project_id])
+
+    if duplicated_proposal && duplicated_proposal.refused?
+      flash[:alert] = 'Você já tem uma proposta recusada nesse projeto'
+      redirect_to project_path(params[:project_id])
+    elsif duplicated_proposal
       flash[:alert] = 'Você já fez uma proposta nesse projeto'
       redirect_to project_path(params[:project_id])
     end
