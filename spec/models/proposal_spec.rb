@@ -258,4 +258,50 @@ RSpec.describe Proposal, type: :model do
       expect(prop1.approved_at).to eq('2022-01-06')
     end
   end
+
+  context '#refuse!' do
+    it 'should refuse if pending' do
+      proposal = create(:proposal)
+
+      proposal.refuse!('Refused!')
+
+      expect(Proposal.first.status).to eq('refused')
+      expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
+    end
+
+    it 'should refuse if approved' do
+      proposal = create(:proposal, status: :approved, approved_at: Time.current)
+
+      proposal.refuse!('Refused!')
+
+      expect(Proposal.first.status).to eq('refused')
+      expect(ProposalRefusal.first.refuse_reason).to eq('Refused!')
+    end
+
+    it 'should not refuse if canceled_pending' do
+      proposal = create(:proposal)
+      proposal.canceled_pending!
+
+      expect(proposal.refuse!).to eq(false)
+      expect(Proposal.first.status).to eq('canceled_pending')
+    end
+
+    it 'should not refuse if canceled_approved' do
+      proposal = create(:proposal)
+      proposal.canceled_approved!
+      ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Canceled')
+
+      expect(proposal.refuse!).to eq(false)
+      expect(Proposal.first.status).to eq('canceled_approved')
+    end
+
+    it 'should not refuse if already refused' do
+      proposal = create(:proposal)
+      proposal.refused!
+      ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused')
+
+      expect(proposal.refuse!).to eq(false)
+      expect(Proposal.first.status).to eq('refused')
+    end
+  end
 end

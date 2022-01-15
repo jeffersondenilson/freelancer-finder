@@ -46,7 +46,6 @@ class Proposal < ApplicationRecord
     false
   end
 
-  # TODO: testar metodo
   def refuse!(refuse_reason = '')
     return false if canceled_pending? || canceled_approved? || refused?
 
