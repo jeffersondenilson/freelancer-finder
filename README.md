@@ -11,7 +11,8 @@ http://freelancer-finder-90193.herokuapp.com
 - [x] Criação de conta (usuário e profissional)
 - [x] Profissional completa perfil
 - [x] Profissional faz/cancela proposta em projeto
-- [ ] Usuário aceita/rejeita propostas
+- [x] Usuário rejeita propostas
+- [ ] Usuário aceita propostas
 - [ ] Usuário encerra inscrições para projeto
 - [ ] Visualizar time do projeto
 - [ ] Fornecer feedback após o projeto (usuário e profissional)
@@ -83,3 +84,16 @@ rails server
 ```
 rspec
 ```
+
+## Outras informações
+
+### Sobre cancelamento de propostas
+- Para cancelar uma proposta aprovada, o profissional deve apresentar um motivo
+- Um profissional não pode cancelar uma proposta após 3 dias da sua aprovação
+- Usuário não vê propostas canceladas enquanto pendentes, mas vê propostas com motivo de cancelamento (cancelada após ser aprovada)
+
+### Sobre recusa de propostas
+- Para recusar uma proposta, um usuário deve apresentar um motivo
+- Propostas recusadas não serão vistas pelo usuário, mas serão vistas pelo profissional junto com motivo de recusa
+- Não é possível modificar uma proposta recusada
+- Um profissional não pode criar novas propostas em um projeto em que teve uma proposta recusada

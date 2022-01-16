@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Professional authentication' do
-  it 'must complete profile to view projects' do
+  it 'should complete profile to view projects' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     Project.create!(
@@ -17,7 +17,7 @@ describe 'Professional authentication' do
     expect(response).to redirect_to('/professionals/edit.1')
   end
 
-  it 'must be signed in to create proposal' do
+  it 'should be signed in to create proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     Project.create!(
@@ -41,7 +41,7 @@ describe 'Professional authentication' do
     expect(Proposal.count).to eq(0)
   end
 
-  it 'can not view edit page of another professional\'s proposal' do
+  it 'should not view edit page of another professional\'s proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -68,7 +68,7 @@ describe 'Professional authentication' do
     expect(response).to have_http_status(:not_found)
   end
 
-  it 'can not update another professional\'s proposal' do
+  it 'should not update another professional\'s proposal' do
     jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
                         password: '123456')
     pj1 = Project.create!(
@@ -102,5 +102,15 @@ describe 'Professional authentication' do
     }
 
     expect(response).to have_http_status(:not_found)
+  end
+
+  it 'should not view proposal refuse form' do
+    proposal = create(:proposal)
+
+    login_as proposal.professional, scope: :professional
+    get '/proposals/1/refuse'
+
+    follow_redirect!
+    expect(response).to redirect_to(root_path)
   end
 end

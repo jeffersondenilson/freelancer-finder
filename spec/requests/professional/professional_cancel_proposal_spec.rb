@@ -3,26 +3,38 @@ require 'rails_helper'
 describe 'Professional cancel proposal' do
   include ActiveSupport::Testing::TimeHelpers
 
-  it 'can not cancel approved proposal after three days' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                        password: '123456')
-    pj1 = Project.create!(
-      title: 'Projeto 1', description: 'lorem ipsum...',
-      desired_abilities: 'design', value_per_hour: 12.34,
-      due_date: '09/10/2021', remote: true, creator: jane
-    )
-    professional = create(:completed_profile_professional)
-    prop1 = Proposal.create!(
-      message: 'John\'s proposal on project 1',
-      value_per_hour: 80.80,
-      hours_per_week: 20,
-      finish_date: 3.days.from_now,
-      status: :approved,
-      approved_at: '10/10/2021',
-      project: pj1,
-      professional: professional
-    )
-    login_as professional, scope: :professional
+  it 'successfully if pending' do
+    proposal = create(:proposal)
+
+    login_as proposal.professional, scope: :professional
+
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_pending')
+    expect(response).to redirect_to('/projects/my')
+    expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
+  end
+
+  it 'successfully if approved' do
+    proposal = create(:proposal, status: :approved, approved_at: Time.current)
+
+    login_as proposal.professional, scope: :professional
+
+    delete '/proposals/1', params: {
+      proposal: {
+        cancel_reason: 'canceling'
+      }
+    }
+
+    expect(Proposal.first.status).to eq('canceled_approved')
+    expect(ProposalCancelation.first.cancel_reason).to eq('canceling')
+    expect(response).to redirect_to('/projects/my')
+    expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
+  end
+
+  it 'and should not cancel approved proposal after three days' do
+    proposal = create(:proposal, status: :approved, approved_at: '10/10/2021')
+    login_as proposal.professional, scope: :professional
 
     delete '/proposals/1', params: {
       proposal: {
@@ -30,7 +42,7 @@ describe 'Professional cancel proposal' do
       }
     }
 
-    travel_to prop1.approved_at + 3.days do
+    travel_to proposal.approved_at + 3.days do
       expect(response.body).to include(
         'Aprovada em 10/10/2021. '\
         'Não é possível cancelar a proposta após 3 dias.'
@@ -39,30 +51,63 @@ describe 'Professional cancel proposal' do
     end
   end
 
-  it 'can not view cancel form if is pending' do
-    jane = User.create!(name: 'Jane Doe', email: 'jane.doe@email.com',
-                        password: '123456')
-    pj1 = Project.create!(
-      title: 'Projeto 1', description: 'lorem ipsum...',
-      desired_abilities: 'design', value_per_hour: 12.34,
-      due_date: '09/10/2021', remote: true, creator: jane
-    )
-    professional = create(:completed_profile_professional)
-    Proposal.create!(
-      message: 'John\'s proposal on project 1',
-      value_per_hour: 80.80,
-      hours_per_week: 20,
-      finish_date: 3.days.from_now,
-      status: :pending,
-      project: pj1,
-      professional: professional
-    )
-    login_as professional, scope: :professional
+  it 'and should not view cancel form if is pending' do
+    proposal = create(:proposal)
+    login_as proposal.professional, scope: :professional
 
     get '/proposals/1/cancel'
 
     expect(response).to redirect_to('/projects/my')
     expect(flash[:notice]).to eq('Proposta cancelada com sucesso')
     expect(Proposal.first.status).to eq('canceled_pending')
+  end
+
+  it 'and should not see cancel form if refused' do
+    proposal = create(:proposal)
+    proposal.refused!
+    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+    login_as proposal.professional, scope: :professional
+
+    get '/proposals/1/cancel'
+
+    expect(Proposal.first.status).to eq('refused')
+    expect(response).to redirect_to(project_path(proposal.project))
+    expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
+  end
+
+  it 'and should not cancel if refused' do
+    proposal = create(:proposal)
+    proposal.refused!
+    ProposalRefusal.create!(proposal: proposal, refuse_reason: 'Refused!')
+
+    login_as proposal.professional, scope: :professional
+
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('refused')
+    expect(response).to redirect_to(project_path(proposal.project))
+    expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
+  end
+
+  it 'and should not cancel if already canceled_pending' do
+    proposal = create(:proposal)
+    proposal.canceled_pending!
+
+    login_as proposal.professional, scope: :professional
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_pending')
+  end
+
+  it 'and should not cancel if already canceled_approved' do
+    proposal = create(:proposal)
+    proposal.canceled_approved!
+    ProposalCancelation.create!(proposal: proposal, cancel_reason: 'Cancel')
+
+    login_as proposal.professional, scope: :professional
+    delete '/proposals/1'
+
+    expect(Proposal.first.status).to eq('canceled_approved')
   end
 end

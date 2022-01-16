@@ -62,3 +62,16 @@ proposal_6 = Proposal.create!({
   professional_id: 1,
   approved_at: Time.current - 3.day
 })
+
+proposal_7 = Proposal.create!({
+  message: 'Refused',
+  value_per_hour: 1,
+  hours_per_week: 1,
+  finish_date: Time.current + 3.day,
+  status: :refused,
+  project_id: 3,
+  professional_id: 1,
+  proposal_refusal: ProposalRefusal.new({
+    refuse_reason: 'Nobis totam perspiciatis repudiandae distinctio dolor'
+  })
+})

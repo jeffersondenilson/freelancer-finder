@@ -13,6 +13,7 @@
   <% else %>
     <p>Esse projeto ainda não recebeu propostas</p>
   <% end %>
+
 <% elsif professional_signed_in? %>
   <% if @proposal %>
     <h2>Sua proposta</h2>
@@ -21,4 +22,5 @@
     <%= link_to 'Fazer proposta', new_project_proposal_path(@project),
     class: 'btn btn-primary' %>
   <% end %>
+
 <% end %>

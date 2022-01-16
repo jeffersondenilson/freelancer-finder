@@ -1,0 +1,18 @@
+<main class="form-signin text-center">
+  <%= form_with model: @proposal, method: :delete do |f| %>
+    <div>
+      <%= f.label :refuse_reason, 'Informe por que quer recusar a proposta:',
+        class: 'h4 mb-3 fw-normal' %>
+      <br>
+      <%= f.text_area :refuse_reason, class: 'form-control', rows: '5' %>
+    </div>
+    
+    <br>
+    <div class="actions">
+      <small class="text-danger">
+        O profissional não poderá criar novas propostas nesse projeto
+      </small>
+      <%= f.submit 'Recusar proposta', class: "w-100 btn btn-lg btn-danger" %>
+    </div>
+  <% end %>
+</main>

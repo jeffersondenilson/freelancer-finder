@@ -1,6 +1,12 @@
 class ProposalsController < ApplicationController
-  before_action :authenticate_professional!
-  before_action :verify_duplicated_proposal, only: %i[new create]
+  before_action :should_authenticate!, only: :destroy
+  before_action :authenticate_professional!, only: %i[new create edit update
+                                                      cancel]
+  before_action :authenticate_user!, only: %i[refuse]
+  before_action :verify_duplicated_or_refused_proposal, only: %i[new create]
+  before_action :verify_refused_proposal_modification,
+                only: %i[edit update cancel destroy],
+                if: :professional_signed_in?
 
   def new
     @project = Project.find(params[:project_id])
@@ -22,13 +28,9 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def edit
-    @proposal = current_professional.proposals.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @proposal = current_professional.proposals.find(params[:id])
-
     if @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
       redirect_to my_projects_path
@@ -38,8 +40,6 @@ class ProposalsController < ApplicationController
   end
 
   def cancel
-    @proposal = current_professional.proposals.find(params[:proposal_id])
-
     if @proposal.pending?
       @proposal.cancel!
       redirect_to my_projects_path, notice: 'Proposta cancelada com sucesso'
@@ -50,9 +50,33 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def destroy
-    @proposal = current_professional.proposals.find(params[:id])
+  def refuse
+    @proposal = Proposal.find_by!(id: params[:proposal_id],
+                                  project: [current_user.projects])
+  end
 
+  def destroy
+    if professional_signed_in?
+      professional_cancel_proposal
+    elsif user_signed_in?
+      user_refuse_proposal
+    end
+  end
+
+  private
+
+  def proposal_params
+    params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week,
+                                     :finish_date)
+  end
+
+  def cancel_reason_params
+    params[:proposal][:cancel_reason] || ''
+  rescue StandardError
+    ''
+  end
+
+  def professional_cancel_proposal
     if @proposal.cancel!(cancel_reason_params)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else
@@ -64,24 +88,16 @@ class ProposalsController < ApplicationController
     redirect_to my_projects_path
   end
 
-  private
+  def user_refuse_proposal
+    @proposal = Proposal.find_by!(id: params[:id],
+                                  project: [current_user.projects])
 
-  def proposal_params
-    params.require(:proposal).permit(:message, :value_per_hour, :hours_per_week,
-                                     :finish_date)
-  end
-
-  def verify_duplicated_proposal
-    if current_professional.not_canceled_proposals
-                           .find_by(project_id: params[:project_id])
-      flash[:alert] = 'Você já fez uma proposta nesse projeto'
-      redirect_to project_path(params[:project_id])
+    if @proposal.refuse!(params[:proposal][:refuse_reason])
+      flash[:notice] = 'Proposta recusada com sucesso'
+    else
+      flash[:alert] = 'Não é possível recusar essa proposta'
     end
-  end
 
-  def cancel_reason_params
-    params[:proposal][:cancel_reason] || ''
-  rescue StandardError
-    ''
+    redirect_to project_path(@proposal.project)
   end
 end

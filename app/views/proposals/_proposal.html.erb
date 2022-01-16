@@ -23,6 +23,11 @@
           Motivo de cancelamento: <br>
           <%= proposal.proposal_cancelation.cancel_reason %>
         </p>
+      <% elsif proposal.refused? %>
+        <p>
+          Motivo de recusa: <br>
+          <%= proposal.proposal_refusal.refuse_reason %>
+        </p>
       <% end %>
     </div>
 
@@ -33,7 +38,7 @@
       <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
     </div>
 
-    <% if professional_signed_in? %>
+    <% if professional_signed_in? && !proposal.refused? %>
       <div>
         <%= link_to 'Editar', edit_proposal_path(proposal), class: 'btn btn-primary' %> 
 
@@ -48,5 +53,10 @@
       </div>
     <% end %>
 
+    <% if user_signed_in? && !proposal.canceled_approved? %>
+      <div>
+        <%= link_to 'Recusar', proposal_refuse_path(proposal), class: 'btn btn-danger' %>
+      </div>
+    <% end %>
   </div>
 </div>
