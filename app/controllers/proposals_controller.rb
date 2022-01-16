@@ -4,8 +4,9 @@ class ProposalsController < ApplicationController
                                                       cancel]
   before_action :authenticate_user!, only: %i[refuse]
   before_action :verify_duplicated_or_refused_proposal, only: %i[new create]
-  before_action :verify_refused_proposal, only: %i[edit update cancel destroy],
-                                          if: :professional_signed_in?
+  before_action :verify_refused_proposal_modification,
+                only: %i[edit update cancel destroy],
+                if: :professional_signed_in?
 
   def new
     @project = Project.find(params[:project_id])
@@ -39,8 +40,6 @@ class ProposalsController < ApplicationController
   end
 
   def cancel
-    @proposal = current_professional.proposals.find(params[:proposal_id])
-
     if @proposal.pending?
       @proposal.cancel!
       redirect_to my_projects_path, notice: 'Proposta cancelada com sucesso'
@@ -71,31 +70,6 @@ class ProposalsController < ApplicationController
                                      :finish_date)
   end
 
-  def verify_duplicated_or_refused_proposal
-    duplicated_proposal = current_professional
-                          .not_canceled_proposals
-                          .find_by(project_id: params[:project_id])
-
-    if duplicated_proposal&.refused?
-      flash[:alert] = 'Você já tem uma proposta recusada nesse projeto'
-      redirect_to project_path(params[:project_id])
-    elsif duplicated_proposal
-      flash[:alert] = 'Você já fez uma proposta nesse projeto'
-      redirect_to project_path(params[:project_id])
-    end
-  end
-
-  def verify_refused_proposal
-    @proposal = current_professional.proposals.find(
-      params[:id] || params[:proposal_id]
-    )
-
-    return unless @proposal.refused?
-
-    flash[:alert] = 'Propostas recusadas não podem ser alteradas'
-    redirect_to @proposal.project
-  end
-
   def cancel_reason_params
     params[:proposal][:cancel_reason] || ''
   rescue StandardError
@@ -103,8 +77,6 @@ class ProposalsController < ApplicationController
   end
 
   def professional_cancel_proposal
-    @proposal = current_professional.proposals.find(params[:id])
-
     if @proposal.cancel!(cancel_reason_params)
       flash[:notice] = 'Proposta cancelada com sucesso'
     else

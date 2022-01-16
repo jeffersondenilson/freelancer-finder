@@ -36,6 +36,32 @@ class ApplicationController < ActionController::Base
     redirect_to edit_professional_registration_path(current_professional)
   end
 
+  def verify_duplicated_or_refused_proposal
+    proposal = current_professional
+               .not_canceled_proposals
+               .find_by(project_id: params[:project_id])
+
+    return unless proposal
+
+    flash[:alert] = 'Você já fez uma proposta nesse projeto'
+    if proposal.refused?
+      flash[:alert] = 'Você já tem uma proposta recusada nesse projeto'
+    end
+
+    redirect_to project_path(params[:project_id])
+  end
+
+  def verify_refused_proposal_modification
+    @proposal = current_professional.proposals.find(
+      params[:id] || params[:proposal_id]
+    )
+
+    return unless @proposal.refused?
+
+    flash[:alert] = 'Propostas recusadas não podem ser alteradas'
+    redirect_to @proposal.project
+  end
+
   def render_not_found(_exception)
     render file: Rails.root.join('public/404.html'), status: :not_found
   end
