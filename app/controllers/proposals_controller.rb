@@ -27,8 +27,7 @@ class ProposalsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @proposal.update(proposal_params)
@@ -73,10 +72,11 @@ class ProposalsController < ApplicationController
   end
 
   def verify_duplicated_or_refused_proposal
-    duplicated_proposal = current_professional.not_canceled_proposals
-                           .find_by(project_id: params[:project_id])
+    duplicated_proposal = current_professional
+                          .not_canceled_proposals
+                          .find_by(project_id: params[:project_id])
 
-    if duplicated_proposal && duplicated_proposal.refused?
+    if duplicated_proposal&.refused?
       flash[:alert] = 'Você já tem uma proposta recusada nesse projeto'
       redirect_to project_path(params[:project_id])
     elsif duplicated_proposal
@@ -90,10 +90,10 @@ class ProposalsController < ApplicationController
       params[:id] || params[:proposal_id]
     )
 
-    if @proposal.refused?
-      flash[:alert] = 'Propostas recusadas não podem ser alteradas'
-      redirect_to @proposal.project
-    end
+    return unless @proposal.refused?
+
+    flash[:alert] = 'Propostas recusadas não podem ser alteradas'
+    redirect_to @proposal.project
   end
 
   def cancel_reason_params
@@ -119,13 +119,13 @@ class ProposalsController < ApplicationController
   def user_refuse_proposal
     @proposal = Proposal.find_by!(id: params[:id],
                                   project: [current_user.projects])
-    
+
     if @proposal.refuse!(params[:proposal][:refuse_reason])
       flash[:notice] = 'Proposta recusada com sucesso'
     else
       flash[:alert] = 'Não é possível recusar essa proposta'
     end
-    
+
     redirect_to project_path(@proposal.project)
   end
 end

@@ -62,9 +62,9 @@ describe 'User refuses proposal' do
     ProposalRefusal.create!(
       proposal: refused_proposal, refuse_reason: 'Refusado!'
     )
-    
+
     another_proposal = create(:proposal, project: project, message: 'Pending')
-    
+
     login_as project.creator, scope: :user
 
     visit project_path(project)
@@ -86,7 +86,7 @@ describe 'User refuses proposal' do
     expect(page).to have_content('Sua proposta')
     within '#proposal-1' do
       expect(page).to have_content("Mensagem: #{proposal.message}")
-      expect(page).to have_content("Status: Recusada")
+      expect(page).to have_content('Status: Recusada')
       expect(page).to have_content(
         "Motivo de recusa: #{proposal.proposal_refusal.refuse_reason}"
       )

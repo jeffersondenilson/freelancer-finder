@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'User refuses proposal' do
   it 'and should be signed in' do
-    proposal = create(:proposal)
+    create(:proposal)
 
     delete '/proposals/1', params: {
       proposal: {
@@ -62,7 +62,7 @@ describe 'User refuses proposal' do
 
   it 'and should not see refuse form for another user\'s project' do
     proposal1, = create_list(:proposal, 2)
-    
+
     login_as proposal1.project.creator, scope: :user
     get '/proposals/2/refuse'
 
@@ -82,7 +82,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('canceled_approved')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 
@@ -98,7 +98,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('canceled_pending')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 
@@ -115,7 +115,7 @@ describe 'User refuses proposal' do
     }
 
     expect(Proposal.first.status).to eq('refused')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Não é possível recusar essa proposta')
   end
 end

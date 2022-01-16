@@ -178,12 +178,12 @@ describe 'Professional creates proposal' do
         message: 'Should not be updated',
         value_per_hour: 10,
         hours_per_week: 10,
-        finish_date: Time.current + 3.days
+        finish_date: 3.days.from_now
       }
     }
 
     expect(Proposal.first.status).to eq('refused')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
   end
 
@@ -202,7 +202,7 @@ describe 'Professional creates proposal' do
     }
 
     expect(Proposal.count).to eq(1)
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq(
       'Você já tem uma proposta recusada nesse projeto'
     )
@@ -218,7 +218,7 @@ describe 'Professional creates proposal' do
     get '/projects/1/proposals/new'
 
     expect(Proposal.count).to eq(1)
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq(
       'Você já tem uma proposta recusada nesse projeto'
     )

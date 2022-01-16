@@ -72,7 +72,7 @@ describe 'Professional cancel proposal' do
     get '/proposals/1/cancel'
 
     expect(Proposal.first.status).to eq('refused')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
   end
 
@@ -86,7 +86,7 @@ describe 'Professional cancel proposal' do
     delete '/proposals/1'
 
     expect(Proposal.first.status).to eq('refused')
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(flash[:alert]).to eq('Propostas recusadas não podem ser alteradas')
   end
 
