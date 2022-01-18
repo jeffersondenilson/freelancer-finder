@@ -55,6 +55,16 @@ class ProposalsController < ApplicationController
                                   project: [current_user.projects])
   end
 
+  def approve
+    proposal = Proposal.find_by!(id: params[:proposal_id],
+                                  project: [current_user.projects])
+    proposal.approved!
+
+    flash[:notice] = 'Proposta aprovada com sucesso. '\
+         "Agora você pode trocar mensagens com #{proposal.professional.name}"
+    redirect_to project_path(proposal.project)
+  end
+
   def destroy
     if professional_signed_in?
       professional_cancel_proposal

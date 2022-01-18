@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   resources :proposals, only: [:edit, :update, :destroy] do
     get '/cancel', to: 'proposals#cancel'
     get '/refuse', to: 'proposals#refuse'
+    put '/approve', to: 'proposals#approve'
   end
 
   resources :professionals, only: [:show]

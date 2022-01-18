@@ -55,6 +55,8 @@
 
     <% if user_signed_in? && !proposal.canceled_approved? %>
       <div>
+        <%= link_to 'Aprovar', proposal_approve_path(proposal),
+          class: 'btn btn-primary mr-2', method: :put %>
         <%= link_to 'Recusar', proposal_refuse_path(proposal), class: 'btn btn-danger' %>
       </div>
     <% end %>
