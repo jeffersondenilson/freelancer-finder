@@ -33,6 +33,9 @@
 
     <div class="col">
       <p>Status: <%= Proposal.human_enum_name(:status, proposal.status) %></p>
+      <% if proposal.approved?%>
+        <p>Aprovada em <%= I18n.l proposal.approved_at %></p>
+      <% end %>
       <p>Valor por hora: <%= number_to_currency proposal.value_per_hour %></p>
       <p>Horas disponíveis por semana: <%= proposal.hours_per_week %></p>
       <p>Expectativa de conclusão: <%= I18n.l proposal.finish_date %></p>
