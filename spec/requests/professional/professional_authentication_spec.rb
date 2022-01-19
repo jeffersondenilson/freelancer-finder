@@ -124,4 +124,23 @@ describe 'Professional authentication' do
     expect(response).to redirect_to(root_path)
     expect(Proposal.first.status).to eq('pending')
   end
+
+  it 'and should not update approved proposal' do
+    proposal = create(:proposal)
+    proposal.approved!
+
+    login_as proposal.professional
+    put '/proposals/1/', params: {
+      proposal: {
+        message: 'Should not update',
+        value_per_hour: 99.99,
+        hours_per_week: 30,
+        finish_date: 1.week.from_now
+      }
+    }
+
+    expect(response).to redirect_to('where?')
+    expect(flash[:alert]).to eq('Não é possível alterar as informações de '\
+      'uma proposta aprovada')
+  end
 end
