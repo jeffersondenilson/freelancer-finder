@@ -58,6 +58,10 @@ class Proposal < ApplicationRecord
     save
   end
 
+  def approve!
+    approved! unless canceled_pending? || canceled_approved? || refused?
+  end
+
   private
 
   def approved_date

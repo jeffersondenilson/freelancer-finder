@@ -113,4 +113,15 @@ describe 'Professional authentication' do
     follow_redirect!
     expect(response).to redirect_to(root_path)
   end
+
+  it 'and should not approve proposal' do
+    proposal = create(:proposal)
+
+    login_as proposal.professional, scope: :professional
+    put '/proposals/1/approve'
+
+    follow_redirect!
+    expect(response).to redirect_to(root_path)
+    expect(Proposal.first.status).to eq('pending')
+  end
 end

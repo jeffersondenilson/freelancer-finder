@@ -2,7 +2,7 @@ class ProposalsController < ApplicationController
   before_action :should_authenticate!, only: :destroy
   before_action :authenticate_professional!, only: %i[new create edit update
                                                       cancel]
-  before_action :authenticate_user!, only: %i[refuse]
+  before_action :authenticate_user!, only: %i[refuse approve]
   before_action :verify_duplicated_or_refused_proposal, only: %i[new create]
   before_action :verify_refused_proposal_modification,
                 only: %i[edit update cancel destroy],
@@ -31,7 +31,11 @@ class ProposalsController < ApplicationController
   def edit; end
 
   def update
-    if @proposal.update(proposal_params)
+    if @proposal.approved?
+      flash[:alert] = 'Não é possível alterar as informações de '\
+                      'uma proposta aprovada'
+      redirect_to project_path(@proposal.project)
+    elsif @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
       redirect_to my_projects_path
     else
@@ -53,6 +57,19 @@ class ProposalsController < ApplicationController
   def refuse
     @proposal = Proposal.find_by!(id: params[:proposal_id],
                                   project: [current_user.projects])
+  end
+
+  def approve
+    proposal = Proposal.find_by!(id: params[:proposal_id],
+                                 project: [current_user.projects])
+    if proposal.approve!
+      flash[:notice] = 'Proposta aprovada com sucesso. Agora você pode '\
+                       "trocar mensagens com #{proposal.professional.name}"
+    else
+      flash[:alert] = 'Não foi possível aprovar a proposta'
+    end
+
+    redirect_to project_path(proposal.project)
   end
 
   def destroy
