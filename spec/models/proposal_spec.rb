@@ -201,7 +201,7 @@ RSpec.describe Proposal, type: :model do
       end
 
       expect(proposal.status).to eq('approved')
-      expect(proposal.approved_at).to eq('2022-01-06')
+      expect(proposal.approved_at.to_formatted_s(:db)).to eq('2022-01-06')
     end
   end
 

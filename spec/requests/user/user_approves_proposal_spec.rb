@@ -2,13 +2,13 @@ require 'rails_helper'
 
 describe 'User approves proposal' do
   it 'and should be signed in' do
-    proposal = create(:proposal)
+    create(:proposal)
 
     put '/proposals/1/approve'
 
     expect(response).to redirect_to('/users/sign_in')
     expect(flash[:alert]).to eq('Para continuar, efetue login ou registre-se.')
-  end 
+  end
 
   it 'successfully' do
     proposal = create(:proposal)
@@ -16,9 +16,11 @@ describe 'User approves proposal' do
     login_as proposal.project.creator, scope: :user
     put '/proposals/1/approve'
 
-    expect(response).to redirect_to(project_path proposal.project)
-    expect(flash[:notice]).to eq('Proposta aprovada com sucesso. '\
-      "Agora você pode trocar mensagens com #{proposal.professional.name}")
+    expect(response).to redirect_to(project_path(proposal.project))
+    expect(flash[:notice]).to eq(
+      'Proposta aprovada com sucesso. '\
+      "Agora você pode trocar mensagens com #{proposal.professional.name}"
+    )
     expect(Proposal.first.status).to eq('approved')
   end
 
@@ -29,7 +31,7 @@ describe 'User approves proposal' do
     login_as proposal.project.creator, scope: :user
     put '/proposals/1/approve'
 
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(Proposal.first.status).to eq('canceled_pending')
     expect(flash[:alert]).to eq('Não foi possível aprovar a proposta')
   end
@@ -42,7 +44,7 @@ describe 'User approves proposal' do
     login_as proposal.project.creator, scope: :user
     put '/proposals/1/approve'
 
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(Proposal.first.status).to eq('canceled_approved')
     expect(flash[:alert]).to eq('Não foi possível aprovar a proposta')
   end
@@ -55,13 +57,13 @@ describe 'User approves proposal' do
     login_as proposal.project.creator, scope: :user
     put '/proposals/1/approve'
 
-    expect(response).to redirect_to(project_path proposal.project)
+    expect(response).to redirect_to(project_path(proposal.project))
     expect(Proposal.first.status).to eq('refused')
     expect(flash[:alert]).to eq('Não foi possível aprovar a proposta')
   end
 
   it 'and should not approve proposal in another user\'s project' do
-    proposal1 = create(:proposal)
+    create(:proposal)
     proposal2 = create(:proposal)
 
     login_as proposal2.project.creator, scope: :user

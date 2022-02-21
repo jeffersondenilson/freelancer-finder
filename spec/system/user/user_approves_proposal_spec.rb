@@ -13,14 +13,15 @@ describe 'User approves proposal' do
         click_on 'Aprovar'
       end
 
-      expect(current_path).to eq(project_path proposal.project)
-      expect(page).to have_content('Proposta aprovada com sucesso. '\
-        "Agora você pode trocar mensagens com #{proposal.professional.name}")
+      expect(current_path).to eq(project_path(proposal.project))
+      expect(page).to have_content(
+        'Proposta aprovada com sucesso. '\
+        "Agora você pode trocar mensagens com #{proposal.professional.name}"
+      )
       within '#proposal-1' do
         expect(page).to have_content('Status: Aprovada')
         expect(page).to have_content('Aprovada em 18/01/2022')
       end
     end
   end
-
 end

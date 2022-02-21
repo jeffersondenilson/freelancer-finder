@@ -31,7 +31,11 @@ class ProposalsController < ApplicationController
   def edit; end
 
   def update
-    if @proposal.update(proposal_params)
+    if @proposal.approved?
+      flash[:alert] = 'Não é possível alterar as informações de '\
+                      'uma proposta aprovada'
+      redirect_to project_path(@proposal.project)
+    elsif @proposal.update(proposal_params)
       flash[:notice] = 'Proposta atualizada com sucesso'
       redirect_to my_projects_path
     else
@@ -57,10 +61,10 @@ class ProposalsController < ApplicationController
 
   def approve
     proposal = Proposal.find_by!(id: params[:proposal_id],
-                                  project: [current_user.projects])
+                                 project: [current_user.projects])
     if proposal.approve!
-      flash[:notice] = 'Proposta aprovada com sucesso. '\
-        "Agora você pode trocar mensagens com #{proposal.professional.name}"
+      flash[:notice] = 'Proposta aprovada com sucesso. Agora você pode '\
+                       "trocar mensagens com #{proposal.professional.name}"
     else
       flash[:alert] = 'Não foi possível aprovar a proposta'
     end
